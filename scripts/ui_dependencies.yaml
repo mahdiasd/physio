@@ -1,0 +1,12 @@
+dependencies:
+  flutter:
+    sdk: flutter
+
+  domain:
+    path: ../../domain
+
+  utils:
+    path: ../../core/utils
+
+  ui:
+    path: ../../core/ui

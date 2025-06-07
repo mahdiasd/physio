@@ -1,0 +1,8 @@
+# melos_managed_dependency_overrides: domain,ui,utils
+dependency_overrides:
+  domain:
+    path: ..\\..\\domain
+  ui:
+    path: ..\\..\\core\\ui
+  utils:
+    path: ..\\..\\core\\utils

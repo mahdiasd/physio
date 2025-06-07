@@ -1,0 +1,36 @@
+name: physio
+
+packages:
+  - packages/**
+
+scripts:
+  generate:build:
+    run: |
+      melos exec -c 1 --depends-on="build_runner" -- "dart run build_runner build --delete-conflicting-outputs"
+    description: >
+      Run code generation for packages that depend on build_runner, 
+      deleting conflicting outputs if they exist.
+
+  sync_dev_dependencies:
+    run: dart scripts/sync_dev_dependencies.dart
+    description: >
+      Synchronize dev_dependencies from dev_dependencies.yaml 
+      into the dev_dependencies section of all pubspec.yaml files 
+      across the repository to ensure consistent development dependencies.
+
+  sync_ui_dependencies:
+    run: dart scripts/sync_ui_dependencies.dart
+    description: "Add common dependencies to all feature packages"
+
+  generate:l10n:
+    run: flutter gen-l10n
+    description: >
+      Generate localization files using Flutter's localization tool
+      to enable multi-language support throughout the app.
+
+  generate:watch:
+    run: |
+      melos exec -c 1 --depends-on="build_runner" -- "dart run build_runner watch --delete-conflicting-outputs"
+    description: >
+      Continuously watch and rebuild code generation outputs for packages 
+      using build_runner, ideal for development mode.
