@@ -34,6 +34,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     switch (result) {
       case Ok<User>():
         emit(state.copyWith(user: result.value));
+        break;
       case Error<User>():
         break;
     }

@@ -1,0 +1,16 @@
+flutter_native_splash:
+  color: "#29B6F6"
+  image: assets/images/ic_logo.png
+  branding: assets/images/ic_logo.png
+
+  android_12:
+    image: assets/images/ic_logo.png
+    icon_background_color: "#000000"
+
+    image_dark: assets/images/ic_logo.png
+    icon_background_color_dark: "#FFFFFF"
+
+  web: false
+
+
+# run this after each changes : dart run flutter_native_splash:create --path=splash_configs.yaml
