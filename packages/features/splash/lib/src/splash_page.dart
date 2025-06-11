@@ -5,7 +5,6 @@ import 'package:splash/src/bloc/splash_event.dart';
 import 'package:splash/src/bloc/splash_state.dart';
 import 'package:utils/utils.dart';
 
-
 import 'bloc/splash_bloc.dart';
 
 import 'package:domain/domain.dart';
@@ -16,8 +15,8 @@ import 'package:splash/src/bloc/splash_state.dart';
 import 'package:utils/utils.dart';
 
 import 'bloc/splash_bloc.dart';
+import 'bloc/splash_effect.dart';
 
-// 1. Main Page - just provides the bloc
 class SplashPage extends StatelessWidget {
   final VoidCallback onLogin;
   final VoidCallback onMain;
@@ -37,7 +36,6 @@ class SplashPage extends StatelessWidget {
   }
 }
 
-// 2. Content - handles logic and UI
 class SplashContent extends StatelessWidget {
   final VoidCallback onLogin;
   final VoidCallback onMain;
@@ -50,51 +48,70 @@ class SplashContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SplashBloc, SplashState>(
-      listener: (context, state) {
-        if (state.updateState != null && state.updateState != UpdateState.upToDate) {
-          _showUpdateDialog(context);
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/images/ic_logo.png', width: 100, height: 100),
-              const SizedBox(height: 20),
-              BlocBuilder<SplashBloc, SplashState>(
-                builder: (context, state) {
-                  if (state.isLoading) {
-                    return CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).colorScheme.onPrimary,
+    final bloc = context.read<SplashBloc>();
+    return StreamBuilder(
+        stream: bloc.effectsStream,
+        builder: (context, asyncSnapshot) {
+          switch (asyncSnapshot.data) {
+            case NavigateToLogin():
+              onLogin();
+              "ToLogin".dLog();
+              break;
+            case NavigateToMain():
+              "ToMain".dLog();
+              onMain();
+              break;
+            default:
+              break;
+          }
+          return BlocListener<SplashBloc, SplashState>(
+            listener: (context, state) {
+              if (state.updateState != null &&
+                  state.updateState != UpdateState.upToDate) {
+                _showUpdateDialog(context);
+              }
+            },
+            child: Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/ic_logo.png',
+                        width: 100, height: 100),
+                    const SizedBox(height: 20),
+                    BlocBuilder<SplashBloc, SplashState>(
+                      builder: (context, state) {
+                        if (state.isLoading) {
+                          return CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              bottomNavigationBar: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: BlocBuilder<SplashBloc, SplashState>(
+                  builder: (context, state) {
+                    return Text(
+                      state.isLoading ? 'Loading...' : 'Ready',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
                     );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: BlocBuilder<SplashBloc, SplashState>(
-            builder: (context, state) {
-              return Text(
-                state.isLoading ? 'Loading...' : 'Ready',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  },
                 ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
+              ),
+            ),
+          );
+        });
   }
 
   void _showUpdateDialog(BuildContext context) {
@@ -115,7 +132,6 @@ class SplashContent extends StatelessWidget {
   }
 }
 
-// 3. Dialog - simple update dialog
 class UpdateDialog extends StatelessWidget {
   final VoidCallback onUpdatePressed;
 

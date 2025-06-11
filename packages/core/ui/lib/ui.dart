@@ -3,4 +3,4 @@ library;
 
 export 'src/state/ui_state.dart';
 export 'src/ui.dart';
-
+export 'src/bloc/side_effect_stream.dart';
