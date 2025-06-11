@@ -9,7 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:utils/utils.dart';
 
 @injectable
-class SplashBloc extends Bloc<SplashEvent, SplashState> with SideEffectMixin<SplashState, SplashEffect> {
+class SplashBloc extends Bloc<SplashEvent, SplashState>
+    with SideEffectMixin<SplashState, SplashEffect> {
   final GetConfigUseCase _configUseCase;
 
   SplashBloc(this._configUseCase) : super(SplashState()) {
@@ -22,7 +23,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with SideEffectMixin<Spl
     emit(state.copyWith(isLoading: true));
     final result = await _configUseCase.getConfig();
     emit(state.copyWith(isLoading: false));
-
     switch (result) {
       case Ok<Config>():
         emit(state.copyWith(config: result.value));
@@ -32,8 +32,8 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with SideEffectMixin<Spl
           emitEffect(NavigateToLogin());
         }
         break;
-      case Error<Config>():
-        break;
+      case Error():
+        throw UnimplementedError();
     }
   }
 
@@ -56,5 +56,4 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with SideEffectMixin<Spl
     final appVersion = await AppInfo().getAppVersion();
     return value.update.getState(int.parse(appVersion));
   }
-
 }
