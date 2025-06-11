@@ -10,10 +10,15 @@ import 'package:url_launcher/url_launcher.dart';
 @injectable
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
   final GetConfigUseCase _configUseCase;
+  final _navigationController = StreamController<SplashNavigation>();
+
+  Stream<SplashNavigation> get navigationStream => _navigationController.stream;
+
 
   SplashBloc(this._configUseCase) : super(SplashState()) {
     on<OnRefresh>(_getConfig);
     on<OnUpdateClick>(_openStore);
+    add(OnRefresh());
   }
 
   Future<void> _getConfig(OnRefresh event, Emitter<SplashState> emit) async {
@@ -26,6 +31,9 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
         emit(state.copyWith(config: result.value));
         final updateState = await getUpdateState(result.value);
         emit(state.copyWith(updateState: updateState));
+        if (updateState == UpdateState.upToDate) {
+          _navigationController.add(SplashNavigation.toLogin);
+        }
         break;
       case Error<Config>():
         // TODO implement error handler.
@@ -33,7 +41,8 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     }
   }
 
-  Future<void> _openStore(OnUpdateClick event, Emitter<SplashState> emit) async {
+  Future<void> _openStore(
+      OnUpdateClick event, Emitter<SplashState> emit) async {
     if (state.config != null) {
       final url = AppInfo().getDeviceType() == DeviceOsType.Android
           ? state.config!.update.googlePlayUrl
@@ -46,6 +55,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       }
     }
   }
+
   Future<UpdateState> getUpdateState(Config value) async {
     final appVersion = await AppInfo().getAppVersion();
     return value.update.getState(int.parse(appVersion));

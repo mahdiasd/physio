@@ -8,58 +8,52 @@ import 'package:utils/utils.dart';
 
 import 'bloc/splash_bloc.dart';
 
+import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:splash/src/bloc/splash_event.dart';
+import 'package:splash/src/bloc/splash_state.dart';
+import 'package:utils/utils.dart';
+
+import 'bloc/splash_bloc.dart';
+
+// 1. Main Page - just provides the bloc
 class SplashPage extends StatelessWidget {
   final VoidCallback onLogin;
   final VoidCallback onMain;
 
-  const SplashPage({super.key, required this.onLogin, required this.onMain});
+  const SplashPage({
+    super.key,
+    required this.onLogin,
+    required this.onMain,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<SplashBloc>(),
-      child: SplashContent(),
+      child: SplashContent(onLogin: onLogin, onMain: onMain),
     );
   }
 }
 
+// 2. Content - handles logic and UI
 class SplashContent extends StatelessWidget {
-  const SplashContent({super.key});
+  final VoidCallback onLogin;
+  final VoidCallback onMain;
+
+  const SplashContent({
+    super.key,
+    required this.onLogin,
+    required this.onMain,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
-        if (state.updateState != UpdateState.upToDate) {
-          showModalBottomSheet<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return Container(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'Update Required',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'A new version of the app is available. Please update to continue.',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<SplashBloc>().add(OnUpdateClick());
-                      },
-                      child: const Text('Update Now'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+        if (state.updateState != null && state.updateState != UpdateState.upToDate) {
+          _showUpdateDialog(context);
         }
       },
       child: Scaffold(
@@ -67,20 +61,96 @@ class SplashContent extends StatelessWidget {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
               Image.asset('assets/images/ic_logo.png', width: 100, height: 100),
               const SizedBox(height: 20),
+              BlocBuilder<SplashBloc, SplashState>(
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
             ],
           ),
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(
-            'Loading...',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+          child: BlocBuilder<SplashBloc, SplashState>(
+            builder: (context, state) {
+              return Text(
+                state.isLoading ? 'Loading...' : 'Ready',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              );
+            },
           ),
         ),
+      ),
+    );
+  }
+
+  void _showUpdateDialog(BuildContext context) {
+    final bloc = context.read<SplashBloc>();
+
+    showModalBottomSheet<void>(
+      context: context,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (modalContext) {
+        return UpdateDialog(
+          onUpdatePressed: () {
+            bloc.add(OnUpdateClick());
+          },
+        );
+      },
+    );
+  }
+}
+
+// 3. Dialog - simple update dialog
+class UpdateDialog extends StatelessWidget {
+  final VoidCallback onUpdatePressed;
+
+  const UpdateDialog({
+    super.key,
+    required this.onUpdatePressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.system_update, size: 48, color: Colors.blue),
+          const SizedBox(height: 16),
+          Text(
+            'Update Required',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            'A new version of the app is available. Please update to continue.',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: onUpdatePressed,
+              child: const Text('Update Now'),
+            ),
+          ),
+        ],
       ),
     );
   }

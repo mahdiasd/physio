@@ -12,3 +12,7 @@ export 'src/dto/config/update_response.dart';
 export 'src/network.dart';
 
 export 'src/utils/api_caller.dart';
+
+export 'src/di/network_module.dart';
+export 'src/di/network_di.dart';
+// export 'src/di/network_di.module.dart';

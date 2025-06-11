@@ -1,10 +1,9 @@
 import 'package:physio/app/app.dart';
 import 'package:physio/bootstrap.dart';
-import 'package:splash/splash.dart';
-import 'package:utils/utils.dart';
+
+import 'app/di/injection.dart';
 
 void main() {
   configureDependencies();
-  configureSplashDependencies();
   bootstrap(() => const App());
 }

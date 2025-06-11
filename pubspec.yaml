@@ -26,6 +26,15 @@ dependencies:
   ui:
     path: packages/core/ui
 
+  network:
+    path: packages/core/network
+
+  domain:
+    path: packages/domain
+
+  data:
+    path: packages/data
+
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6

@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:network/network.dart';
 import 'package:utils/utils.dart';
 
-@LazySingleton()
+@LazySingleton(as: ConfigRepository)
 class ConfigRepositoryImpl extends ConfigRepository {
   final ConfigApiService _configApiService;
 
