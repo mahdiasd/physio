@@ -15,17 +15,22 @@ class UpdateResponse {
   final int suggestVersion;
 
   @JsonKey(defaultValue: '')
-  final String link;
-
-  @JsonKey(defaultValue: '')
   final String message;
+
+  @JsonKey(defaultValue: 'google_play_url')
+  final String googlePlayUrl;
+
+  @JsonKey(defaultValue: 'app_store_url')
+  final String appStorePlayUrl;
 
   UpdateResponse({
     required this.forceVersion,
     required this.lastVersion,
     required this.suggestVersion,
-    required this.link,
     required this.message,
+    required this.googlePlayUrl,
+    required this.appStorePlayUrl,
+
   });
 
   factory UpdateResponse.fromJson(Map<String, dynamic> json) =>

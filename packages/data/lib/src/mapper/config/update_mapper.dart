@@ -8,7 +8,8 @@ extension UpdateResponseMapper on UpdateResponse {
       forceVersion : forceVersion,
       lastVersion : lastVersion,
       suggestVersion : suggestVersion,
-      link : link,
       message : message,
+      googlePlayUrl : googlePlayUrl,
+      appStorePlayUrl : appStorePlayUrl,
   );
 }

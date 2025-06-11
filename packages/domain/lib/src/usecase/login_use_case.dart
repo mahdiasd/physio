@@ -3,7 +3,7 @@ import 'package:domain/src/repository/user/user_repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:utils/src/model/result.dart';
 
-@Injectable()
+@injectable
 class LoginUseCase {
   final UserRepository _userRepository;
 

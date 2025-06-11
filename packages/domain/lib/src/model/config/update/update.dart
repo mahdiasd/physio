@@ -5,15 +5,17 @@ class Update {
     required this.forceVersion,
     required this.lastVersion,
     required this.suggestVersion,
-    required this.link,
     required this.message,
+    required this.googlePlayUrl,
+    required this.appStorePlayUrl,
   });
 
   final int forceVersion;
   final int lastVersion;
   final int suggestVersion;
-  final String link;
   final String message;
+  final String googlePlayUrl;
+  final String appStorePlayUrl;
 
   UpdateState getState(int currentAppVersionCode) {
     if (forceVersion > currentAppVersionCode) {
