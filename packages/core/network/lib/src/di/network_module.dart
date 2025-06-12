@@ -10,7 +10,7 @@ abstract class NetworkModule {
   Dio dio() {
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'https://app.dahilive.ir/api',
+        baseUrl: 'https://app.dahilive.ir/',
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 3),
         headers: {

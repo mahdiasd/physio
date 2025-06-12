@@ -8,7 +8,6 @@ extension Logger on Object {
       dev.log(
         this.toString(),
         name: logHeader,
-        time: DateTime.now(),
       );
     }
   }
