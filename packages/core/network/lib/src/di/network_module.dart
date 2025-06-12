@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:flutter/foundation.dart';
+
+import '../utils/network_log_interceptor.dart'; // Import for kDebugMode
 
 @module
 abstract class NetworkModule {
@@ -7,7 +10,7 @@ abstract class NetworkModule {
   Dio dio() {
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'https://yourapi.com/api/v1',
+        baseUrl: 'https://app.dahilive.ir/api',
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 3),
         headers: {
@@ -17,8 +20,11 @@ abstract class NetworkModule {
       ),
     );
 
-    dio.interceptors.add(LogInterceptor());
-
+    // Only add the logger in debug mode
+    if (kDebugMode) {
+      // Replace LogInterceptor with your custom one
+      dio.interceptors.add(CustomLogInterceptor());
+    }
     return dio;
   }
 }

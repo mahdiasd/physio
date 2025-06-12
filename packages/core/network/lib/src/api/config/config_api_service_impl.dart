@@ -14,6 +14,6 @@ class ConfigApiServiceImpl extends ConfigApiService {
 
   @override
   Future<Response<NetworkResponse<ConfigResponse>>> getConfig() {
-    return dio.get('config');
+    return dio.get('v1/config');
   }
 }

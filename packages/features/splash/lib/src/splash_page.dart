@@ -55,7 +55,6 @@ class SplashContent extends StatelessWidget {
           switch (asyncSnapshot.data) {
             case NavigateToLogin():
               onLogin();
-              "ToLogin".dLog();
               break;
             case NavigateToMain():
               "ToMain".dLog();
