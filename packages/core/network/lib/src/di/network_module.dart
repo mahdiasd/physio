@@ -20,11 +20,10 @@ abstract class NetworkModule {
       ),
     );
 
-    // Only add the logger in debug mode
     if (kDebugMode) {
-      // Replace LogInterceptor with your custom one
       dio.interceptors.add(CustomLogInterceptor());
     }
+
     return dio;
   }
 }
