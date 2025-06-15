@@ -1,59 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:utils/utils.dart';
+import 'package:ui/ui.dart';
 
-import 'bloc/login_bloc.dart';
+import '../login.dart';
+import 'bloc/login_effect.dart';
+import 'bloc/login_event.dart';
+import 'bloc/login_state.dart';
 
 class LoginPage extends StatelessWidget {
   final VoidCallback onMain;
-  const LoginPage({super.key, required this.onMain});
+
+  const LoginPage({
+    super.key,
+    required this.onMain,
+  });
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<LoginBloc>();
     return EffectListener(
       effectsStream: bloc.effectsStream,
-      onLogin: onLogin,
       onMain: onMain,
-      child: LoginContent(),
+      child: const LoginContent(),
     );
   }
 }
-
-class LoginContent extends StatelessWidget {
-  const LoginContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              "Welcome Back",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 32),
-            // Your login form widgets will go here
-            const SizedBox(height: 16),
-
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 
 class EffectListener extends StatelessWidget {
   final Stream<dynamic> effectsStream;
@@ -71,15 +42,73 @@ class EffectListener extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: effectsStream,
-      builder: (context, asyncSnapshot) {
+      builder: (context, snapshot) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (asyncSnapshot.hasData) {
-            final effect = asyncSnapshot.data;
-
+          final effect = snapshot.data;
+          if (effect is NavigateToHome) {
+            onMain();
           }
         });
         return child;
       },
+    );
+  }
+}
+
+class LoginContent extends StatelessWidget {
+  const LoginContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<LoginBloc>();
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          return AbsorbPointer(
+            absorbing: state.isLoading,
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppTextField(
+                    value: state.username,
+                    onChanged: (value) => bloc.add(UsernameChanged(value)),
+                    hint: 'Username',
+                  ),
+                  const SizedBox(height: 16),
+                  AppTextField(
+                    value: state.password,
+                    onChanged: (value) => bloc.add(PasswordChanged(value)),
+                    hint: 'Password',
+                    keyboardType: TextInputType.visiblePassword,
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => bloc.add(const LoginSubmitted()),
+                      child: state.isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                AlwaysStoppedAnimation(Colors.white),
+                              ),
+                            )
+                          : const Text('Login'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
