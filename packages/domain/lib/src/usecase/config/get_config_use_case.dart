@@ -9,7 +9,7 @@ class GetConfigUseCase {
   GetConfigUseCase(this._configRepository);
 
   Future<Result<Config>> getConfig() {
-    return _configRepository.getConfig();
+    // return _configRepository.getConfig();
     // TODO: remove this fake data
     return Future.value(Result.ok(Config(
       update: Update(
