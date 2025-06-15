@@ -46,7 +46,7 @@ abstract class ApiCaller {
     }
   }
 
-  static Exception _handleDioError(DioException e) {
+  static AppException _handleDioError(DioException e) {
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
@@ -59,7 +59,7 @@ abstract class ApiCaller {
     }
   }
 
-  static Exception _parseHttpError(Response<dynamic> response) {
+  static AppException _parseHttpError(Response<dynamic> response) {
     return HttpException(
       code: response.statusCode,
       message: response.statusMessage ?? 'HTTP Error',

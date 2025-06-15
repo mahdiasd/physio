@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:network/network.dart';
 import 'package:utils/utils.dart';
 
-@LazySingleton()
+@LazySingleton(as: UserRepository)
 class UserRepositoryImpl extends UserRepository {
   final UserApiService _userApiService;
 

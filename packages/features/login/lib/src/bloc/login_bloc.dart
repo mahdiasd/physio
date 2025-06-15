@@ -5,7 +5,7 @@ import 'package:login/src/bloc/login_state.dart';
 import 'package:injectable/injectable.dart';
 import 'package:utils/src/model/result.dart';
 
-@Injectable()
+@injectable
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase _loginUseCase;
 
@@ -34,6 +34,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     switch (result) {
       case Ok<User>():
         emit(state.copyWith(user: result.value));
+        break;
       case Error<User>():
         break;
     }
