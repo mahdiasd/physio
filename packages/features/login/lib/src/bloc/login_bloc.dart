@@ -6,7 +6,9 @@ import 'package:injectable/injectable.dart';
 import 'package:utils/src/model/result.dart';
 
 @injectable
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
+class LoginBloc extends Bloc<LoginEvent, LoginState>
+    with SideEffectMixin<LoginState, LoginEffect> {
+
   final LoginUseCase _loginUseCase;
 
   LoginBloc(this._loginUseCase) : super(LoginState()) {

@@ -9,20 +9,6 @@ import '../main/main_route.dart';
 
 part 'splash_route.g.dart';
 
-// @TypedGoRoute<SplashRoute>(path: "/splash")
-// @immutable
-// class SplashRoute extends GoRouteData {
-//   const SplashRoute();
-//
-//   @override
-//   Widget build(BuildContext context, GoRouterState state) {
-//     return SplashPage(
-//       onLogin: () => context.push(SplashRoute().location),
-//       onMain: () => context.push(HomeRoute().location),
-//     );
-//   }
-// }
-
 @TypedGoRoute<SplashRoute>(path: "/splash")
 @immutable
 class SplashRoute extends GoRouteData {
@@ -30,13 +16,13 @@ class SplashRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return BlocProvider( // <-- BlocProvider را اینجا قرار می‌دهیم
+    return BlocProvider(
       create: (context) => getIt<SplashBloc>(),
-      child: Builder( // Builder برای دسترسی به BlocProvider تازه ساخته شده
+      child: Builder(
         builder: (innerContext) {
           return SplashPage(
-            onLogin: () => innerContext.go(LoginRoute().location), // از innerContext استفاده کنید
-            onMain: () => innerContext.go(HomeRoute().location), // از innerContext استفاده کنید
+            onLogin: () => innerContext.go(LoginRoute().location),
+            onMain: () => innerContext.go(HomeRoute().location),
           );
         },
       ),

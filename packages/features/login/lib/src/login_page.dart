@@ -10,16 +10,18 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<LoginBloc>(),
-      child: LoginContent(onToRegister: onMain),
+    final bloc = context.read<LoginBloc>();
+    return EffectListener(
+      effectsStream: bloc.effectsStream,
+      onLogin: onLogin,
+      onMain: onMain,
+      child: LoginContent(),
     );
   }
 }
 
 class LoginContent extends StatelessWidget {
-  final VoidCallback onToRegister;
-  const LoginContent({super.key, required this.onToRegister});
+  const LoginContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +46,40 @@ class LoginContent extends StatelessWidget {
             const SizedBox(height: 32),
             // Your login form widgets will go here
             const SizedBox(height: 16),
-            TextButton(
-              onPressed: onToRegister,
-              child: const Text("Don't have an account? Register here"),
-            ),
+
           ],
         ),
       ),
+    );
+  }
+}
+
+
+class EffectListener extends StatelessWidget {
+  final Stream<dynamic> effectsStream;
+  final VoidCallback onMain;
+  final Widget child;
+
+  const EffectListener({
+    super.key,
+    required this.effectsStream,
+    required this.onMain,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: effectsStream,
+      builder: (context, asyncSnapshot) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (asyncSnapshot.hasData) {
+            final effect = asyncSnapshot.data;
+
+          }
+        });
+        return child;
+      },
     );
   }
 }
