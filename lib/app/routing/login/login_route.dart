@@ -8,7 +8,7 @@ import '../main/main_route.dart';
 
 part 'login_route.g.dart';
 
-@TypedGoRoute<LoginRoute>(path: "/splash")
+@TypedGoRoute<LoginRoute>(path: "/login")
 @immutable
 class LoginRoute extends GoRouteData {
   const LoginRoute();
