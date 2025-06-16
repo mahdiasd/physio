@@ -9,7 +9,7 @@ class BodyLargeText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
-  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
+  final VoidCallback? onTap;
 
   const BodyLargeText(
     this.text, {
@@ -60,7 +60,7 @@ class BodyMediumText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
-  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
+  final VoidCallback? onTap;
 
   const BodyMediumText(
     this.text, {
@@ -111,7 +111,7 @@ class BodySmallText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
-  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
+  final VoidCallback? onTap;
 
   const BodySmallText(
     this.text, {
@@ -162,7 +162,7 @@ class BodyLargeBoldText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
-  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
+  final VoidCallback? onTap;
 
   const BodyLargeBoldText(
     this.text, {
@@ -214,7 +214,7 @@ class BodyMediumBoldText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
-  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
+  final VoidCallback? onTap;
 
   const BodyMediumBoldText(
     this.text, {
@@ -266,7 +266,7 @@ class BodySmallBoldText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
-  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
+  final VoidCallback? onTap;
 
   const BodySmallBoldText(
     this.text, {

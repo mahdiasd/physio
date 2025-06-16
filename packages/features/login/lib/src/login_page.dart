@@ -54,18 +54,20 @@ class LoginContent extends StatelessWidget {
                   AppTextField(
                     value: state.email,
                     keyboardType: TextInputType.emailAddress,
+                    maxLines: 1,
                     hint: "Email",
-                    onChanged: (email) {
-                      context.read<LoginBloc>().add(EmailChanged(email));
+                    onChanged: (text) {
+                      context.read<LoginBloc>().add(EmailChanged(text));
                     },
                   ),
                   AppTextField(
-                    value: state.email,
+                    value: state.password,
                     keyboardType: TextInputType.text,
-                    hint: "Email",
-
-                    onChanged: (email) {
-                      context.read<LoginBloc>().add(PasswordChanged(email));
+                    maxLines: 1,
+                    obscureText: state.isPasswordObscured,
+                    hint: "Password",
+                    onChanged: (text) {
+                      context.read<LoginBloc>().add(PasswordChanged(text));
                     },
                   ),
                   Align(
@@ -82,7 +84,7 @@ class LoginContent extends StatelessWidget {
               },
             ),
             Column(
-              spacing: 8,
+              spacing: 12,
               children: [
                 BlocBuilder<LoginBloc, LoginState>(
                   buildWhen: (previous, current) =>
@@ -102,19 +104,17 @@ class LoginContent extends StatelessWidget {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 4,
                   children: [
-                    Text(
-                      'No Account Yet? ',
-                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    LabelMediumText(
+                      'No Account Yet?',
                     ),
-                    TextButton(
-                      onPressed: () {
+                    BodyMediumBoldText(
+                      'Sign Up',
+                      color: theme.colorScheme.primary,
+                      onTap: () {
                         context.read<LoginBloc>().add(SignUpPressed());
                       },
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(color: Colors.blue[700], fontSize: 14),
-                      ),
                     ),
                   ],
                 ),
