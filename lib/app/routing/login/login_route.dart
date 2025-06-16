@@ -21,6 +21,7 @@ class LoginRoute extends GoRouteData {
         builder: (innerContext) {
           return LoginPage(
             onMain: () => innerContext.go(HomeRoute().location),
+            onBack: () => innerContext.pop(),
           );
         },
       ),

@@ -3,31 +3,33 @@ import 'package:flutter/material.dart';
 class BodyLargeText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
-  final Color? color; // حالا null به صورت پیش‌فرض، برای استفاده از رنگ تم
+  final Color? color;
   final TextDirection textDirection;
-  final int? maxLines; // حالا null به صورت پیش‌فرض، برای خطوط نامحدود
+  final int? maxLines;
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
+  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
 
   const BodyLargeText(
-      this.text, {
-        super.key,
-        this.textAlign = TextAlign.start,
-        this.color, // اگر null باشد، از رنگ پیش‌فرض استایل تم استفاده می‌کند
-        this.textDirection = TextDirection.rtl,
-        this.maxLines, // اگر null باشد، خطوط نامحدود
-        this.overflow = TextOverflow.clip,
-        this.softWrap = true,
-        this.customStyle,
-      });
+    this.text, {
+    super.key,
+    this.textAlign = TextAlign.start,
+    this.color,
+    this.textDirection = TextDirection.ltr,
+    this.maxLines,
+    this.overflow = TextOverflow.clip,
+    this.softWrap = true,
+    this.customStyle,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final defaultStyle = textTheme.bodyLarge;
 
-    return Text(
+    final textWidget = Text(
       text,
       textAlign: textAlign,
       textDirection: textDirection,
@@ -35,9 +37,17 @@ class BodyLargeText extends StatelessWidget {
       overflow: overflow,
       softWrap: softWrap,
       style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color, // اگر color اینجا null باشد، copyWith رنگ قبلی را حفظ می‌کند
+        color: color,
       ),
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: textWidget,
+      );
+    }
+    return textWidget;
   }
 }
 
@@ -50,25 +60,27 @@ class BodyMediumText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
+  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
 
   const BodyMediumText(
-      this.text, {
-        super.key,
-        this.textAlign = TextAlign.start,
-        this.color,
-        this.textDirection = TextDirection.rtl,
-        this.maxLines,
-        this.overflow = TextOverflow.clip,
-        this.softWrap = true,
-        this.customStyle,
-      });
+    this.text, {
+    super.key,
+    this.textAlign = TextAlign.start,
+    this.color,
+    this.textDirection = TextDirection.ltr,
+    this.maxLines,
+    this.overflow = TextOverflow.clip,
+    this.softWrap = true,
+    this.customStyle,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final defaultStyle = textTheme.bodyMedium;
 
-    return Text(
+    final textWidget = Text(
       text,
       textAlign: textAlign,
       textDirection: textDirection,
@@ -79,6 +91,14 @@ class BodyMediumText extends StatelessWidget {
         color: color,
       ),
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: textWidget,
+      );
+    }
+    return textWidget;
   }
 }
 
@@ -91,25 +111,27 @@ class BodySmallText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
+  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
 
   const BodySmallText(
-      this.text, {
-        super.key,
-        this.textAlign = TextAlign.start,
-        this.color,
-        this.textDirection = TextDirection.rtl,
-        this.maxLines,
-        this.overflow = TextOverflow.clip,
-        this.softWrap = true,
-        this.customStyle,
-      });
+    this.text, {
+    super.key,
+    this.textAlign = TextAlign.start,
+    this.color,
+    this.textDirection = TextDirection.ltr,
+    this.maxLines,
+    this.overflow = TextOverflow.clip,
+    this.softWrap = true,
+    this.customStyle,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final defaultStyle = textTheme.bodySmall;
 
-    return Text(
+    final textWidget = Text(
       text,
       textAlign: textAlign,
       textDirection: textDirection,
@@ -120,6 +142,14 @@ class BodySmallText extends StatelessWidget {
         color: color,
       ),
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: textWidget,
+      );
+    }
+    return textWidget;
   }
 }
 
@@ -132,25 +162,28 @@ class BodyLargeBoldText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
+  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
 
   const BodyLargeBoldText(
-      this.text, {
-        super.key,
-        this.textAlign = TextAlign.start,
-        this.color,
-        this.textDirection = TextDirection.rtl,
-        this.maxLines,
-        this.overflow = TextOverflow.clip,
-        this.softWrap = true,
-        this.customStyle,
-      });
+    this.text, {
+    super.key,
+    this.textAlign = TextAlign.start,
+    this.color,
+    this.textDirection = TextDirection.ltr,
+    this.maxLines,
+    this.overflow = TextOverflow.clip,
+    this.softWrap = true,
+    this.customStyle,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final defaultStyle = textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold);
+    final defaultStyle =
+        textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold);
 
-    return Text(
+    final textWidget = Text(
       text,
       textAlign: textAlign,
       textDirection: textDirection,
@@ -161,6 +194,14 @@ class BodyLargeBoldText extends StatelessWidget {
         color: color,
       ),
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: textWidget,
+      );
+    }
+    return textWidget;
   }
 }
 
@@ -173,25 +214,28 @@ class BodyMediumBoldText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
+  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
 
   const BodyMediumBoldText(
-      this.text, {
-        super.key,
-        this.textAlign = TextAlign.start,
-        this.color,
-        this.textDirection = TextDirection.rtl,
-        this.maxLines,
-        this.overflow = TextOverflow.clip,
-        this.softWrap = true,
-        this.customStyle,
-      });
+    this.text, {
+    super.key,
+    this.textAlign = TextAlign.start,
+    this.color,
+    this.textDirection = TextDirection.ltr,
+    this.maxLines,
+    this.overflow = TextOverflow.clip,
+    this.softWrap = true,
+    this.customStyle,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final defaultStyle = textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold);
+    final defaultStyle =
+        textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold);
 
-    return Text(
+    final textWidget = Text(
       text,
       textAlign: textAlign,
       textDirection: textDirection,
@@ -202,6 +246,14 @@ class BodyMediumBoldText extends StatelessWidget {
         color: color,
       ),
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: textWidget,
+      );
+    }
+    return textWidget;
   }
 }
 
@@ -214,25 +266,28 @@ class BodySmallBoldText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
+  final VoidCallback? onTap; // پراپرتی جدید برای کلیک
 
   const BodySmallBoldText(
-      this.text, {
-        super.key,
-        this.textAlign = TextAlign.start,
-        this.color,
-        this.textDirection = TextDirection.rtl,
-        this.maxLines,
-        this.overflow = TextOverflow.clip,
-        this.softWrap = true,
-        this.customStyle,
-      });
+    this.text, {
+    super.key,
+    this.textAlign = TextAlign.start,
+    this.color,
+    this.textDirection = TextDirection.ltr,
+    this.maxLines,
+    this.overflow = TextOverflow.clip,
+    this.softWrap = true,
+    this.customStyle,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final defaultStyle = textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold);
+    final defaultStyle =
+        textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold);
 
-    return Text(
+    final textWidget = Text(
       text,
       textAlign: textAlign,
       textDirection: textDirection,
@@ -243,5 +298,13 @@ class BodySmallBoldText extends StatelessWidget {
         color: color,
       ),
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: textWidget,
+      );
+    }
+    return textWidget;
   }
 }

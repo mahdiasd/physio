@@ -1,28 +1,24 @@
-import 'package:domain/domain.dart';
-
 class LoginState {
-  final String username;
+  final String email;
   final String password;
   final bool isLoading;
-  final User? user;
 
-  LoginState(
-      {this.username = "",
-      this.password = "",
-      this.isLoading = false,
-      this.user = null});
+  LoginState({
+    this.email = '',
+    this.password = '',
+    this.isLoading = false,
+  });
 
   LoginState copyWith({
-    String? username,
+    String? email,
     String? password,
     bool? isLoading,
-    User? user,
+    String? errorMessage,
   }) {
     return LoginState(
-      username: username ?? this.username,
+      email: email ?? this.email,
       password: password ?? this.password,
       isLoading: isLoading ?? this.isLoading,
-      user: user ?? this.user,
     );
   }
 }

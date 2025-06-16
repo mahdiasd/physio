@@ -10,6 +10,7 @@ class AppTextField extends StatelessWidget {
   final int minLines;
   final int maxLines;
   final bool showClearIcon;
+  final bool obscureText;
   final TextDirection textDirection;
   final TextAlign textAlign;
   final TextStyle? textStyle;
@@ -37,13 +38,15 @@ class AppTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.leadingIcon,
     this.trailingIcon,
+    this.obscureText = false,
     this.errorText,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isClearVisible = showClearIcon && value.isNotEmpty && enabled && !readOnly;
+    final isClearVisible =
+        showClearIcon && value.isNotEmpty && enabled && !readOnly;
 
     return TextField(
       controller: TextEditingController(text: value),
@@ -52,13 +55,15 @@ class AppTextField extends StatelessWidget {
       readOnly: readOnly,
       minLines: minLines,
       maxLines: maxLines,
+      obscureText: obscureText,
       keyboardType: keyboardType,
       textDirection: textDirection,
       textAlign: textAlign,
       style: textStyle ?? theme.textTheme.bodyMedium,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: placeholderStyle ?? theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor),
+        hintStyle: placeholderStyle ??
+            theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
@@ -78,7 +83,8 @@ class AppTextField extends StatelessWidget {
         filled: true,
         fillColor: theme.colorScheme.surfaceVariant,
         errorText: isError ? errorText : null,
-        prefixIcon: leadingIcon ?? (isClearVisible ? _buildClearIcon(context) : null),
+        prefixIcon:
+            leadingIcon ?? (isClearVisible ? _buildClearIcon(context) : null),
         suffixIcon: trailingIcon,
       ),
     );
@@ -98,4 +104,3 @@ class AppTextField extends StatelessWidget {
     );
   }
 }
-

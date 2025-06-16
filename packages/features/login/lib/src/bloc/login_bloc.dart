@@ -16,28 +16,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>
 
   LoginBloc(this._loginUseCase) : super(LoginState()) {
 
-    on<UsernameChanged>((event, emit) {
-      emit(state.copyWith(username: event.username));
+    on<EmailChanged>((event, emit) {
+      emit(state.copyWith(email: event.email));
     });
 
     on<PasswordChanged>((event, emit) {
       emit(state.copyWith(password: event.password));
     });
 
-    on<LoginSubmitted>(_onLoginSubmitted);
+    on<LoginPressed>(_onLoginSubmitted);
   }
 
   Future<void> _onLoginSubmitted(
-    LoginSubmitted event,
+    LoginPressed event,
     Emitter<LoginState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
-    final result = await _loginUseCase.login(state.username, state.password);
+    final result = await _loginUseCase.login(state.email, state.password);
     emit(state.copyWith(isLoading: false));
 
     switch (result) {
       case Ok<User>():
-        emit(state.copyWith(user: result.value));
         break;
       case Error<User>():
         break;

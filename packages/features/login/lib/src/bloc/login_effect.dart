@@ -1,3 +1,4 @@
 sealed class LoginEffect {}
 
-class NavigateToHome extends LoginEffect {}
+class NavigateToMain extends LoginEffect {}
+class NavigateBack extends LoginEffect {}

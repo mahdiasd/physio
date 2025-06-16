@@ -1,17 +1,17 @@
-sealed class LoginEvent {
-  const LoginEvent();
-}
+sealed class LoginEvent {}
 
-class UsernameChanged extends LoginEvent {
-  final String username;
-  const UsernameChanged(this.username);
+class EmailChanged extends LoginEvent {
+  final String email;
+  EmailChanged(this.email);
 }
 
 class PasswordChanged extends LoginEvent {
   final String password;
-  const PasswordChanged(this.password);
+  PasswordChanged(this.password);
 }
 
-class LoginSubmitted extends LoginEvent {
-  const LoginSubmitted();
-}
+class LoginPressed extends LoginEvent {}
+
+class ForgotPasswordPressed extends LoginEvent {}
+
+class SignUpPressed extends LoginEvent {}

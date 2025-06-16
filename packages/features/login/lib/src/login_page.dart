@@ -9,105 +9,119 @@ import 'bloc/login_state.dart';
 
 class LoginPage extends StatelessWidget {
   final VoidCallback onMain;
+  final VoidCallback onBack;
 
   const LoginPage({
     super.key,
     required this.onMain,
+    required this.onBack,
   });
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<LoginBloc>();
-    return EffectListener(
+    return BlocListenerWidget(
       effectsStream: bloc.effectsStream,
-      onMain: onMain,
-      child: const LoginContent(),
-    );
-  }
-}
-
-class EffectListener extends StatelessWidget {
-  final Stream<dynamic> effectsStream;
-  final VoidCallback onMain;
-  final Widget child;
-
-  const EffectListener({
-    super.key,
-    required this.effectsStream,
-    required this.onMain,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: effectsStream,
-      builder: (context, snapshot) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          final effect = snapshot.data;
-          if (effect is NavigateToHome) {
-            onMain();
-          }
-        });
-        return child;
+      messageStream: bloc.messageStream,
+      effectHandlers: {
+        NavigateBack: onBack,
+        NavigateToMain: onMain,
       },
+      child: LoginContent(),
     );
   }
 }
 
+// Login Content
 class LoginContent extends StatelessWidget {
   const LoginContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<LoginBloc>();
-
+    final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: BlocBuilder<LoginBloc, LoginState>(
-        builder: (context, state) {
-          return AbsorbPointer(
-            absorbing: state.isLoading,
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+      backgroundColor: theme.colorScheme.surface,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 100),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            HeadlineLargeBoldText("Login"),
+            BlocBuilder<LoginBloc, LoginState>(
+              buildWhen: (previous, current) => previous.email != current.email,
+              builder: (context, state) {
+                return Column(spacing: 16, children: [
                   AppTextField(
-                    value: state.username,
-                    onChanged: (value) => bloc.add(UsernameChanged(value)),
-                    hint: 'Username',
+                    value: state.email,
+                    keyboardType: TextInputType.emailAddress,
+                    hint: "Email",
+                    onChanged: (email) {
+                      context.read<LoginBloc>().add(EmailChanged(email));
+                    },
                   ),
-                  const SizedBox(height: 16),
                   AppTextField(
-                    value: state.password,
-                    onChanged: (value) => bloc.add(PasswordChanged(value)),
-                    hint: 'Password',
-                    keyboardType: TextInputType.visiblePassword,
+                    value: state.email,
+                    keyboardType: TextInputType.text,
+                    hint: "Email",
+
+                    onChanged: (email) {
+                      context.read<LoginBloc>().add(PasswordChanged(email));
+                    },
                   ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => bloc.add(const LoginSubmitted()),
-                      child: state.isLoading
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor:
-                                AlwaysStoppedAnimation(Colors.white),
-                              ),
-                            )
-                          : const Text('Login'),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: BodyMediumText(
+                      "Forgot Password?",
+                      color: theme.colorScheme.primary,
+                      onTap: () {
+                        context.read<LoginBloc>().add(ForgotPasswordPressed());
+                      },
                     ),
                   ),
-                ],
-              ),
+                ]);
+              },
             ),
-          );
-        },
+            Column(
+              spacing: 8,
+              children: [
+                BlocBuilder<LoginBloc, LoginState>(
+                  buildWhen: (previous, current) =>
+                      previous.isLoading != current.isLoading,
+                  builder: (context, state) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: AppPrimaryButton(
+                        text: "Log In",
+                        onPressed: () {
+                          context.read<LoginBloc>().add(LoginPressed());
+                        },
+                        isLoading: state.isLoading,
+                      ),
+                    );
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'No Account Yet? ',
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<LoginBloc>().add(SignUpPressed());
+                      },
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(color: Colors.blue[700], fontSize: 14),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
