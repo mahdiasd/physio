@@ -65,6 +65,12 @@ class LoginContent extends StatelessWidget {
                     keyboardType: TextInputType.text,
                     maxLines: 1,
                     obscureText: state.isPasswordObscured,
+                    trailingIcon: IconButton(
+                      icon: Icon(
+                        state.isPasswordObscured ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      onPressed: () => context.read<LoginBloc>().add(TogglePasswordVisibility()),
+                    ),
                     hint: "Password",
                     onChanged: (text) {
                       context.read<LoginBloc>().add(PasswordChanged(text));
