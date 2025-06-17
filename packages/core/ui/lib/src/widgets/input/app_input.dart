@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   final String value;
   final ValueChanged<String> onChanged;
   final String hint;
@@ -43,26 +43,60 @@ class AppTextField extends StatelessWidget {
   });
 
   @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.value);
+    _controller.addListener(() {
+      if (_controller.text != widget.value) {
+        widget.onChanged(_controller.text);
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant AppTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != _controller.text) {
+      _controller.text = widget.value;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isClearVisible =
-        showClearIcon && value.isNotEmpty && enabled && !readOnly;
+        widget.showClearIcon &&
+            widget.value.isNotEmpty &&
+            widget.enabled &&
+            !widget.readOnly;
 
     return TextField(
-      controller: TextEditingController(text: value),
-      onChanged: onChanged,
-      enabled: enabled,
-      readOnly: readOnly,
-      minLines: minLines,
-      maxLines: maxLines,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      textDirection: textDirection,
-      textAlign: textAlign,
-      style: textStyle ?? theme.textTheme.bodyMedium,
+      controller: _controller,
+      enabled: widget.enabled,
+      readOnly: widget.readOnly,
+      minLines: widget.minLines,
+      maxLines: widget.maxLines,
+      obscureText: widget.obscureText,
+      keyboardType: widget.keyboardType,
+      textDirection: widget.textDirection,
+      textAlign: widget.textAlign,
+      style: widget.textStyle ?? theme.textTheme.bodyMedium,
       decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: placeholderStyle ??
+        hintText: widget.hint,
+        hintStyle: widget.placeholderStyle ??
             theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -82,17 +116,17 @@ class AppTextField extends StatelessWidget {
         ),
         filled: true,
         fillColor: theme.colorScheme.surfaceContainerHigh,
-        errorText: isError ? errorText : null,
-        prefixIcon:
-            leadingIcon ?? (isClearVisible ? _buildClearIcon(context) : null),
-        suffixIcon: trailingIcon,
+        errorText: widget.isError ? widget.errorText : null,
+        prefixIcon: widget.leadingIcon ??
+            (isClearVisible ? _buildClearIcon(context) : null),
+        suffixIcon: widget.trailingIcon,
       ),
     );
   }
 
   Widget _buildClearIcon(BuildContext context) {
     return GestureDetector(
-      onTap: () => onChanged(""),
+      onTap: () => _controller.clear(),
       child: Container(
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(

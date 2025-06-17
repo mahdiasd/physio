@@ -12,42 +12,55 @@ class BodyLargeText extends StatelessWidget {
   final VoidCallback? onTap;
 
   const BodyLargeText(
-    this.text, {
-    super.key,
-    this.textAlign = TextAlign.start,
-    this.color,
-    this.textDirection = TextDirection.ltr,
-    this.maxLines,
-    this.overflow = TextOverflow.clip,
-    this.softWrap = true,
-    this.customStyle,
-    this.onTap,
-  });
+      this.text, {
+        super.key,
+        this.textAlign = TextAlign.start,
+        this.color,
+        this.textDirection = TextDirection.ltr,
+        this.maxLines,
+        this.overflow = TextOverflow.clip,
+        this.softWrap = true,
+        this.customStyle,
+        this.onTap,
+      });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final defaultStyle = textTheme.bodyLarge;
 
-    final textWidget = Text(
-      text,
-      textAlign: textAlign,
-      textDirection: textDirection,
-      maxLines: maxLines,
-      overflow: overflow,
-      softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
-    );
+    final style = (customStyle ?? defaultStyle)?.copyWith(color: color);
 
     if (onTap != null) {
-      return GestureDetector(
-        onTap: onTap,
-        child: textWidget,
+      return TextButton(
+        onPressed: onTap,
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          alignment: Alignment.centerLeft,
+        ),
+        child: Text(
+          text,
+          textAlign: textAlign,
+          textDirection: textDirection,
+          maxLines: maxLines,
+          overflow: overflow,
+          softWrap: softWrap,
+          style: style,
+        ),
+      );
+    } else {
+      return Text(
+        text,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        maxLines: maxLines,
+        overflow: overflow,
+        softWrap: softWrap,
+        style: style,
       );
     }
-    return textWidget;
   }
 }
 
@@ -63,42 +76,55 @@ class BodyMediumText extends StatelessWidget {
   final VoidCallback? onTap;
 
   const BodyMediumText(
-    this.text, {
-    super.key,
-    this.textAlign = TextAlign.start,
-    this.color,
-    this.textDirection = TextDirection.ltr,
-    this.maxLines,
-    this.overflow = TextOverflow.clip,
-    this.softWrap = true,
-    this.customStyle,
-    this.onTap,
-  });
+      this.text, {
+        super.key,
+        this.textAlign = TextAlign.start,
+        this.color,
+        this.textDirection = TextDirection.ltr,
+        this.maxLines,
+        this.overflow = TextOverflow.clip,
+        this.softWrap = true,
+        this.customStyle,
+        this.onTap,
+      });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final defaultStyle = textTheme.bodyMedium;
 
-    final textWidget = Text(
-      text,
-      textAlign: textAlign,
-      textDirection: textDirection,
-      maxLines: maxLines,
-      overflow: overflow,
-      softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
-    );
+    final style = (customStyle ?? defaultStyle)?.copyWith(color: color);
 
     if (onTap != null) {
-      return GestureDetector(
-        onTap: onTap,
-        child: textWidget,
+      return TextButton(
+        onPressed: onTap,
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          alignment: Alignment.centerLeft,
+        ),
+        child: Text(
+          text,
+          textAlign: textAlign,
+          textDirection: textDirection,
+          maxLines: maxLines,
+          overflow: overflow,
+          softWrap: softWrap,
+          style: style,
+        ),
+      );
+    } else {
+      return Text(
+        text,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        maxLines: maxLines,
+        overflow: overflow,
+        softWrap: softWrap,
+        style: style,
       );
     }
-    return textWidget;
   }
 }
 
@@ -114,42 +140,55 @@ class BodySmallText extends StatelessWidget {
   final VoidCallback? onTap;
 
   const BodySmallText(
-    this.text, {
-    super.key,
-    this.textAlign = TextAlign.start,
-    this.color,
-    this.textDirection = TextDirection.ltr,
-    this.maxLines,
-    this.overflow = TextOverflow.clip,
-    this.softWrap = true,
-    this.customStyle,
-    this.onTap,
-  });
+      this.text, {
+        super.key,
+        this.textAlign = TextAlign.start,
+        this.color,
+        this.textDirection = TextDirection.ltr,
+        this.maxLines,
+        this.overflow = TextOverflow.clip,
+        this.softWrap = true,
+        this.customStyle,
+        this.onTap,
+      });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final defaultStyle = textTheme.bodySmall;
 
-    final textWidget = Text(
-      text,
-      textAlign: textAlign,
-      textDirection: textDirection,
-      maxLines: maxLines,
-      overflow: overflow,
-      softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
-    );
+    final style = (customStyle ?? defaultStyle)?.copyWith(color: color);
 
     if (onTap != null) {
-      return GestureDetector(
-        onTap: onTap,
-        child: textWidget,
+      return TextButton(
+        onPressed: onTap,
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          alignment: Alignment.centerLeft,
+        ),
+        child: Text(
+          text,
+          textAlign: textAlign,
+          textDirection: textDirection,
+          maxLines: maxLines,
+          overflow: overflow,
+          softWrap: softWrap,
+          style: style,
+        ),
+      );
+    } else {
+      return Text(
+        text,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        maxLines: maxLines,
+        overflow: overflow,
+        softWrap: softWrap,
+        style: style,
       );
     }
-    return textWidget;
   }
 }
 
@@ -165,43 +204,56 @@ class BodyLargeBoldText extends StatelessWidget {
   final VoidCallback? onTap;
 
   const BodyLargeBoldText(
-    this.text, {
-    super.key,
-    this.textAlign = TextAlign.start,
-    this.color,
-    this.textDirection = TextDirection.ltr,
-    this.maxLines,
-    this.overflow = TextOverflow.clip,
-    this.softWrap = true,
-    this.customStyle,
-    this.onTap,
-  });
+      this.text, {
+        super.key,
+        this.textAlign = TextAlign.start,
+        this.color,
+        this.textDirection = TextDirection.ltr,
+        this.maxLines,
+        this.overflow = TextOverflow.clip,
+        this.softWrap = true,
+        this.customStyle,
+        this.onTap,
+      });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final defaultStyle =
-        textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold);
+    textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold);
 
-    final textWidget = Text(
-      text,
-      textAlign: textAlign,
-      textDirection: textDirection,
-      maxLines: maxLines,
-      overflow: overflow,
-      softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
-    );
+    final style = (customStyle ?? defaultStyle)?.copyWith(color: color);
 
     if (onTap != null) {
-      return GestureDetector(
-        onTap: onTap,
-        child: textWidget,
+      return TextButton(
+        onPressed: onTap,
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          alignment: Alignment.centerLeft,
+        ),
+        child: Text(
+          text,
+          textAlign: textAlign,
+          textDirection: textDirection,
+          maxLines: maxLines,
+          overflow: overflow,
+          softWrap: softWrap,
+          style: style,
+        ),
+      );
+    } else {
+      return Text(
+        text,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        maxLines: maxLines,
+        overflow: overflow,
+        softWrap: softWrap,
+        style: style,
       );
     }
-    return textWidget;
   }
 }
 
@@ -217,43 +269,56 @@ class BodyMediumBoldText extends StatelessWidget {
   final VoidCallback? onTap;
 
   const BodyMediumBoldText(
-    this.text, {
-    super.key,
-    this.textAlign = TextAlign.start,
-    this.color,
-    this.textDirection = TextDirection.ltr,
-    this.maxLines,
-    this.overflow = TextOverflow.clip,
-    this.softWrap = true,
-    this.customStyle,
-    this.onTap,
-  });
+      this.text, {
+        super.key,
+        this.textAlign = TextAlign.start,
+        this.color,
+        this.textDirection = TextDirection.ltr,
+        this.maxLines,
+        this.overflow = TextOverflow.clip,
+        this.softWrap = true,
+        this.customStyle,
+        this.onTap,
+      });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final defaultStyle =
-        textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold);
+    textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold);
 
-    final textWidget = Text(
-      text,
-      textAlign: textAlign,
-      textDirection: textDirection,
-      maxLines: maxLines,
-      overflow: overflow,
-      softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
-    );
+    final style = (customStyle ?? defaultStyle)?.copyWith(color: color);
 
     if (onTap != null) {
-      return GestureDetector(
-        onTap: onTap,
-        child: textWidget,
+      return TextButton(
+        onPressed: onTap,
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          alignment: Alignment.centerLeft,
+        ),
+        child: Text(
+          text,
+          textAlign: textAlign,
+          textDirection: textDirection,
+          maxLines: maxLines,
+          overflow: overflow,
+          softWrap: softWrap,
+          style: style,
+        ),
+      );
+    } else {
+      return Text(
+        text,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        maxLines: maxLines,
+        overflow: overflow,
+        softWrap: softWrap,
+        style: style,
       );
     }
-    return textWidget;
   }
 }
 
@@ -269,42 +334,55 @@ class BodySmallBoldText extends StatelessWidget {
   final VoidCallback? onTap;
 
   const BodySmallBoldText(
-    this.text, {
-    super.key,
-    this.textAlign = TextAlign.start,
-    this.color,
-    this.textDirection = TextDirection.ltr,
-    this.maxLines,
-    this.overflow = TextOverflow.clip,
-    this.softWrap = true,
-    this.customStyle,
-    this.onTap,
-  });
+      this.text, {
+        super.key,
+        this.textAlign = TextAlign.start,
+        this.color,
+        this.textDirection = TextDirection.ltr,
+        this.maxLines,
+        this.overflow = TextOverflow.clip,
+        this.softWrap = true,
+        this.customStyle,
+        this.onTap,
+      });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final defaultStyle =
-        textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold);
+    textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold);
 
-    final textWidget = Text(
-      text,
-      textAlign: textAlign,
-      textDirection: textDirection,
-      maxLines: maxLines,
-      overflow: overflow,
-      softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
-    );
+    final style = (customStyle ?? defaultStyle)?.copyWith(color: color);
 
     if (onTap != null) {
-      return GestureDetector(
-        onTap: onTap,
-        child: textWidget,
+      return TextButton(
+        onPressed: onTap,
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          alignment: Alignment.centerLeft,
+        ),
+        child: Text(
+          text,
+          textAlign: textAlign,
+          textDirection: textDirection,
+          maxLines: maxLines,
+          overflow: overflow,
+          softWrap: softWrap,
+          style: style,
+        ),
+      );
+    } else {
+      return Text(
+        text,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        maxLines: maxLines,
+        overflow: overflow,
+        softWrap: softWrap,
+        style: style,
       );
     }
-    return textWidget;
   }
 }
