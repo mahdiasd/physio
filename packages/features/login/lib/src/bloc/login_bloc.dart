@@ -1,9 +1,12 @@
 import 'package:domain/domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:login/src/bloc/login_event.dart';
 import 'package:login/src/bloc/login_state.dart';
-import 'package:injectable/injectable.dart';
+import 'package:ui/src/bloc/side_effect_stream.dart';
 import 'package:utils/src/model/result.dart';
+
+import 'login_effect.dart';
 
 @injectable
 class LoginBloc extends Bloc<LoginEvent, LoginState>
@@ -13,29 +16,31 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>
 
   LoginBloc(this._loginUseCase) : super(LoginState()) {
 
-    on<UsernameChanged>((event, emit) {
-      emit(state.copyWith(username: event.username));
+    on<EmailChanged>((event, emit) {
+      emit(state.copyWith(email: event.email));
     });
 
     on<PasswordChanged>((event, emit) {
       emit(state.copyWith(password: event.password));
     });
 
-    on<LoginSubmitted>(_onLoginSubmitted);
+    on<TogglePasswordVisibility>((event, emit) {
+      emit(state.copyWith(isPasswordObscured: !state.isPasswordObscured));
+    });
 
+    on<LoginPressed>(_onLoginSubmitted);
   }
 
   Future<void> _onLoginSubmitted(
-    LoginSubmitted event,
+    LoginPressed event,
     Emitter<LoginState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
-    final result = await _loginUseCase.login(state.username, state.password);
+    final result = await _loginUseCase.login(state.email, state.password);
     emit(state.copyWith(isLoading: false));
 
     switch (result) {
       case Ok<User>():
-        emit(state.copyWith(user: result.value));
         break;
       case Error<User>():
         break;

@@ -896,7 +896,7 @@ packages:
     source: path
     version: "0.1.0+1"
   responsive_framework:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: responsive_framework
       sha256: a8e1c13d4ba980c60cbf6fa1e9907cd60662bf2585184d7c96ca46c43de91552

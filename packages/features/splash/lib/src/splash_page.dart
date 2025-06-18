@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:splash/src/bloc/splash_event.dart';
 import 'package:splash/src/bloc/splash_state.dart';
-import 'package:utils/utils.dart';
+import 'package:ui/ui.dart';
 
 import 'bloc/splash_bloc.dart';
 import 'bloc/splash_effect.dart';
@@ -21,48 +21,14 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<SplashBloc>();
-    return EffectListener(
+    return BlocListenerWidget(
       effectsStream: bloc.effectsStream,
-      onLogin: onLogin,
-      onMain: onMain,
-      child: SplashContent(),
-    );
-  }
-}
-
-class EffectListener extends StatelessWidget {
-  final Stream<dynamic> effectsStream;
-  final VoidCallback onLogin;
-  final VoidCallback onMain;
-  final Widget child;
-
-  const EffectListener({
-    super.key,
-    required this.effectsStream,
-    required this.onLogin,
-    required this.onMain,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: effectsStream,
-      builder: (context, asyncSnapshot) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (asyncSnapshot.hasData) {
-            final effect = asyncSnapshot.data;
-            if (effect is NavigateToLogin) {
-              "NavigateToLogin".dLog();
-              onLogin();
-            } else if (effect is NavigateToMain) {
-              "NavigateToMain".dLog();
-              onMain();
-            }
-          }
-        });
-        return child;
+      messageStream: bloc.messageStream,
+      effectHandlers: {
+        NavigateToLogin: onLogin,
+        NavigateToMain: onMain,
       },
+      child: SplashContent(),
     );
   }
 }

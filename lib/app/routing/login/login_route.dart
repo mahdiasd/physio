@@ -8,7 +8,7 @@ import '../main/main_route.dart';
 
 part 'login_route.g.dart';
 
-@TypedGoRoute<LoginRoute>(path: "/splash")
+@TypedGoRoute<LoginRoute>(path: "/login")
 @immutable
 class LoginRoute extends GoRouteData {
   const LoginRoute();
@@ -21,6 +21,7 @@ class LoginRoute extends GoRouteData {
         builder: (innerContext) {
           return LoginPage(
             onMain: () => innerContext.go(HomeRoute().location),
+            onBack: () => innerContext.pop(),
           );
         },
       ),

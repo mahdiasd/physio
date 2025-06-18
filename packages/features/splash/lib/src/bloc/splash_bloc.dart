@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 import 'package:splash/src/bloc/splash_effect.dart';
 import 'package:splash/src/bloc/splash_event.dart';
 import 'package:splash/src/bloc/splash_state.dart';
-import 'package:ui/src/bloc/side_effect_stream.dart';
 import 'package:ui/ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:utils/utils.dart';
