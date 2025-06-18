@@ -1,4 +1,4 @@
 /// A Very Good Project created by Very Good CLI.
 library;
 
-export 'src/register.dart';
+export 'src/register_page.dart';
