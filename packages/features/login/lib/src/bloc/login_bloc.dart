@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:login/src/bloc/login_event.dart';
 import 'package:login/src/bloc/login_state.dart';
 import 'package:ui/src/bloc/side_effect_stream.dart';
+import 'package:ui/ui.dart';
 import 'package:utils/src/model/result.dart';
 
 import 'login_effect.dart';
@@ -11,10 +12,10 @@ import 'login_effect.dart';
 @injectable
 class LoginBloc extends Bloc<LoginEvent, LoginState>
     with SideEffectMixin<LoginState, LoginEffect> {
-
   final LoginUseCase _loginUseCase;
 
   LoginBloc(this._loginUseCase) : super(LoginState()) {
+    print("***************************************************** LoginBloc");
 
     on<EmailChanged>((event, emit) {
       emit(state.copyWith(email: event.email));
@@ -28,6 +29,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>
       emit(state.copyWith(isPasswordObscured: !state.isPasswordObscured));
     });
 
+    on<ForgotPasswordPressed>((event, emit) {
+      emitEffect(NavigateToForgotPassword());
+    });
+
+    on<RegisterPressed>((event, emit) {
+      print("RegisterPressed");
+      emitEffect(NavigateToRegister());
+    });
+
     on<LoginPressed>(_onLoginSubmitted);
   }
 
@@ -35,14 +45,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>
     LoginPressed event,
     Emitter<LoginState> emit,
   ) async {
+    print("***************************************************** _onLoginSubmitted");
     emit(state.copyWith(isLoading: true));
     final result = await _loginUseCase.login(state.email, state.password);
     emit(state.copyWith(isLoading: false));
 
     switch (result) {
       case Ok<User>():
+        emitEffect(NavigateToMain());
+        print("***************************************************** Ok<User>()");
         break;
       case Error<User>():
+        print("***************************************************** Error<User>()");
+        emitMessage(result.error.toUiMessage());
         break;
     }
   }

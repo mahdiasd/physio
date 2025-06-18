@@ -16,4 +16,4 @@ class TogglePasswordVisibility extends LoginEvent {}
 
 class ForgotPasswordPressed extends LoginEvent {}
 
-class SignUpPressed extends LoginEvent {}
+class RegisterPressed extends LoginEvent {}

@@ -8,4 +8,5 @@ import 'register/register_route.dart';
 final router = GoRouter(
   initialLocation: SplashRoute().location,
   routes: [$splashRoute, $loginRoute, $registerRoute, $mainRoute],
+  routerNeglect: false,
 );

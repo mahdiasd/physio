@@ -15,6 +15,7 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:login/src/di/login_di.module.dart' as _i63;
 import 'package:network/src/di/network_di.module.dart' as _i292;
+import 'package:register/src/di/register_di.module.dart' as _i536;
 import 'package:splash/src/di/splash_di.module.dart' as _i49;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -32,6 +33,7 @@ extension GetItInjectableX on _i174.GetIt {
     await _i24.DataPackageModule().init(gh);
     await _i887.DomainPackageModule().init(gh);
     await _i63.LoginPackageModule().init(gh);
+    await _i536.RegisterPackageModule().init(gh);
     await _i49.SplashPackageModule().init(gh);
     return this;
   }

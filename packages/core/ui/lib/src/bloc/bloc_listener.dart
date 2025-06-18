@@ -1,9 +1,9 @@
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
 import '../../ui.dart';
-
-class BlocListenerWidget extends StatelessWidget {
+class BlocListenerWidget extends StatefulWidget {
   final Stream<dynamic> effectsStream;
   final Map<Type, VoidCallback> effectHandlers;
   final Stream<UiMessage> messageStream;
@@ -20,52 +20,71 @@ class BlocListenerWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: effectsStream,
-      builder: (context, effectSnapshot) {
-        return StreamBuilder(
-          stream: messageStream,
-          builder: (context, messageSnapshot) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-
-              if (effectSnapshot.hasData) {
-                final effect = effectSnapshot.data;
-                final handler = effectHandlers[effect.runtimeType];
-                if (handler != null) {
-                  handler();
-                }
-              }
-
-              if (messageSnapshot.hasData) {
-                final message = messageSnapshot.data!;
-                if (customMessageHandler != null) {
-                  customMessageHandler!(message);
-                } else {
-                  _showToast(context, message);
-                }
-              }
-            });
-            return child;
-          },
-        );
-      },
-    );
-  }
+  State<BlocListenerWidget> createState() => _BlocListenerWidgetState();
 }
 
-void _showToast(BuildContext context, UiMessage message) {
-  if (message.status == UiMessageStatus.Success) {
-    successToast(
-      title: 'Success',
-      description: message.message,
-    );
-  } else if (message.status == UiMessageStatus.Error) {
-    errorToast(
-      title: 'Error',
-      description: message.message,
-    );
-  } else if (message.status == UiMessageStatus.Warning) {
-    // اگه بعداً warningToast اضافه کردی، اینجا استفاده کن
+class _BlocListenerWidgetState extends State<BlocListenerWidget> {
+  StreamSubscription<dynamic>? _effectSubscription;
+  StreamSubscription<UiMessage>? _messageSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupListeners();
+  }
+
+  void _setupListeners() {
+    _effectSubscription = widget.effectsStream.listen((effect) {
+      if (mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            final handler = widget.effectHandlers[effect.runtimeType];
+            handler?.call();
+          }
+        });
+      }
+    });
+
+    _messageSubscription = widget.messageStream.listen((message) {
+      if (mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            if (widget.customMessageHandler != null) {
+              widget.customMessageHandler!(message);
+            } else {
+              _showToast(context, message);
+            }
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _effectSubscription?.cancel();
+    _messageSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+
+  void _showToast(BuildContext context, UiMessage message) {
+    if (message.status == UiMessageStatus.Success) {
+      successToast(
+        title: 'Success',
+        description: message.message,
+      );
+    } else if (message.status == UiMessageStatus.Error) {
+      errorToast(
+        title: 'Error',
+        description: message.message,
+      );
+    } else if (message.status == UiMessageStatus.Warning) {
+      // اگه بعداً warningToast اضافه کردی، اینجا استفاده کن
+    }
   }
 }

@@ -13,7 +13,9 @@ export 'src/repository/config/config_repository.dart';
 
 // Use Cases
 export 'src/usecase/user/login_use_case.dart';
+export 'src/usecase/user/register_use_case.dart';
 export 'src/usecase/config/get_config_use_case.dart';
 
 export 'src/di/domain_di.dart';
+
 // export 'src/di/domain_di.module.dart';

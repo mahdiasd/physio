@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 import '../login.dart';
 import 'bloc/login_effect.dart';
@@ -9,13 +10,17 @@ import 'bloc/login_state.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class LoginPage extends StatelessWidget {
-  final VoidCallback onMain;
-  final VoidCallback onBack;
+  final VoidCallback navigateToMain;
+  final VoidCallback navigateBack;
+  final VoidCallback navigateToRegister;
+  final VoidCallback navigateToForgotPassword;
 
   const LoginPage({
     super.key,
-    required this.onMain,
-    required this.onBack,
+    required this.navigateToMain,
+    required this.navigateBack,
+    required this.navigateToRegister,
+    required this.navigateToForgotPassword,
   });
 
   @override
@@ -25,12 +30,35 @@ class LoginPage extends StatelessWidget {
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
-        NavigateBack: onBack,
-        NavigateToMain: onMain,
+        NavigateBack: navigateBack,
+        NavigateToMain: navigateToMain,
+        NavigateToRegister: navigateToRegister,
+        NavigateToForgotPassword: navigateToForgotPassword,
       },
       child: LoginContent(),
     );
   }
+
+  //
+  // @override
+  // Widget build(BuildContext context) {
+  //   final bloc = getIt<LoginBloc>();
+  //   return BlocProvider(
+  //     create: (context) => bloc,
+  //     child: Builder(builder: (context) {
+  //       return BlocListenerWidget(
+  //           effectsStream: bloc.effectsStream,
+  //           messageStream: bloc.messageStream,
+  //           effectHandlers: {
+  //             NavigateBack: navigateBack,
+  //             NavigateToMain: navigateToMain,
+  //             NavigateToRegister: navigateToRegister,
+  //             NavigateToForgotPassword: navigateToForgotPassword,
+  //           },
+  //           child: LoginContent());
+  //     }),
+  //   );
+  // }
 }
 
 class LoginContent extends StatelessWidget {
@@ -59,6 +87,7 @@ class LoginContent extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 32),
                       child: HeadlineLargeBoldText("Rose Physio HUB",
+                          textAlign: TextAlign.center,
                           color: theme.colorScheme.onPrimary),
                     ),
                   ),
@@ -168,7 +197,7 @@ class LoginForm extends StatelessWidget {
                     'Sign Up',
                     color: theme.colorScheme.primary,
                     onTap: () {
-                      context.read<LoginBloc>().add(SignUpPressed());
+                      context.read<LoginBloc>().add(RegisterPressed());
                     },
                   ),
                 ],
