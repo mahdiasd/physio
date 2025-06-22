@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
-import 'package:utils/utils.dart';
 
 import 'bloc/register_bloc.dart';
 import 'bloc/register_effect.dart';
@@ -18,25 +17,6 @@ class RegisterPage extends StatelessWidget {
     required this.onMain,
     required this.onBack,
   });
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   final bloc = getIt<RegisterBloc>();
-  //   return BlocProvider(
-  //     create: (context) => bloc,
-  //     child: Builder(builder: (context) {
-  //       return BlocListenerWidget(
-  //         effectsStream: bloc.effectsStream,
-  //         messageStream: bloc.messageStream,
-  //         effectHandlers: {
-  //           NavigateBack: onBack,
-  //           NavigateToMain: onMain,
-  //         },
-  //         child: RegisterContent(),
-  //       );
-  //     }),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,31 +39,40 @@ class RegisterContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isNotMobile = !ResponsiveBreakpoints.of(context).isMobile;
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: Row(
         children: [
-          if (isNotMobile)
+          if (!ResponsiveBreakpoints.of(context).isMobile)
             Expanded(
-              child: Stack(
-                children: [
-                  Positioned.fill(
+              child: Container(
+                color: Colors.grey,
+                child: Column(spacing: 50, children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 100, left: 24, right: 24),
+                    child: Column(
+                      spacing: 16,
+                      children: [
+                        HeadlineLargeBoldText("Rose Physio HUB",
+                            textAlign: TextAlign.center,
+                            color: theme.colorScheme.onPrimary),
+                        BodyMediumText(
+                            "Your personal space to follow your care plan, track your progress, and stay connected with your practitioner.",
+                            textAlign: TextAlign.center,
+                            color: theme.colorScheme.onPrimary),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 250,
+                    height: 250,
                     child: Image.asset(
                       "assets/images/login_vector.jpg",
                       fit: BoxFit.cover,
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 32),
-                      child: HeadlineLargeBoldText("Rose Physio HUB",
-                          textAlign: TextAlign.center,
-                          color: theme.colorScheme.onPrimary),
-                    ),
-                  ),
-                ],
+                  )
+                ]),
               ),
             ),
           Expanded(
@@ -113,7 +102,16 @@ class RegisterForm extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          HeadlineLargeBoldText("Register"),
+          Column(
+            spacing: 16,
+            children: [
+              HeadlineLargeBoldText("Sign Up"),
+              if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
+                BodyMediumText(
+                    textAlign: TextAlign.center,
+                    "Join Rose Physio HUB to access your personalised care plan, track progress, and stay connected with your practitioner."),
+            ],
+          ),
           BlocBuilder<RegisterBloc, RegisterState>(
             builder: (context, state) {
               return Column(spacing: 8, children: [

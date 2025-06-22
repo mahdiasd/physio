@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
-import 'package:utils/utils.dart';
 
 import '../login.dart';
 import 'bloc/login_effect.dart';
 import 'bloc/login_event.dart';
 import 'bloc/login_state.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 class LoginPage extends StatelessWidget {
   final VoidCallback navigateToMain;
@@ -38,27 +37,6 @@ class LoginPage extends StatelessWidget {
       child: LoginContent(),
     );
   }
-
-  //
-  // @override
-  // Widget build(BuildContext context) {
-  //   final bloc = getIt<LoginBloc>();
-  //   return BlocProvider(
-  //     create: (context) => bloc,
-  //     child: Builder(builder: (context) {
-  //       return BlocListenerWidget(
-  //           effectsStream: bloc.effectsStream,
-  //           messageStream: bloc.messageStream,
-  //           effectHandlers: {
-  //             NavigateBack: navigateBack,
-  //             NavigateToMain: navigateToMain,
-  //             NavigateToRegister: navigateToRegister,
-  //             NavigateToForgotPassword: navigateToForgotPassword,
-  //           },
-  //           child: LoginContent());
-  //     }),
-  //   );
-  // }
 }
 
 class LoginContent extends StatelessWidget {
@@ -67,31 +45,39 @@ class LoginContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isNotMobile = !ResponsiveBreakpoints.of(context).isMobile;
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: Row(
         children: [
-          if (isNotMobile)
+          if (!ResponsiveBreakpoints.of(context).isMobile)
             Expanded(
-              child: Stack(
-                children: [
-                  Positioned.fill(
+              child: Container(
+                color: Colors.grey,
+                child: Column(spacing: 50, children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 100,left: 24 , right: 24),
+                    child: Column(
+                      spacing: 16,
+                      children: [
+                        HeadlineLargeBoldText("Rose Physio HUB",
+                            textAlign: TextAlign.center,
+                            color: theme.colorScheme.onPrimary),
+                        BodyMediumText(
+                            "Your personal space to follow your care plan, track your progress, and stay connected with your practitioner.",
+                            textAlign: TextAlign.center,
+                            color: theme.colorScheme.onPrimary),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 250,
+                    height: 250,
                     child: Image.asset(
                       "assets/images/login_vector.jpg",
-                      fit: BoxFit.cover, // یا contain بسته به نوع تصویر
+                      fit: BoxFit.cover,
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 32),
-                      child: HeadlineLargeBoldText("Rose Physio HUB",
-                          textAlign: TextAlign.center,
-                          color: theme.colorScheme.onPrimary),
-                    ),
-                  ),
-                ],
+                  )
+                ]),
               ),
             ),
           Expanded(
@@ -121,7 +107,16 @@ class LoginForm extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          HeadlineLargeBoldText("Login"),
+          Column(
+            spacing: 16,
+            children: [
+              HeadlineLargeBoldText("Login"),
+              if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
+                BodyMediumText(
+                    textAlign: TextAlign.center,
+                    "Log in to check your programmes, book appointments, and chat with your practitioner."),
+            ],
+          ),
           BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {
               return Column(spacing: 16, children: [
