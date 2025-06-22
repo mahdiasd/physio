@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:splash/src/bloc/splash_event.dart';
 import 'package:splash/src/bloc/splash_state.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 import 'bloc/splash_bloc.dart';
 import 'bloc/splash_effect.dart';
@@ -20,15 +21,20 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<SplashBloc>();
-    return BlocListenerWidget(
-      effectsStream: bloc.effectsStream,
-      messageStream: bloc.messageStream,
-      effectHandlers: {
-        NavigateToLogin: onLogin,
-        NavigateToMain: onMain,
-      },
-      child: SplashContent(),
+    final bloc = getIt<SplashBloc>();
+    return BlocProvider(
+      create: (context) => bloc,
+      child: Builder(builder: (context) {
+        return BlocListenerWidget(
+          effectsStream: bloc.effectsStream,
+          messageStream: bloc.messageStream,
+          effectHandlers: {
+            NavigateToLogin: onLogin,
+            NavigateToMain: onMain,
+          },
+          child: SplashContent(),
+        );
+      }),
     );
   }
 }

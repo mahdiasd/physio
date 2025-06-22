@@ -10,9 +10,36 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl(this._userApiService);
 
   @override
-  Future<Result<User>> login(String username, String password) async {
+  Future<Result<User>> login({
+    required String email,
+    required String password,
+  }) async {
     final result = await ApiCaller.safeApiCall<LoginResponse>(
-      () => _userApiService.login(username, password),
+      () => _userApiService.login(email: email, password: password),
+    );
+
+    switch (result) {
+      case Ok<LoginResponse>():
+        return Result.ok(_mapToUser(result.value));
+      case Error<LoginResponse>():
+        return Result.error(result.error);
+    }
+  }
+
+  @override
+  Future<Result<User>> register({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String password,
+  }) async {
+    final result = await ApiCaller.safeApiCall<LoginResponse>(
+      () => _userApiService.register(
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+      ),
     );
 
     switch (result) {

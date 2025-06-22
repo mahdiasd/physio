@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
 
 import '../login.dart';
@@ -8,49 +9,32 @@ import 'bloc/login_event.dart';
 import 'bloc/login_state.dart';
 
 class LoginPage extends StatelessWidget {
-  final VoidCallback onMain;
+  final VoidCallback navigateToMain;
+  final VoidCallback navigateBack;
+  final VoidCallback navigateToRegister;
+  final VoidCallback navigateToForgotPassword;
 
   const LoginPage({
     super.key,
-    required this.onMain,
+    required this.navigateToMain,
+    required this.navigateBack,
+    required this.navigateToRegister,
+    required this.navigateToForgotPassword,
   });
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<LoginBloc>();
-    return EffectListener(
+    return BlocListenerWidget(
       effectsStream: bloc.effectsStream,
-      onMain: onMain,
-      child: const LoginContent(),
-    );
-  }
-}
-
-class EffectListener extends StatelessWidget {
-  final Stream<dynamic> effectsStream;
-  final VoidCallback onMain;
-  final Widget child;
-
-  const EffectListener({
-    super.key,
-    required this.effectsStream,
-    required this.onMain,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: effectsStream,
-      builder: (context, snapshot) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          final effect = snapshot.data;
-          if (effect is NavigateToHome) {
-            onMain();
-          }
-        });
-        return child;
+      messageStream: bloc.messageStream,
+      effectHandlers: {
+        NavigateBack: navigateBack,
+        NavigateToMain: navigateToMain,
+        NavigateToRegister: navigateToRegister,
+        NavigateToForgotPassword: navigateToForgotPassword,
       },
+      child: LoginContent(),
     );
   }
 }
@@ -60,54 +44,162 @@ class LoginContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<LoginBloc>();
-
+    final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: BlocBuilder<LoginBloc, LoginState>(
-        builder: (context, state) {
-          return AbsorbPointer(
-            absorbing: state.isLoading,
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AppTextField(
-                    value: state.username,
-                    onChanged: (value) => bloc.add(UsernameChanged(value)),
-                    hint: 'Username',
-                  ),
-                  const SizedBox(height: 16),
-                  AppTextField(
-                    value: state.password,
-                    onChanged: (value) => bloc.add(PasswordChanged(value)),
-                    hint: 'Password',
-                    keyboardType: TextInputType.visiblePassword,
-                  ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => bloc.add(const LoginSubmitted()),
-                      child: state.isLoading
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor:
-                                AlwaysStoppedAnimation(Colors.white),
-                              ),
-                            )
-                          : const Text('Login'),
+      backgroundColor: theme.colorScheme.surface,
+      body: Row(
+        children: [
+          if (!ResponsiveBreakpoints.of(context).isMobile)
+            Expanded(
+              child: Container(
+                color: Colors.grey,
+                child: Column(spacing: 50, children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 100,left: 24 , right: 24),
+                    child: Column(
+                      spacing: 16,
+                      children: [
+                        HeadlineLargeBoldText("Rose Physio HUB",
+                            textAlign: TextAlign.center,
+                            color: theme.colorScheme.onPrimary),
+                        BodyMediumText(
+                            "Your personal space to follow your care plan, track your progress, and stay connected with your practitioner.",
+                            textAlign: TextAlign.center,
+                            color: theme.colorScheme.onPrimary),
+                      ],
                     ),
+                  ),
+                  SizedBox(
+                    width: 250,
+                    height: 250,
+                    child: Image.asset(
+                      "assets/images/login_vector.jpg",
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                ]),
+              ),
+            ),
+          Expanded(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: 400,
+                ),
+                child: LoginForm(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LoginForm extends StatelessWidget {
+  const LoginForm({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            spacing: 16,
+            children: [
+              HeadlineLargeBoldText("Login"),
+              if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
+                BodyMediumText(
+                    textAlign: TextAlign.center,
+                    "Log in to check your programmes, book appointments, and chat with your practitioner."),
+            ],
+          ),
+          BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state) {
+              return Column(spacing: 16, children: [
+                AppTextField(
+                  value: state.email,
+                  keyboardType: TextInputType.emailAddress,
+                  maxLines: 1,
+                  hint: "Email",
+                  onChanged: (text) {
+                    context.read<LoginBloc>().add(EmailChanged(text));
+                  },
+                ),
+                AppTextField(
+                  value: state.password,
+                  keyboardType: TextInputType.text,
+                  maxLines: 1,
+                  obscureText: state.isPasswordObscured,
+                  trailingIcon: IconButton(
+                    icon: Icon(
+                      state.isPasswordObscured
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () => context
+                        .read<LoginBloc>()
+                        .add(TogglePasswordVisibility()),
+                  ),
+                  hint: "Password",
+                  onChanged: (text) {
+                    context.read<LoginBloc>().add(PasswordChanged(text));
+                  },
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: BodyMediumText(
+                    "Forgot Password?",
+                    color: theme.colorScheme.primary,
+                    onTap: () {
+                      context.read<LoginBloc>().add(ForgotPasswordPressed());
+                    },
+                  ),
+                ),
+              ]);
+            },
+          ),
+          Column(
+            spacing: 12,
+            children: [
+              BlocBuilder<LoginBloc, LoginState>(
+                buildWhen: (previous, current) =>
+                    previous.isLoading != current.isLoading,
+                builder: (context, state) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: AppPrimaryButton(
+                      text: "Log In",
+                      onPressed: () {
+                        context.read<LoginBloc>().add(LoginPressed());
+                      },
+                      isLoading: state.isLoading,
+                    ),
+                  );
+                },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 4,
+                children: [
+                  LabelMediumText(
+                    'No Account Yet?',
+                  ),
+                  BodyMediumBoldText(
+                    'Sign Up',
+                    color: theme.colorScheme.primary,
+                    onTap: () {
+                      context.read<LoginBloc>().add(RegisterPressed());
+                    },
                   ),
                 ],
               ),
-            ),
-          );
-        },
+            ],
+          )
+        ],
       ),
     );
   }

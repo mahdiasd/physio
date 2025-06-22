@@ -50,12 +50,15 @@ dependencies:
   melos: ^6.3.2
   go_router: ^15.1.2
   google_fonts: ^6.2.1
-#  flutter_native_splash: ^2.4.6
+  responsive_framework: ^1.5.1
 
 dev_dependencies:
   bloc_test: 9.1.7
   flutter_test:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+
   injectable_generator: ^2.7.0
   build_runner: ^2.4.15
   flutter_lints: ^5.0.0

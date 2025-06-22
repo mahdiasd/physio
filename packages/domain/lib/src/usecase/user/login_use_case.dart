@@ -9,7 +9,7 @@ class LoginUseCase {
 
   LoginUseCase(this._userRepository);
 
-  Future<Result<User>> login(String username, String password) {
-    return _userRepository.login(username, password);
+  Future<Result<User>> login(String email, String password) {
+    return _userRepository.login(email: email, password: password);
   }
 }

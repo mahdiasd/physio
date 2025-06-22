@@ -20,6 +20,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState>
   }
 
   Future<void> _getConfig(OnRefresh event, Emitter<SplashState> emit) async {
+    print("******************************************** _getConfig");
     emit(state.copyWith(isLoading: true));
     final result = await _configUseCase.getConfig();
     emit(state.copyWith(isLoading: false));

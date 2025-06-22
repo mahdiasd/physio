@@ -12,10 +12,21 @@ class UserApiServiceImpl extends UserApiService {
 
   @override
   Future<Response<NetworkResponse<LoginResponse>>> login(
-    String username,
-    String password,
-  ) {
-    return dio
-        .post('login', data: {'username': username, 'password': password});
+      {required String email, required String password}) {
+    return dio.post('login', data: {'email': email, 'password': password});
+  }
+
+  @override
+  Future<Response<NetworkResponse<LoginResponse>>> register(
+      {required String firstName,
+      required String lastName,
+      required String email,
+      required String password}) {
+    return dio.post('login', data: {
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'password': password
+    });
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui/src/widgets/text/body_text.dart';
 
 class AppPrimaryButton extends StatelessWidget {
   final String text;
@@ -7,15 +8,17 @@ class AppPrimaryButton extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final double borderRadius;
   final double elevation;
+  final Color? textColor;
 
   const AppPrimaryButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.isLoading = false,
-    this.padding = const EdgeInsets.symmetric(vertical: 14),
-    this.borderRadius = 12,
+    this.padding = const EdgeInsets.symmetric(vertical: 16),
+    this.borderRadius = 25,
     this.elevation = 0,
+    this.textColor,
   });
 
   @override
@@ -32,7 +35,7 @@ class AppPrimaryButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
         ),
-        textStyle: Theme.of(context).textTheme.labelLarge,
+        textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
       ),
       child: isLoading
           ? SizedBox(
@@ -43,7 +46,10 @@ class AppPrimaryButton extends StatelessWidget {
                 valueColor: AlwaysStoppedAnimation(colorScheme.onPrimary),
               ),
             )
-          : Text(text),
+          : BodyLargeBoldText(
+              text,
+              color: textColor ?? colorScheme.onPrimary,
+            ),
     );
   }
 }
@@ -55,6 +61,7 @@ class AppPrimaryContainerButton extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final double borderRadius;
   final double elevation;
+  final Color? textColor;
 
   const AppPrimaryContainerButton({
     super.key,
@@ -62,8 +69,9 @@ class AppPrimaryContainerButton extends StatelessWidget {
     required this.onPressed,
     this.isLoading = false,
     this.padding = const EdgeInsets.symmetric(vertical: 14),
-    this.borderRadius = 12,
+    this.borderRadius = 25,
     this.elevation = 0,
+    this.textColor,
   });
 
   @override
@@ -80,7 +88,7 @@ class AppPrimaryContainerButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
         ),
-        textStyle: Theme.of(context).textTheme.labelLarge,
+        textStyle: Theme.of(context).textTheme.bodyLarge,
       ),
       child: isLoading
           ? SizedBox(
@@ -92,7 +100,10 @@ class AppPrimaryContainerButton extends StatelessWidget {
                     AlwaysStoppedAnimation(colorScheme.onPrimaryContainer),
               ),
             )
-          : Text(text),
+          : BodyLargeBoldText(
+              text,
+              color: textColor ?? colorScheme.onPrimaryContainer,
+            ),
     );
   }
 }

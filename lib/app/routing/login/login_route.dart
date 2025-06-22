@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:login/login.dart';
+import 'package:physio/app/routing/register/register_route.dart';
 import 'package:utils/utils.dart';
 
 import '../main/main_route.dart';
@@ -20,10 +21,25 @@ class LoginRoute extends GoRouteData {
       child: Builder(
         builder: (innerContext) {
           return LoginPage(
-            onMain: () => innerContext.go(HomeRoute().location),
+            navigateToMain: () => innerContext.go(HomeRoute().location),
+            navigateBack: () => innerContext.pop(),
+            navigateToRegister: () {
+              innerContext.push(RegisterRoute().location);
+            },
+            navigateToForgotPassword: () {},
           );
         },
       ),
     );
   }
+
+// @override
+// Widget build(BuildContext context, GoRouterState state) {
+//   return LoginPage(
+//     navigateToMain: () => context.go(HomeRoute().location),
+//     navigateBack: () => context.pop(),
+//     navigateToRegister: () => context.push(RegisterRoute().location),
+//     navigateToForgotPassword: () {},
+//   );
+// }
 }
