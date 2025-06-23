@@ -19,24 +19,18 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState>
       emit(state.copyWith(email: event.email));
     });
 
-    on<PasswordChanged>((event, emit) {
-      emit(state.copyWith(password: event.password));
-    });
-    on<ForgotPressed>(_onForgotSubmitted);
+    on<SendEmailClick>(_onValidateEmail);
   }
 
-  Future<void> _onForgotSubmitted(ForgotPressed event, Emitter<ForgotState> emit,) async {
+  Future<void> _onValidateEmail(ForgotEvent event, Emitter<ForgotState> emit,) async {
     emit(state.copyWith(isLoading: true));
     final result = await _validateEmailUseCase.validateEmail(state.email);
     emit(state.copyWith(isLoading: false));
-
     switch (result) {
       case Ok<String>():
         emitEffect(NavigateToVerify());
-        print("***************************************************** Ok<User>()");
         break;
       case Error<String>():
-        print("***************************************************** Error<User>()");
         emitMessage(result.error.toUiMessage());
         break;
     }

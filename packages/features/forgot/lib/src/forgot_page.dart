@@ -3,44 +3,38 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
 
-import '../login.dart';
-import 'bloc/login_effect.dart';
-import 'bloc/login_event.dart';
-import 'bloc/login_state.dart';
+import '../forgot.dart';
+import 'bloc/forgot_effect.dart';
+import 'bloc/forgot_event.dart';
+import 'bloc/forgot_state.dart';
 
-class LoginPage extends StatelessWidget {
-  final VoidCallback navigateToMain;
+class ForgotPage extends StatelessWidget {
   final VoidCallback navigateBack;
-  final VoidCallback navigateToRegister;
-  final VoidCallback navigateToForgotPassword;
+  final VoidCallback navigateToVerify;
 
-  const LoginPage({
+  const ForgotPage({
     super.key,
-    required this.navigateToMain,
     required this.navigateBack,
-    required this.navigateToRegister,
-    required this.navigateToForgotPassword,
+    required this.navigateToVerify,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<LoginBloc>();
+    final bloc = context.read<ForgotBloc>();
     return BlocListenerWidget(
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
         NavigateBack: navigateBack,
-        NavigateToMain: navigateToMain,
-        NavigateToRegister: navigateToRegister,
-        NavigateToForgotPassword: navigateToForgotPassword,
+        NavigateToVerify: navigateToVerify,
       },
-      child: LoginContent(),
+      child: ForgotContent(),
     );
   }
 }
 
-class LoginContent extends StatelessWidget {
-  const LoginContent({super.key});
+class ForgotContent extends StatelessWidget {
+  const ForgotContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +49,8 @@ class LoginContent extends StatelessWidget {
                 color: Colors.grey,
                 child: Column(spacing: 50, children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 100,left: 24 , right: 24),
+                    padding:
+                        const EdgeInsets.only(top: 100, left: 24, right: 24),
                     child: Column(
                       spacing: 16,
                       children: [
@@ -86,7 +81,7 @@ class LoginContent extends StatelessWidget {
                 constraints: BoxConstraints(
                   maxWidth: 400,
                 ),
-                child: LoginForm(),
+                child: ForgotForm(),
               ),
             ),
           ),
@@ -96,8 +91,8 @@ class LoginContent extends StatelessWidget {
   }
 }
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({super.key});
+class ForgotForm extends StatelessWidget {
+  const ForgotForm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -110,14 +105,14 @@ class LoginForm extends StatelessWidget {
           Column(
             spacing: 16,
             children: [
-              HeadlineLargeBoldText("Login"),
+              HeadlineLargeBoldText("Forgot"),
               if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                 BodyMediumText(
                     textAlign: TextAlign.center,
                     "Log in to check your programmes, book appointments, and chat with your practitioner."),
             ],
           ),
-          BlocBuilder<LoginBloc, LoginState>(
+          BlocBuilder<ForgotBloc, ForgotState>(
             builder: (context, state) {
               return Column(spacing: 16, children: [
                 AppTextField(
@@ -127,39 +122,8 @@ class LoginForm extends StatelessWidget {
                   hint: "Enter your email",
                   title: "Email",
                   onChanged: (text) {
-                    context.read<LoginBloc>().add(EmailChanged(text));
+                    context.read<ForgotBloc>().add(EmailChanged(text));
                   },
-                ),
-                AppTextField(
-                  value: state.password,
-                  keyboardType: TextInputType.text,
-                  maxLines: 1,
-                  obscureText: state.isPasswordObscured,
-                  trailingIcon: IconButton(
-                    icon: Icon(
-                      state.isPasswordObscured
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () => context
-                        .read<LoginBloc>()
-                        .add(TogglePasswordVisibility()),
-                  ),
-                  hint: "Enter your password",
-                  title: "Password",
-                  onChanged: (text) {
-                    context.read<LoginBloc>().add(PasswordChanged(text));
-                  },
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: BodyMediumText(
-                    "Forgot Password?",
-                    color: theme.colorScheme.primary,
-                    onTap: () {
-                      context.read<LoginBloc>().add(ForgotPasswordPressed());
-                    },
-                  ),
                 ),
               ]);
             },
@@ -167,37 +131,21 @@ class LoginForm extends StatelessWidget {
           Column(
             spacing: 12,
             children: [
-              BlocBuilder<LoginBloc, LoginState>(
+              BlocBuilder<ForgotBloc, ForgotState>(
                 buildWhen: (previous, current) =>
                     previous.isLoading != current.isLoading,
                 builder: (context, state) {
                   return SizedBox(
                     width: double.infinity,
                     child: AppPrimaryButton(
-                      text: "Log In",
+                      text: "Send Email",
                       onPressed: () {
-                        context.read<LoginBloc>().add(LoginPressed());
+                        context.read<ForgotBloc>().add(SendEmailClick());
                       },
                       isLoading: state.isLoading,
                     ),
                   );
                 },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 4,
-                children: [
-                  LabelMediumText(
-                    'No Account Yet?',
-                  ),
-                  BodyMediumBoldText(
-                    'Sign Up',
-                    color: theme.colorScheme.primary,
-                    onTap: () {
-                      context.read<LoginBloc>().add(RegisterPressed());
-                    },
-                  ),
-                ],
               ),
             ],
           )

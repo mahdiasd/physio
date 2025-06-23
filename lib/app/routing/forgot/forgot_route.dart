@@ -1,34 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forgot/forgot.dart';
 import 'package:go_router/go_router.dart';
-import 'package:login/login.dart';
-import 'package:physio/app/routing/forgot/forgot_route.dart';
 import 'package:physio/app/routing/register/register_route.dart';
 import 'package:utils/utils.dart';
 
-import '../main/main_route.dart';
+part 'forgot_route.g.dart';
 
-part 'login_route.g.dart';
-
-@TypedGoRoute<LoginRoute>(path: "/login")
+@TypedGoRoute<ForgotRoute>(path: "/forgot")
 @immutable
-class LoginRoute extends GoRouteData {
-  const LoginRoute();
+class ForgotRoute extends GoRouteData {
+  const ForgotRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return BlocProvider(
-      create: (context) => getIt<LoginBloc>(),
+      create: (context) => getIt<ForgotBloc>(),
       child: Builder(
         builder: (innerContext) {
-          return LoginPage(
-            navigateToMain: () => innerContext.go(HomeRoute().location),
+          return ForgotPage(
             navigateBack: () => innerContext.pop(),
-            navigateToRegister: () {
+            navigateToVerify: () {
               innerContext.push(RegisterRoute().location);
-            },
-            navigateToForgotPassword: () {
-              innerContext.push(ForgotRoute().location);
             },
           );
         },

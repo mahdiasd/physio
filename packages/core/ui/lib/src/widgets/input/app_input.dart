@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:ui/src/widgets/text/body_text.dart';
+
 class AppTextField extends StatefulWidget {
   final String value;
   final ValueChanged<String> onChanged;
@@ -19,6 +22,12 @@ class AppTextField extends StatefulWidget {
   final Widget? leadingIcon;
   final Widget? trailingIcon;
   final String? errorText;
+
+  /// New: Optional title above the text field
+  final String? title;
+
+  /// New: spacing between title and field
+  final double titleSpacing;
 
   const AppTextField({
     super.key,
@@ -40,6 +49,8 @@ class AppTextField extends StatefulWidget {
     this.trailingIcon,
     this.obscureText = false,
     this.errorText,
+    this.title,
+    this.titleSpacing = 8.0,
   });
 
   @override
@@ -77,50 +88,72 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     final isClearVisible =
         widget.showClearIcon &&
             widget.value.isNotEmpty &&
             widget.enabled &&
             !widget.readOnly;
 
-    return TextField(
-      controller: _controller,
-      enabled: widget.enabled,
-      readOnly: widget.readOnly,
-      minLines: widget.minLines,
-      maxLines: widget.maxLines,
-      obscureText: widget.obscureText,
-      keyboardType: widget.keyboardType,
-      textDirection: widget.textDirection,
-      textAlign: widget.textAlign,
-      style: widget.textStyle ?? theme.textTheme.bodyMedium,
-      decoration: InputDecoration(
-        hintText: widget.hint,
-        hintStyle: widget.placeholderStyle ??
-            theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.title != null) ...[
+          BodyMediumText(
+            widget.title!,
+          ),
+          SizedBox(height: widget.titleSpacing),
+        ],
+        TextField(
+          controller: _controller,
+          enabled: widget.enabled,
+          readOnly: widget.readOnly,
+          minLines: widget.minLines,
+          maxLines: widget.maxLines,
+          obscureText: widget.obscureText,
+          keyboardType: widget.keyboardType,
+          textDirection: widget.textDirection,
+          textAlign: widget.textAlign,
+          style: widget.textStyle ?? theme.textTheme.bodyMedium,
+          decoration: InputDecoration(
+            hintText: widget.hint,
+            hintStyle: widget.placeholderStyle ??
+                theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.hintColor,
+                ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: theme.colorScheme.outlineVariant,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: theme.colorScheme.error,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: theme.colorScheme.error,
+              ),
+            ),
+            filled: true,
+            fillColor: theme.colorScheme.surfaceContainerHigh,
+            errorText: widget.isError ? widget.errorText : null,
+            prefixIcon: widget.leadingIcon ??
+                (isClearVisible ? _buildClearIcon(context) : null),
+            suffixIcon: widget.trailingIcon,
+          ),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.colorScheme.primary),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.colorScheme.error),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.colorScheme.error),
-        ),
-        filled: true,
-        fillColor: theme.colorScheme.surfaceContainerHigh,
-        errorText: widget.isError ? widget.errorText : null,
-        prefixIcon: widget.leadingIcon ??
-            (isClearVisible ? _buildClearIcon(context) : null),
-        suffixIcon: widget.trailingIcon,
-      ),
+      ],
     );
   }
 
@@ -138,3 +171,4 @@ class _AppTextFieldState extends State<AppTextField> {
     );
   }
 }
+

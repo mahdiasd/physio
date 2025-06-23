@@ -11,6 +11,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:data/src/di/data_di.module.dart' as _i24;
 import 'package:domain/src/di/domain_di.module.dart' as _i887;
+import 'package:forgot/src/di/forgot_di.module.dart' as _i813;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:login/src/di/login_di.module.dart' as _i63;
@@ -32,6 +33,7 @@ extension GetItInjectableX on _i174.GetIt {
     await _i292.NetworkPackageModule().init(gh);
     await _i24.DataPackageModule().init(gh);
     await _i887.DomainPackageModule().init(gh);
+    await _i813.ForgotPackageModule().init(gh);
     await _i63.LoginPackageModule().init(gh);
     await _i536.RegisterPackageModule().init(gh);
     await _i49.SplashPackageModule().init(gh);
