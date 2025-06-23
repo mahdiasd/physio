@@ -9,4 +9,7 @@ abstract class UserRepository {
       required String lastName,
       required String email,
       required String password});
+
+  Future<Result<String>> validateEmail({required String email});
+
 }
