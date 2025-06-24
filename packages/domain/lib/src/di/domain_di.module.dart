@@ -11,6 +11,7 @@ import 'package:domain/src/repository/user/user_repository.dart' as _i498;
 import 'package:domain/src/usecase/config/get_config_use_case.dart' as _i927;
 import 'package:domain/src/usecase/user/login_use_case.dart' as _i203;
 import 'package:domain/src/usecase/user/register_use_case.dart' as _i531;
+import 'package:domain/src/usecase/user/send_otp_codes_use_case.dart' as _i979;
 import 'package:domain/src/usecase/user/validate_email_use_case.dart' as _i706;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -24,6 +25,8 @@ class DomainPackageModule extends _i526.MicroPackageModule {
         () => _i203.LoginUseCase(gh<_i498.UserRepository>()));
     gh.factory<_i531.RegisterUseCase>(
         () => _i531.RegisterUseCase(gh<_i498.UserRepository>()));
+    gh.factory<_i979.SendOtpCodeUseCase>(
+        () => _i979.SendOtpCodeUseCase(gh<_i498.UserRepository>()));
     gh.factory<_i706.ValidateEmailUseCase>(
         () => _i706.ValidateEmailUseCase(gh<_i498.UserRepository>()));
   }

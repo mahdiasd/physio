@@ -3,12 +3,12 @@ import 'package:injectable/injectable.dart';
 import 'package:utils/src/model/result.dart';
 
 @injectable
-class SendOtpCodesUseCase {
+class SendOtpCodeUseCase {
   final UserRepository _userRepository;
 
-  SendOtpCodesUseCase(this._userRepository);
+  SendOtpCodeUseCase(this._userRepository);
 
-  Future<Result<String>> validateEmail(List<String> codes) {
+  Future<Result<String>> sendCodes(List<String> codes) {
     return _userRepository.sendOtpCodes(code: codes.join());
   }
 }

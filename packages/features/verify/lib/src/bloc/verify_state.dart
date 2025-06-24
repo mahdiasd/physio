@@ -1,10 +1,10 @@
 class VerifyState {
-  final List<String> codeDigits;
+  final List<String> codes;
   final bool isVerified;
   final bool isLoading;
 
   VerifyState({
-    this.codeDigits = const ['', '', '', ''],
+    this.codes = const ['', '', '', ''],
     this.isVerified = false,
     this.isLoading = false,
   });
@@ -15,7 +15,7 @@ class VerifyState {
     bool? isLoading,
   }) {
     return VerifyState(
-      codeDigits: codeDigits ?? this.codeDigits,
+      codes: codeDigits ?? this.codes,
       isVerified: isVerified ?? this.isVerified,
       isLoading: isLoading ?? this.isLoading,
     );

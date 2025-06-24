@@ -201,9 +201,9 @@ class _VerifyCodeFieldsState extends State<VerifyCodeFields> {
       builder: (context, state) {
         // مقدارهای ورودی رو همواره با استیت سینک کن
         for (int i = 0; i < 4; i++) {
-          if (_controllers[i].text != state.codeDigits[i]) {
-            _controllers[i].text = state.codeDigits[i];
-            _controllers[i].selection = TextSelection.collapsed(offset: state.codeDigits[i].length);
+          if (_controllers[i].text != state.codes[i]) {
+            _controllers[i].text = state.codes[i];
+            _controllers[i].selection = TextSelection.collapsed(offset: state.codes[i].length);
           }
         }
 
