@@ -8,7 +8,6 @@ import 'package:ui/ui.dart';
 import 'bloc/verify_bloc.dart';
 import 'bloc/verify_effect.dart';
 import 'bloc/verify_event.dart';
-import 'bloc/verify_state.dart';
 
 class VerifyPage extends StatelessWidget {
   final VoidCallback navigateBack;
