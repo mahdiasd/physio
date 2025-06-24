@@ -80,4 +80,20 @@ class UserRepositoryImpl extends UserRepository {
       post: loginResponse.user.post,
     );
   }
+
+  @override
+  Future<Result<String>> sendOtpCodes({required String code}) async {
+    final result = await ApiCaller.safeApiCall<String>(
+          () => _userApiService.sendOtpCodes(
+        code: code,
+      ),
+    );
+
+    switch (result) {
+      case Ok<String>():
+        return Result.ok(result.value);
+      case Error<String>():
+        return Result.error(result.error);
+    }
+  }
 }

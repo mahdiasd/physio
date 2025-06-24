@@ -37,4 +37,11 @@ class UserApiServiceImpl extends UserApiService {
       'email': email,
     });
   }
+
+  @override
+  Future<Response<NetworkResponse<String>>> sendOtpCodes({required String code}) {
+    return dio.post('otp', data: {
+      'code': code,
+    });
+  }
 }

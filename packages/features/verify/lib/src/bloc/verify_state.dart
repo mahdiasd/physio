@@ -1,18 +1,22 @@
 class VerifyState {
-  final String email;
+  final List<String> codeDigits;
+  final bool isVerified;
   final bool isLoading;
 
   VerifyState({
-    this.email = '',
+    this.codeDigits = const ['', '', '', ''],
+    this.isVerified = false,
     this.isLoading = false,
   });
 
   VerifyState copyWith({
-    String? email,
+    List<String>? codeDigits,
+    bool? isVerified,
     bool? isLoading,
   }) {
     return VerifyState(
-      email: email ?? this.email,
+      codeDigits: codeDigits ?? this.codeDigits,
+      isVerified: isVerified ?? this.isVerified,
       isLoading: isLoading ?? this.isLoading,
     );
   }

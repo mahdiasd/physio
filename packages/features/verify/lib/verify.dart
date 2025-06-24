@@ -1,4 +1,5 @@
 /// My new Flutter package
 library;
 
-export 'src/verify.dart';
+export 'src/bloc/verify_bloc.dart';
+export 'src/verify_page.dart';

@@ -5,4 +5,13 @@ class EmailChanged extends VerifyEvent {
   EmailChanged(this.email);
 }
 
-class SendEmailClick extends VerifyEvent {}
+class CodeDigitChanged extends VerifyEvent {
+  final int index;
+  final String value;
+
+  CodeDigitChanged(this.index, this.value);
+}
+
+
+class VerifyClick extends VerifyEvent {}
+class ContinueClick extends VerifyEvent {}

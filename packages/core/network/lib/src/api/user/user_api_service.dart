@@ -19,4 +19,7 @@ abstract class UserApiService {
     required String email,
   });
 
+  Future<Response<NetworkResponse<String>>> sendOtpCodes({
+    required String code,
+  });
 }
