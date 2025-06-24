@@ -14,4 +14,12 @@ abstract class UserApiService {
     required String email,
     required String password,
   });
+
+  Future<Response<NetworkResponse<String>>> validateEmail({
+    required String email,
+  });
+
+  Future<Response<NetworkResponse<String>>> sendOtpCodes({
+    required String code,
+  });
 }

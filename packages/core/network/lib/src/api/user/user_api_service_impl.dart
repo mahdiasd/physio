@@ -29,4 +29,19 @@ class UserApiServiceImpl extends UserApiService {
       'password': password
     });
   }
+
+  @override
+  Future<Response<NetworkResponse<String>>> validateEmail(
+      {required String email}) {
+    return dio.post('validate', data: {
+      'email': email,
+    });
+  }
+
+  @override
+  Future<Response<NetworkResponse<String>>> sendOtpCodes({required String code}) {
+    return dio.post('otp', data: {
+      'code': code,
+    });
+  }
 }

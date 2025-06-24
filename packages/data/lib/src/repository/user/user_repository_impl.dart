@@ -50,6 +50,24 @@ class UserRepositoryImpl extends UserRepository {
     }
   }
 
+  @override
+  Future<Result<String>> validateEmail({
+    required String email,
+  }) async {
+    final result = await ApiCaller.safeApiCall<String>(
+      () => _userApiService.validateEmail(
+        email: email,
+      ),
+    );
+
+    switch (result) {
+      case Ok<String>():
+        return Result.ok(result.value);
+      case Error<String>():
+        return Result.error(result.error);
+    }
+  }
+
   User _mapToUser(LoginResponse loginResponse) {
     return User(
       id: loginResponse.user.id,
@@ -61,5 +79,21 @@ class UserRepositoryImpl extends UserRepository {
       totalSessions: loginResponse.user.totalSessions,
       post: loginResponse.user.post,
     );
+  }
+
+  @override
+  Future<Result<String>> sendOtpCodes({required String code}) async {
+    final result = await ApiCaller.safeApiCall<String>(
+          () => _userApiService.sendOtpCodes(
+        code: code,
+      ),
+    );
+
+    switch (result) {
+      case Ok<String>():
+        return Result.ok(result.value);
+      case Error<String>():
+        return Result.error(result.error);
+    }
   }
 }

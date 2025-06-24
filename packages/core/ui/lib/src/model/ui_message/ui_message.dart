@@ -11,7 +11,7 @@ class UiMessage {
 
   UiMessage({
     required this.message,
-    this.status = UiMessageStatus.Success,
+    this.status = UiMessageStatus.Error,
     this.type = UiMessageType.Device,
   });
 }

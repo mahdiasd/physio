@@ -50,7 +50,7 @@ class RegisterContent extends StatelessWidget {
                 child: Column(spacing: 50, children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(top: 100, left: 24, right: 24),
+                        const EdgeInsets.only(top: 50, left: 24, right: 24),
                     child: Column(
                       spacing: 16,
                       children: [
@@ -98,129 +98,139 @@ class RegisterForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            spacing: 16,
-            children: [
-              HeadlineLargeBoldText("Sign Up"),
-              if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-                BodyMediumText(
-                    textAlign: TextAlign.center,
-                    "Join Rose Physio HUB to access your personalised care plan, track progress, and stay connected with your practitioner."),
-            ],
-          ),
-          BlocBuilder<RegisterBloc, RegisterState>(
-            builder: (context, state) {
-              return Column(spacing: 8, children: [
-                Row(
-                  spacing: 8,
-                  children: [
-                    Expanded(
-                      child: AppTextField(
-                        value: state.firstName,
-                        keyboardType: TextInputType.name,
-                        maxLines: 1,
-                        hint: "First Name",
-                        onChanged: (text) {
-                          context
-                              .read<RegisterBloc>()
-                              .add(FirstNameChanged(text));
-                        },
+      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 16),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              spacing: 16,
+              children: [
+                HeadlineLargeBoldText("Sign Up"),
+                if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
+                  BodyMediumText(
+                      textAlign: TextAlign.center,
+                      "Join Rose Physio HUB to access your personalised care plan, track progress, and stay connected with your practitioner."),
+              ],
+            ),
+            SizedBox(height: 8),
+            BlocBuilder<RegisterBloc, RegisterState>(
+              builder: (context, state) {
+                return Column(spacing: 8, children: [
+                  Row(
+                    spacing: 8,
+                    children: [
+                      Expanded(
+                        child: AppTextField(
+                          value: state.firstName,
+                          keyboardType: TextInputType.name,
+                          maxLines: 1,
+                          title: "First Name",
+                          hint: "First Name",
+                          onChanged: (text) {
+                            context
+                                .read<RegisterBloc>()
+                                .add(FirstNameChanged(text));
+                          },
+                        ),
                       ),
+                      Expanded(
+                        child: AppTextField(
+                          value: state.lastName,
+                          keyboardType: TextInputType.name,
+                          maxLines: 1,
+                          title: "Last Name",
+                          hint: "Last Name",
+                          onChanged: (text) {
+                            context
+                                .read<RegisterBloc>()
+                                .add(LastNameChanged(text));
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  AppTextField(
+                    value: state.email,
+                    keyboardType: TextInputType.emailAddress,
+                    maxLines: 1,
+                    title: "Email",
+                    hint: "Enter your email",
+                    onChanged: (text) {
+                      context.read<RegisterBloc>().add(EmailChanged(text));
+                    },
+                  ),
+                  SizedBox(height: 8),
+                  AppTextField(
+                    value: state.password,
+                    keyboardType: TextInputType.text,
+                    maxLines: 1,
+                    obscureText: state.isPasswordObscured,
+                    trailingIcon: IconButton(
+                      icon: Icon(
+                        state.isPasswordObscured
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () => context
+                          .read<RegisterBloc>()
+                          .add(TogglePasswordVisibility()),
                     ),
-                    Expanded(
-                      child: AppTextField(
-                        value: state.lastName,
-                        keyboardType: TextInputType.name,
-                        maxLines: 1,
-                        hint: "Last Name",
-                        onChanged: (text) {
-                          context
-                              .read<RegisterBloc>()
-                              .add(LastNameChanged(text));
+                    title: "Password",
+                    hint: "Enter your password",
+                    onChanged: (text) {
+                      context.read<RegisterBloc>().add(PasswordChanged(text));
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: LabelSmallText(
+                        "It must be a combination of minimum 8 letters, numbers, and symbols."),
+                  )
+                ]);
+              },
+            ),
+            SizedBox(height: 8),
+            Column(
+              spacing: 12,
+              children: [
+                BlocBuilder<RegisterBloc, RegisterState>(
+                  buildWhen: (previous, current) =>
+                      previous.isLoading != current.isLoading,
+                  builder: (context, state) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: AppPrimaryButton(
+                        text: "Register",
+                        onPressed: () {
+                          context.read<RegisterBloc>().add(RegisterPressed());
                         },
+                        isLoading: state.isLoading,
                       ),
+                    );
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 4,
+                  children: [
+                    LabelMediumText(
+                      'Already have an account?',
+                    ),
+                    BodyMediumBoldText(
+                      'Log In',
+                      color: theme.colorScheme.primary,
+                      onTap: () {
+                        context.read<RegisterBloc>().add(LoginPressed());
+                      },
                     ),
                   ],
                 ),
-                AppTextField(
-                  value: state.email,
-                  keyboardType: TextInputType.emailAddress,
-                  maxLines: 1,
-                  hint: "Email",
-                  onChanged: (text) {
-                    context.read<RegisterBloc>().add(EmailChanged(text));
-                  },
-                ),
-                AppTextField(
-                  value: state.password,
-                  keyboardType: TextInputType.text,
-                  maxLines: 1,
-                  obscureText: state.isPasswordObscured,
-                  trailingIcon: IconButton(
-                    icon: Icon(
-                      state.isPasswordObscured
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () => context
-                        .read<RegisterBloc>()
-                        .add(TogglePasswordVisibility()),
-                  ),
-                  hint: "Password",
-                  onChanged: (text) {
-                    context.read<RegisterBloc>().add(PasswordChanged(text));
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: LabelSmallText(
-                      "It must be a combination of minimum 8 letters, numbers, and symbols."),
-                )
-              ]);
-            },
-          ),
-          Column(
-            spacing: 12,
-            children: [
-              BlocBuilder<RegisterBloc, RegisterState>(
-                buildWhen: (previous, current) =>
-                    previous.isLoading != current.isLoading,
-                builder: (context, state) {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: AppPrimaryButton(
-                      text: "Register",
-                      onPressed: () {
-                        context.read<RegisterBloc>().add(RegisterPressed());
-                      },
-                      isLoading: state.isLoading,
-                    ),
-                  );
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 4,
-                children: [
-                  LabelMediumText(
-                    'Already have an account?',
-                  ),
-                  BodyMediumBoldText(
-                    'Log In',
-                    color: theme.colorScheme.primary,
-                    onTap: () {
-                      context.read<RegisterBloc>().add(LoginPressed());
-                    },
-                  ),
-                ],
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
