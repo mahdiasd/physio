@@ -96,7 +96,6 @@ class ForgotForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 16),
       child: Column(
@@ -105,11 +104,11 @@ class ForgotForm extends StatelessWidget {
           Column(
             spacing: 16,
             children: [
-              HeadlineLargeBoldText("Forgot"),
+              HeadlineLargeBoldText("Forgotten Your Password?", textAlign: TextAlign.center,),
               if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                 BodyMediumText(
                     textAlign: TextAlign.center,
-                    "Log in to check your programmes, book appointments, and chat with your practitioner."),
+                    "We'll send a verification code to your email so you can reset your password."),
             ],
           ),
           BlocBuilder<ForgotBloc, ForgotState>(

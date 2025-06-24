@@ -15,3 +15,4 @@ class CodeDigitChanged extends VerifyEvent {
 
 class VerifyClick extends VerifyEvent {}
 class ContinueClick extends VerifyEvent {}
+class ResendCodeClicked extends VerifyEvent {}

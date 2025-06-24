@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ui/src/widgets/text/body_text.dart';
 
 class AppTextField extends StatefulWidget {
@@ -22,12 +21,9 @@ class AppTextField extends StatefulWidget {
   final Widget? leadingIcon;
   final Widget? trailingIcon;
   final String? errorText;
-
-  /// New: Optional title above the text field
   final String? title;
-
-  /// New: spacing between title and field
   final double titleSpacing;
+  final FocusNode? focusNode;
 
   const AppTextField({
     super.key,
@@ -51,6 +47,7 @@ class AppTextField extends StatefulWidget {
     this.errorText,
     this.title,
     this.titleSpacing = 8.0,
+    this.focusNode,
   });
 
   @override
@@ -59,14 +56,32 @@ class AppTextField extends StatefulWidget {
 
 class _AppTextFieldState extends State<AppTextField> {
   late final TextEditingController _controller;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.value);
+    _focusNode = widget.focusNode ?? FocusNode();
+
     _controller.addListener(() {
       if (_controller.text != widget.value) {
-        widget.onChanged(_controller.text);
+        // For verification code inputs, limit to single digit
+        if (widget.keyboardType == TextInputType.number &&
+            widget.textAlign == TextAlign.center &&
+            _controller.text.length > 1) {
+          // Keep only the last entered digit
+          final newValue = _controller.text.characters.last;
+          _controller.value = TextEditingValue(
+            text: newValue,
+            selection: TextSelection.fromPosition(
+              TextPosition(offset: newValue.length),
+            ),
+          );
+          widget.onChanged(newValue);
+        } else {
+          widget.onChanged(_controller.text);
+        }
       }
     });
   }
@@ -82,6 +97,9 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   void dispose() {
     _controller.dispose();
+    if (widget.focusNode == null) {
+      _focusNode.dispose();
+    }
     super.dispose();
   }
 
@@ -104,53 +122,75 @@ class _AppTextFieldState extends State<AppTextField> {
           ),
           SizedBox(height: widget.titleSpacing),
         ],
-        TextField(
-          controller: _controller,
-          enabled: widget.enabled,
-          readOnly: widget.readOnly,
-          minLines: widget.minLines,
-          maxLines: widget.maxLines,
-          obscureText: widget.obscureText,
-          keyboardType: widget.keyboardType,
-          textDirection: widget.textDirection,
-          textAlign: widget.textAlign,
-          style: widget.textStyle ?? theme.textTheme.bodyMedium,
-          decoration: InputDecoration(
-            hintText: widget.hint,
-            hintStyle: widget.placeholderStyle ??
-                theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.hintColor,
+        KeyboardListener(
+          focusNode: FocusNode(),
+          onKeyEvent: (KeyEvent event) {
+            // Handle backspace for better UX in verification code fields
+            if (event is KeyDownEvent &&
+                event.logicalKey == LogicalKeyboardKey.backspace &&
+                widget.keyboardType == TextInputType.number &&
+                widget.textAlign == TextAlign.center &&
+                _controller.text.isEmpty) {
+              // Trigger onChange with empty string to handle focus movement
+              widget.onChanged('');
+            }
+          },
+          child: TextField(
+            controller: _controller,
+            focusNode: _focusNode,
+            enabled: widget.enabled,
+            readOnly: widget.readOnly,
+            minLines: widget.minLines,
+            maxLines: widget.maxLines,
+            obscureText: widget.obscureText,
+            keyboardType: widget.keyboardType,
+            textDirection: widget.textDirection,
+            textAlign: widget.textAlign,
+            style: widget.textStyle ?? theme.textTheme.bodyMedium,
+            inputFormatters: widget.keyboardType == TextInputType.number &&
+                widget.textAlign == TextAlign.center
+                ? [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(1),
+            ]
+                : null,
+            decoration: InputDecoration(
+              hintText: widget.hint,
+              hintStyle: widget.placeholderStyle ??
+                  theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.hintColor,
+                  ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.outlineVariant,
                 ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: theme.colorScheme.outlineVariant,
               ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: theme.colorScheme.primary,
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.primary,
+                ),
               ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: theme.colorScheme.error,
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.error,
+                ),
               ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: theme.colorScheme.error,
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.error,
+                ),
               ),
+              filled: true,
+              fillColor: theme.colorScheme.surfaceContainerHigh,
+              errorText: widget.isError ? widget.errorText : null,
+              prefixIcon: widget.leadingIcon ??
+                  (isClearVisible ? _buildClearIcon(context) : null),
+              suffixIcon: widget.trailingIcon,
             ),
-            filled: true,
-            fillColor: theme.colorScheme.surfaceContainerHigh,
-            errorText: widget.isError ? widget.errorText : null,
-            prefixIcon: widget.leadingIcon ??
-                (isClearVisible ? _buildClearIcon(context) : null),
-            suffixIcon: widget.trailingIcon,
           ),
         ),
       ],
@@ -171,4 +211,3 @@ class _AppTextFieldState extends State<AppTextField> {
     );
   }
 }
-

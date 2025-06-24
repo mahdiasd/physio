@@ -18,6 +18,7 @@ import 'package:login/src/di/login_di.module.dart' as _i63;
 import 'package:network/src/di/network_di.module.dart' as _i292;
 import 'package:register/src/di/register_di.module.dart' as _i536;
 import 'package:splash/src/di/splash_di.module.dart' as _i49;
+import 'package:verify/src/di/verify_di.module.dart' as _i262;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -37,6 +38,7 @@ extension GetItInjectableX on _i174.GetIt {
     await _i63.LoginPackageModule().init(gh);
     await _i536.RegisterPackageModule().init(gh);
     await _i49.SplashPackageModule().init(gh);
+    await _i262.VerifyPackageModule().init(gh);
     return this;
   }
 }

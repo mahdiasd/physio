@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:forgot/forgot.dart';
 import 'package:go_router/go_router.dart';
-import 'package:physio/app/routing/register/register_route.dart';
+import 'package:physio/app/routing/main/main_route.dart';
 import 'package:utils/utils.dart';
+import 'package:verify/verify.dart';
 
 part 'verify_route.g.dart';
 
@@ -20,8 +20,8 @@ class VerifyRoute extends GoRouteData {
         builder: (innerContext) {
           return VerifyPage(
             navigateBack: () => innerContext.pop(),
-            navigateToVerify: () {
-              innerContext.push(RegisterRoute().location);
+            navigateToMain: () {
+              innerContext.push(HomeRoute().location);
             },
           );
         },
