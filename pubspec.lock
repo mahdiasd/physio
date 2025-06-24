@@ -902,6 +902,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0+1"
+  reset_password:
+    dependency: "direct main"
+    description:
+      path: "packages/features/reset_password"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   responsive_framework:
     dependency: "direct main"
     description:

@@ -26,6 +26,9 @@ dependencies:
   verify:
     path: packages/features/verify
 
+  reset_password:
+    path: packages/features/reset_password
+
   utils:
     path: packages/core/utils
 
