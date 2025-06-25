@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ui/src/widgets/text/body_text.dart';
+import 'package:ui/src/widgets/text/label_text.dart';
+
+const _borderRadius = 8.0;
 
 class AppTextField extends StatefulWidget {
   final String value;
@@ -24,6 +27,7 @@ class AppTextField extends StatefulWidget {
   final String? title;
   final double titleSpacing;
   final FocusNode? focusNode;
+  final String? label;
 
   const AppTextField({
     super.key,
@@ -47,6 +51,7 @@ class AppTextField extends StatefulWidget {
     this.errorText,
     this.title,
     this.titleSpacing = 8.0,
+    this.label,
     this.focusNode,
   });
 
@@ -107,11 +112,10 @@ class _AppTextFieldState extends State<AppTextField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final isClearVisible =
-        widget.showClearIcon &&
-            widget.value.isNotEmpty &&
-            widget.enabled &&
-            !widget.readOnly;
+    final isClearVisible = widget.showClearIcon &&
+        widget.value.isNotEmpty &&
+        widget.enabled &&
+        !widget.readOnly;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,13 +129,11 @@ class _AppTextFieldState extends State<AppTextField> {
         KeyboardListener(
           focusNode: FocusNode(),
           onKeyEvent: (KeyEvent event) {
-            // Handle backspace for better UX in verification code fields
             if (event is KeyDownEvent &&
                 event.logicalKey == LogicalKeyboardKey.backspace &&
                 widget.keyboardType == TextInputType.number &&
                 widget.textAlign == TextAlign.center &&
                 _controller.text.isEmpty) {
-              // Trigger onChange with empty string to handle focus movement
               widget.onChanged('');
             }
           },
@@ -148,11 +150,11 @@ class _AppTextFieldState extends State<AppTextField> {
             textAlign: widget.textAlign,
             style: widget.textStyle ?? theme.textTheme.bodyMedium,
             inputFormatters: widget.keyboardType == TextInputType.number &&
-                widget.textAlign == TextAlign.center
+                    widget.textAlign == TextAlign.center
                 ? [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(1),
-            ]
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(1),
+                  ]
                 : null,
             decoration: InputDecoration(
               hintText: widget.hint,
@@ -161,25 +163,25 @@ class _AppTextFieldState extends State<AppTextField> {
                     color: theme.hintColor,
                   ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(_borderRadius),
                 borderSide: BorderSide(
                   color: theme.colorScheme.outlineVariant,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(_borderRadius),
                 borderSide: BorderSide(
                   color: theme.colorScheme.primary,
                 ),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(_borderRadius),
                 borderSide: BorderSide(
                   color: theme.colorScheme.error,
                 ),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(_borderRadius),
                 borderSide: BorderSide(
                   color: theme.colorScheme.error,
                 ),
@@ -193,6 +195,12 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
           ),
         ),
+        if (widget.label != null) ...[
+          SizedBox(height: 4),
+          LabelSmallText(
+            widget.label!,
+          ),
+        ],
       ],
     );
   }

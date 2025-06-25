@@ -15,6 +15,7 @@ class VerifyPage extends StatelessWidget {
 
   const VerifyPage({
     super.key,
+    required String email,
     required this.navigateBack,
     required this.navigateToMain,
   });
@@ -100,8 +101,6 @@ class VerifyForm extends StatefulWidget {
 }
 
 class _VerifyFormState extends State<VerifyForm> {
-  final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
-
   Timer? _timer;
   int _secondsLeft = 60;
 
@@ -125,17 +124,6 @@ class _VerifyFormState extends State<VerifyForm> {
     });
   }
 
-  void _onCodeChanged(BuildContext context, int index, String value) {
-    final bloc = context.read<VerifyBloc>();
-    bloc.add(CodeDigitChanged(index, value));
-
-    if (RegExp(r'^\d$').hasMatch(value) && index < _focusNodes.length - 1) {
-      _focusNodes[index + 1].requestFocus();
-    } else if (value.isEmpty && index > 0) {
-      _focusNodes[index - 1].requestFocus();
-    }
-  }
-
   void _onResendCode(BuildContext context) {
     _startCountdown();
     context.read<VerifyBloc>().add(ResendCodeClicked());
@@ -144,9 +132,6 @@ class _VerifyFormState extends State<VerifyForm> {
   @override
   void dispose() {
     _timer?.cancel();
-    for (final node in _focusNodes) {
-      node.dispose();
-    }
     super.dispose();
   }
 
@@ -157,7 +142,6 @@ class _VerifyFormState extends State<VerifyForm> {
     final isLoading = context.select((VerifyBloc bloc) => bloc.state.isLoading);
     final isResendLoading =
         context.select((VerifyBloc bloc) => bloc.state.isResendLoading);
-    final codes = context.select((VerifyBloc bloc) => bloc.state.codes);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 8),
@@ -165,7 +149,13 @@ class _VerifyFormState extends State<VerifyForm> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildHeader(context, isVerified),
-          if (!isVerified) _buildCodeFields(context, codes),
+          if (!isVerified)
+            VerificationCodeField(
+              labelText: 'Enter Verification Code',
+              onChanged: (text) {
+                context.read<VerifyBloc>().add(CodeChange(text));
+              },
+            ),
           _buildFooterSection(context, isVerified, isLoading, isResendLoading),
         ],
       ),
@@ -194,30 +184,6 @@ class _VerifyFormState extends State<VerifyForm> {
               : "You're all set to get started!",
         ),
       ],
-    );
-  }
-
-  Widget _buildCodeFields(BuildContext context, List<String> codes) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(4, (index) {
-        return SizedBox(
-          width: 50,
-          child: AppTextField(
-            value: codes[index],
-            maxLines: 1,
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
-            onChanged: (value) => _onCodeChanged(context, index, value),
-            textDirection: TextDirection.ltr,
-            obscureText: false,
-            showClearIcon: false,
-            readOnly: false,
-            enabled: true,
-            focusNode: _focusNodes[index],
-          ),
-        );
-      }),
     );
   }
 

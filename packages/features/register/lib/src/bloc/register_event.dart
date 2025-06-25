@@ -20,6 +20,8 @@ class PasswordChanged extends RegisterEvent {
   PasswordChanged(this.password);
 }
 
+
+
 class RegisterPressed extends RegisterEvent {}
 
 class TogglePasswordVisibility extends RegisterEvent {}

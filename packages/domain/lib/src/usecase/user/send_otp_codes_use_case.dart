@@ -8,7 +8,7 @@ class SendOtpCodeUseCase {
 
   SendOtpCodeUseCase(this._userRepository);
 
-  Future<Result<String>> sendCodes(List<String> codes) {
-    return _userRepository.sendOtpCodes(code: codes.join());
+  Future<Result<String>> sendCodes(String code) {
+    return _userRepository.sendOtpCodes(code: code);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ui/ui.dart';
@@ -14,10 +15,12 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
   final SendOtpCodeUseCase _sendOtpCodeUseCase;
 
   VerifyBloc(this._sendOtpCodeUseCase) : super(VerifyState()) {
-    on<CodeDigitChanged>((event, emit) {
-      final updated = List<String>.from(state.codes);
-      updated[event.index] = event.value;
-      emit(state.copyWith(codeDigits: updated));
+    on<CodeChange>((event, emit) {
+      emit(state.copyWith(code: event.value));
+    });
+
+    on<InitEmail>((event, emit) {
+      emit(state.copyWith(email: event.email));
     });
 
     on<VerifyClick>(_onVerify);
@@ -29,8 +32,8 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     VerifyEvent event,
     Emitter<VerifyState> emit,
   ) async {
-    final isValidCode = state.codes.length == 4 &&
-        state.codes.every((digit) => RegExp(r'^\d$').hasMatch(digit));
+    final isValidCode =
+        state.code.length == 4 && RegExp(r'^\d$').hasMatch(state.code);
 
     if (!isValidCode) {
       emitMessage(UiMessage(
@@ -40,7 +43,7 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
 
     emit(state.copyWith(isLoading: true));
 
-    final result = await _sendOtpCodeUseCase.sendCodes(state.codes);
+    final result = await _sendOtpCodeUseCase.sendCodes(state.code);
 
     emit(state.copyWith(isLoading: false, isVerified: true));
 
@@ -59,7 +62,7 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     Emitter<VerifyState> emit,
   ) async {
     emit(state.copyWith(isResendLoading: true));
-    final result = await _sendOtpCodeUseCase.sendCodes(state.codes);
+    final result = await _sendOtpCodeUseCase.sendCodes(state.code);
     emit(state.copyWith(isResendLoading: false));
     switch (result) {
       case Ok<String>():

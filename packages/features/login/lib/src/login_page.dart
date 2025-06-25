@@ -55,7 +55,8 @@ class LoginContent extends StatelessWidget {
                 color: Colors.grey,
                 child: Column(spacing: 50, children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 100,left: 24 , right: 24),
+                    padding:
+                        const EdgeInsets.only(top: 100, left: 24, right: 24),
                     child: Column(
                       spacing: 16,
                       children: [
@@ -83,9 +84,8 @@ class LoginContent extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: 400,
-                ),
+                constraints:
+                    BoxConstraints(maxWidth: 400, maxHeight: double.infinity),
                 child: LoginForm(),
               ),
             ),

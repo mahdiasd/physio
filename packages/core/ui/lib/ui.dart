@@ -10,6 +10,7 @@ export 'src/widgets/text/body_text.dart';
 export 'src/widgets/text/label_text.dart';
 export 'src/widgets/text/headline_text.dart';
 export 'src/widgets/input/app_input.dart';
+export 'src/widgets/input/verification_code_field.dart';
 export 'src/widgets/buttons/app_button.dart';
 export 'src/widgets/image/app_image.dart';
 export 'src/bloc/bloc_listener.dart';
