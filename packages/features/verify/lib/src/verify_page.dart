@@ -15,7 +15,6 @@ class VerifyPage extends StatelessWidget {
 
   const VerifyPage({
     super.key,
-    required String email,
     required this.navigateBack,
     required this.navigateToMain,
   });

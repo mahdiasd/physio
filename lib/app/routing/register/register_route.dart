@@ -17,14 +17,14 @@ class RegisterRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
+    final bloc = getIt<RegisterBloc>();
     return BlocProvider(
-      create: (context) => getIt<RegisterBloc>(),
+      create: (context) => bloc,
       child: Builder(
         builder: (innerContext) {
           return RegisterPage(
             toVerify: () {
-              final bloc = context.read<RegisterBloc>();
-              VerifyRoute(email: bloc.state.email).go(innerContext);
+              innerContext.push(VerifyRoute(email: bloc.state.email).location);
             },
             onBack: () => LoginRoute().pushReplacement(innerContext),
           );

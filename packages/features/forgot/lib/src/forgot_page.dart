@@ -10,12 +10,12 @@ import 'bloc/forgot_state.dart';
 
 class ForgotPage extends StatelessWidget {
   final VoidCallback navigateBack;
-  final VoidCallback navigateToVerify;
+  final VoidCallback navigateToResetPassword;
 
   const ForgotPage({
     super.key,
     required this.navigateBack,
-    required this.navigateToVerify,
+    required this.navigateToResetPassword,
   });
 
   @override
@@ -26,7 +26,9 @@ class ForgotPage extends StatelessWidget {
       messageStream: bloc.messageStream,
       effectHandlers: {
         NavigateBack: navigateBack,
-        NavigateToVerify: navigateToVerify,
+        NavigateToResetPassword: () {
+          navigateToResetPassword();
+        },
       },
       child: ForgotContent(),
     );

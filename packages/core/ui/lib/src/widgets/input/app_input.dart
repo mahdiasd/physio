@@ -199,6 +199,7 @@ class _AppTextFieldState extends State<AppTextField> {
           SizedBox(height: 4),
           LabelSmallText(
             widget.label!,
+            color: theme.colorScheme.outline,
           ),
         ],
       ],

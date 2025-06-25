@@ -28,12 +28,15 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     on<ResendCodeClicked>(_resend);
   }
 
+  void passData(String email) {
+    add(InitEmail(email));
+  }
+
   Future<void> _onVerify(
     VerifyEvent event,
     Emitter<VerifyState> emit,
   ) async {
-    final isValidCode =
-        state.code.length == 4 && RegExp(r'^\d$').hasMatch(state.code);
+    final isValidCode = state.code.length == 4;
 
     if (!isValidCode) {
       emitMessage(UiMessage(

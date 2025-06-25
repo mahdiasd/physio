@@ -11,10 +11,15 @@ import 'reset_password_state.dart';
 @injectable
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
     with SideEffectMixin<ResetPasswordState, ResetPasswordEffect> {
-
   final SendOtpCodeUseCase _sendOtpCodeUseCase;
+  final ValidateEmailUseCase _validateEmailUseCase;
 
-  ResetPasswordBloc(this._sendOtpCodeUseCase) : super(ResetPasswordState()) {
+  void passEmail(String email) {
+    add(InitEmail(email));
+  }
+
+  ResetPasswordBloc(this._sendOtpCodeUseCase, this._validateEmailUseCase)
+      : super(ResetPasswordState()) {
     on<CodeChanged>((event, emit) {
       emit(state.copyWith(code: event.code));
     });
@@ -42,17 +47,14 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
 
     on<ResetPasswordClick>(_onResetPassword);
 
-    on<ResendCodeClicked>(_resend);
+    on<ResendCodeClicked>(_resendVerifyCode);
   }
 
   Future<void> _onResetPassword(
     ResetPasswordEvent event,
     Emitter<ResetPasswordState> emit,
   ) async {
-    final isValidCode =
-        state.code.length == 4 && RegExp(r'^\d$').hasMatch(state.code);
-
-    if (!isValidCode) {
+    if (state.code.length != 4) {
       emitMessage(UiMessage(
           message: "Please enter all 4 digits of the code correctly."));
       return;
@@ -62,7 +64,9 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
 
     final result = await _sendOtpCodeUseCase.sendCodes(state.code);
 
-    emit(state.copyWith(isLoading: false,));
+    emit(state.copyWith(
+      isLoading: false,
+    ));
 
     switch (result) {
       case Ok<String>():
@@ -74,12 +78,13 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
     }
   }
 
-  Future<void> _resend(
+  Future<void> _resendVerifyCode(
     ResetPasswordEvent event,
     Emitter<ResetPasswordState> emit,
   ) async {
     emit(state.copyWith(isResendLoading: true));
-    final result = await _sendOtpCodeUseCase.sendCodes(state.code);
+    print(state.email);
+    final result = await _validateEmailUseCase.validateEmail(state.email);
     emit(state.copyWith(isResendLoading: false));
     switch (result) {
       case Ok<String>():

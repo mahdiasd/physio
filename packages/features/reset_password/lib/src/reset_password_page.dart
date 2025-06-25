@@ -82,7 +82,7 @@ class ResetPasswordContent extends StatelessWidget {
             child: Align(
               alignment: Alignment.center,
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 450),
+                constraints: BoxConstraints(maxWidth: 500),
                 child: ResetPasswordForm(),
               ),
             ),
@@ -194,13 +194,13 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
   Widget _buildCodeFields(BuildContext context, ResetPasswordState state) {
     return SingleChildScrollView(
       child: Column(
-        spacing: 16,
+        spacing: 24,
         children: [
           VerificationCodeField(
             onChanged: (code) {
               context.read<ResetPasswordBloc>().add(CodeChanged(code));
             },
-            labelText: 'Enter Code',
+            labelText: "Enter Code",
           ),
           AppTextField(
             value: state.password,

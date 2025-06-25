@@ -18,12 +18,15 @@ class VerifyRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
+    final bloc = getIt<VerifyBloc>();
     return BlocProvider(
-      create: (context) => getIt<VerifyBloc>(),
+      create: (context)  {
+        bloc.passData(email);
+        return bloc;
+      },
       child: Builder(
         builder: (innerContext) {
           return VerifyPage(
-            email: email,
             navigateBack: () => innerContext.pop(),
             navigateToMain: () {
               innerContext.push(HomeRoute().location);

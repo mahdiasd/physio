@@ -8,16 +8,21 @@ import '../main/main_route.dart';
 
 part 'reset_password_route.g.dart';
 
-@TypedGoRoute<ResetPasswordRoute>(path: "/reset-password")
+@TypedGoRoute<ResetPasswordRoute>(path: "/reset_password")
 @immutable
 class ResetPasswordRoute extends GoRouteData {
-  final String email;
+  final String? email;
+
   const ResetPasswordRoute(this.email);
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return BlocProvider(
-      create: (context) => getIt<ResetPasswordBloc>(),
+      create: (context) {
+        final bloc = getIt<ResetPasswordBloc>();
+        bloc.passEmail(email ?? "");
+        return bloc;
+      },
       child: Builder(
         builder: (innerContext) {
           return ResetPasswordPage(

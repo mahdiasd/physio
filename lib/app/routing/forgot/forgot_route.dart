@@ -15,14 +15,15 @@ class ForgotRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
+    final bloc = getIt<ForgotBloc>();
     return BlocProvider(
-      create: (context) => getIt<ForgotBloc>(),
+      create: (context) => bloc,
       child: Builder(
         builder: (innerContext) {
           return ForgotPage(
             navigateBack: () => innerContext.pop(),
-            navigateToVerify: () {
-              innerContext.push(ResetPasswordRoute().location);
+            navigateToResetPassword: () {
+              innerContext.push(ResetPasswordRoute(bloc.state.email).location);
             },
           );
         },

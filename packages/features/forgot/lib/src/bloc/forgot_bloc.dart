@@ -26,7 +26,7 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState>
     Emitter<ForgotState> emit,
   ) async {
     // TODO After connect to api.
-    emitEffect(NavigateToVerify());
+    // emitEffect(NavigateToResetPassword());
 
     final email = state.email.trim();
 
@@ -41,7 +41,7 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState>
 
     switch (result) {
       case Ok<String>():
-        emitEffect(NavigateToVerify());
+        emitEffect(NavigateToResetPassword());
         break;
       case Error<String>():
         emitMessage(result.error.toUiMessage());

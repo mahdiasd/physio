@@ -1,5 +1,5 @@
 sealed class ForgotEffect {}
 
-class NavigateToVerify extends ForgotEffect {}
+class NavigateToResetPassword extends ForgotEffect {}
 
 class NavigateBack extends ForgotEffect {}
