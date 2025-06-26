@@ -14,11 +14,20 @@ dependencies:
   register:
     path: packages/features/register
 
+  forgot:
+    path: packages/features/forgot
+
   main:
     path: packages/features/main
 
   splash:
     path: packages/features/splash
+
+  verify:
+    path: packages/features/verify
+
+  reset_password:
+    path: packages/features/reset_password
 
   utils:
     path: packages/core/utils

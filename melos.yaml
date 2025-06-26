@@ -5,11 +5,8 @@ packages:
 
 scripts:
   generate:build:
-    run: |
-      melos exec -c 1 --depends-on="build_runner" -- "dart run build_runner build --delete-conflicting-outputs"
-    description: >
-      Run code generation for packages that depend on build_runner, 
-      deleting conflicting outputs if they exist.
+    run: dart scripts/build_single_package.dart
+    description: Build runner for a single selected package interactively.
 
   sync_dev_dependencies:
     run: dart scripts/sync_dev_dependencies.dart

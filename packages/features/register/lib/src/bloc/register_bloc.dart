@@ -93,7 +93,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState>
 
     switch (result) {
       case Ok<User>():
-        emitEffect(NavigateToMain());
+        emitEffect(NavigateToVerify());
         break;
       case Error<User>():
         emitMessage(result.error.toUiMessage());

@@ -1,4 +1,4 @@
 sealed class RegisterEffect {}
 
-class NavigateToMain extends RegisterEffect {}
+class NavigateToVerify extends RegisterEffect {}
 class NavigateBack extends RegisterEffect {}

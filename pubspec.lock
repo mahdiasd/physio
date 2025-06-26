@@ -411,6 +411,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  forgot:
+    dependency: "direct main"
+    description:
+      path: "packages/features/forgot"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -895,6 +902,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0+1"
+  reset_password:
+    dependency: "direct main"
+    description:
+      path: "packages/features/reset_password"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   responsive_framework:
     dependency: "direct main"
     description:
@@ -1185,6 +1199,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  verify:
+    dependency: "direct main"
+    description:
+      path: "packages/features/verify"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   very_good_analysis:
     dependency: "direct dev"
     description:

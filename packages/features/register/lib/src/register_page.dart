@@ -9,12 +9,12 @@ import 'bloc/register_event.dart';
 import 'bloc/register_state.dart';
 
 class RegisterPage extends StatelessWidget {
-  final VoidCallback onMain;
+  final VoidCallback toVerify;
   final VoidCallback onBack;
 
   const RegisterPage({
     super.key,
-    required this.onMain,
+    required this.toVerify,
     required this.onBack,
   });
 
@@ -26,7 +26,7 @@ class RegisterPage extends StatelessWidget {
       messageStream: bloc.messageStream,
       effectHandlers: {
         NavigateBack: onBack,
-        NavigateToMain: onMain,
+        NavigateToVerify: toVerify,
       },
       child: RegisterContent(),
     );
@@ -50,7 +50,7 @@ class RegisterContent extends StatelessWidget {
                 child: Column(spacing: 50, children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(top: 100, left: 24, right: 24),
+                        const EdgeInsets.only(top: 50, left: 24, right: 24),
                     child: Column(
                       spacing: 16,
                       children: [
@@ -76,11 +76,10 @@ class RegisterContent extends StatelessWidget {
               ),
             ),
           Expanded(
-            child: Center(
+            child: Align(
+              alignment: Alignment.center,
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: 400,
-                ),
+                constraints: BoxConstraints(maxWidth: 450),
                 child: RegisterForm(),
               ),
             ),
@@ -98,20 +97,24 @@ class RegisterForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             spacing: 16,
             children: [
-              HeadlineLargeBoldText("Sign Up"),
+              HeadlineLargeBoldText(
+                "Sign Up",
+                color: theme.colorScheme.primary,
+              ),
               if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                 BodyMediumText(
                     textAlign: TextAlign.center,
                     "Join Rose Physio HUB to access your personalised care plan, track progress, and stay connected with your practitioner."),
             ],
           ),
+          SizedBox(height: 8),
           BlocBuilder<RegisterBloc, RegisterState>(
             builder: (context, state) {
               return Column(spacing: 8, children: [
@@ -123,6 +126,7 @@ class RegisterForm extends StatelessWidget {
                         value: state.firstName,
                         keyboardType: TextInputType.name,
                         maxLines: 1,
+                        title: "First Name",
                         hint: "First Name",
                         onChanged: (text) {
                           context
@@ -136,6 +140,7 @@ class RegisterForm extends StatelessWidget {
                         value: state.lastName,
                         keyboardType: TextInputType.name,
                         maxLines: 1,
+                        title: "Last Name",
                         hint: "Last Name",
                         onChanged: (text) {
                           context
@@ -146,15 +151,18 @@ class RegisterForm extends StatelessWidget {
                     ),
                   ],
                 ),
+                SizedBox(height: 8),
                 AppTextField(
                   value: state.email,
                   keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
-                  hint: "Email",
+                  title: "Email",
+                  hint: "Enter your email",
                   onChanged: (text) {
                     context.read<RegisterBloc>().add(EmailChanged(text));
                   },
                 ),
+                SizedBox(height: 8),
                 AppTextField(
                   value: state.password,
                   keyboardType: TextInputType.text,
@@ -170,7 +178,8 @@ class RegisterForm extends StatelessWidget {
                         .read<RegisterBloc>()
                         .add(TogglePasswordVisibility()),
                   ),
-                  hint: "Password",
+                  title: "Password",
+                  hint: "Enter your password",
                   onChanged: (text) {
                     context.read<RegisterBloc>().add(PasswordChanged(text));
                   },
@@ -183,6 +192,7 @@ class RegisterForm extends StatelessWidget {
               ]);
             },
           ),
+          SizedBox(height: 8),
           Column(
             spacing: 12,
             children: [
