@@ -70,7 +70,7 @@ class ForgotContent extends StatelessWidget {
                     width: 250,
                     height: 250,
                     child: Image.asset(
-                      "assets/images/login_vector.jpg",
+                      "assets/images/login_vector.png",
                       fit: BoxFit.cover,
                     ),
                   )
@@ -80,9 +80,8 @@ class ForgotContent extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: 400,
-                ),
+                constraints:
+                    BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
                 child: ForgotForm(),
               ),
             ),
@@ -106,7 +105,10 @@ class ForgotForm extends StatelessWidget {
           Column(
             spacing: 16,
             children: [
-              HeadlineLargeBoldText("Forgotten Your Password?", textAlign: TextAlign.center,),
+              HeadlineLargeBoldText(
+                "Forgotten Your Password?",
+                textAlign: TextAlign.center,
+              ),
               if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                 BodyMediumText(
                     textAlign: TextAlign.center,
@@ -121,7 +123,7 @@ class ForgotForm extends StatelessWidget {
                   keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
                   hint: "Enter your email",
-                  title: "Email",
+                  title: "Email Address",
                   onChanged: (text) {
                     context.read<ForgotBloc>().add(EmailChanged(text));
                   },
@@ -139,7 +141,7 @@ class ForgotForm extends StatelessWidget {
                   return SizedBox(
                     width: double.infinity,
                     child: AppPrimaryButton(
-                      text: "Send Email",
+                      text: "Continue",
                       onPressed: () {
                         context.read<ForgotBloc>().add(SendEmailClick());
                       },

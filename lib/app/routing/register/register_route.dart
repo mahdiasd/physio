@@ -24,7 +24,7 @@ class RegisterRoute extends GoRouteData {
         builder: (innerContext) {
           return RegisterPage(
             toVerify: () {
-              innerContext.push(VerifyRoute(email: bloc.state.email).location);
+              innerContext.push(VerifyRoute(bloc.state.email).location);
             },
             onBack: () => LoginRoute().pushReplacement(innerContext),
           );

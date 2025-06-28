@@ -12,16 +12,17 @@ part 'verify_route.g.dart';
 )
 @immutable
 class VerifyRoute extends GoRouteData {
-  final String email;
+  final String? email;
 
-  const VerifyRoute({required this.email});
+  const VerifyRoute(this.email);
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     final bloc = getIt<VerifyBloc>();
     return BlocProvider(
       create: (context)  {
-        bloc.passData(email);
+        bloc.passData(email ?? "");
+
         return bloc;
       },
       child: Builder(

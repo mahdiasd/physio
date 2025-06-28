@@ -74,7 +74,7 @@ class LoginContent extends StatelessWidget {
                     width: 250,
                     height: 250,
                     child: Image.asset(
-                      "assets/images/login_vector.jpg",
+                      "assets/images/login_vector.png",
                       fit: BoxFit.cover,
                     ),
                   )
@@ -85,7 +85,7 @@ class LoginContent extends StatelessWidget {
             child: Center(
               child: ConstrainedBox(
                 constraints:
-                    BoxConstraints(maxWidth: 400, maxHeight: double.infinity),
+                    BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
                 child: LoginForm(),
               ),
             ),
@@ -114,7 +114,7 @@ class LoginForm extends StatelessWidget {
               if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                 BodyMediumText(
                     textAlign: TextAlign.center,
-                    "Log in to check your programmes, book appointments, and chat with your practitioner."),
+                    "Login to check your programmes, book appointments, and chat with your practitioner."),
             ],
           ),
           BlocBuilder<LoginBloc, LoginState>(
@@ -125,7 +125,7 @@ class LoginForm extends StatelessWidget {
                   keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
                   hint: "Enter your email",
-                  title: "Email",
+                  title: "Email Address",
                   onChanged: (text) {
                     context.read<LoginBloc>().add(EmailChanged(text));
                   },
@@ -174,7 +174,7 @@ class LoginForm extends StatelessWidget {
                   return SizedBox(
                     width: double.infinity,
                     child: AppPrimaryButton(
-                      text: "Log In",
+                      text: "Login",
                       onPressed: () {
                         context.read<LoginBloc>().add(LoginPressed());
                       },

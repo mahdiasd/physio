@@ -71,7 +71,7 @@ class ResetPasswordContent extends StatelessWidget {
                     width: 250,
                     height: 250,
                     child: Image.asset(
-                      "assets/images/login_vector.jpg",
+                      "assets/images/login_vector.png",
                       fit: BoxFit.cover,
                     ),
                   )

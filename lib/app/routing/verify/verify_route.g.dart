@@ -17,13 +17,13 @@ RouteBase get $verifyRoute => GoRouteData.$route(
 
 extension $VerifyRouteExtension on VerifyRoute {
   static VerifyRoute _fromState(GoRouterState state) => VerifyRoute(
-        email: state.uri.queryParameters['email']!,
+        state.uri.queryParameters['email'],
       );
 
   String get location => GoRouteData.$location(
         '/verify',
         queryParams: {
-          'email': email,
+          if (email != null) 'email': email,
         },
       );
 

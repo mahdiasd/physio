@@ -68,7 +68,7 @@ class RegisterContent extends StatelessWidget {
                     width: 250,
                     height: 250,
                     child: Image.asset(
-                      "assets/images/login_vector.jpg",
+                      "assets/images/login_vector.png",
                       fit: BoxFit.cover,
                     ),
                   )
@@ -79,7 +79,7 @@ class RegisterContent extends StatelessWidget {
             child: Align(
               alignment: Alignment.center,
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 450),
+                constraints: BoxConstraints(maxWidth: 500),
                 child: RegisterForm(),
               ),
             ),
@@ -105,7 +105,9 @@ class RegisterForm extends StatelessWidget {
             spacing: 16,
             children: [
               HeadlineLargeBoldText(
-                "Sign Up",
+                ResponsiveBreakpoints.of(context).isMobile
+                    ? "Sign Up"
+                    : "Create Your Client Account",
                 color: theme.colorScheme.primary,
               ),
               if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
@@ -156,7 +158,7 @@ class RegisterForm extends StatelessWidget {
                   value: state.email,
                   keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
-                  title: "Email",
+                  title: "Email Address",
                   hint: "Enter your email",
                   onChanged: (text) {
                     context.read<RegisterBloc>().add(EmailChanged(text));
@@ -188,6 +190,11 @@ class RegisterForm extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: LabelSmallText(
                       "It must be a combination of minimum 8 letters, numbers, and symbols."),
+                ),
+                SizedBox(height: 8),
+                PrivacyPolicyText(
+                  onPrivacyPolicyTap: () {},
+                  onTermsConditionsTap: () {},
                 )
               ]);
             },
@@ -203,7 +210,7 @@ class RegisterForm extends StatelessWidget {
                   return SizedBox(
                     width: double.infinity,
                     child: AppPrimaryButton(
-                      text: "Register",
+                      text: "Continue",
                       onPressed: () {
                         context.read<RegisterBloc>().add(RegisterPressed());
                       },
@@ -220,7 +227,7 @@ class RegisterForm extends StatelessWidget {
                     'Already have an account?',
                   ),
                   BodyMediumBoldText(
-                    'Log In',
+                    'Login',
                     color: theme.colorScheme.primary,
                     onTap: () {
                       context.read<RegisterBloc>().add(LoginPressed());
@@ -230,6 +237,64 @@ class RegisterForm extends StatelessWidget {
               ),
             ],
           )
+        ],
+      ),
+    );
+  }
+}
+
+class PrivacyPolicyText extends StatelessWidget {
+  final VoidCallback? onPrivacyPolicyTap;
+  final VoidCallback? onTermsConditionsTap;
+  final Color? linkColor;
+  final Color? textColor;
+
+  const PrivacyPolicyText({
+    super.key,
+    this.onPrivacyPolicyTap,
+    this.onTermsConditionsTap,
+    this.linkColor,
+    this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final defaultLinkColor = linkColor ?? theme.colorScheme.primary;
+    final defaultTextColor = textColor ?? theme.textTheme.bodyMedium?.color;
+
+    return SizedBox(
+      width: double.infinity,
+      child: Wrap(
+        children: [
+          BodyMediumText(
+            'By continuing, you agree to our ',
+            color: defaultTextColor,
+          ),
+          BodyMediumText(
+            'Privacy Policy',
+            color: defaultLinkColor,
+            customStyle: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+            onTap: onPrivacyPolicyTap,
+          ),
+          BodyMediumText(
+            ' and ',
+            color: defaultTextColor,
+          ),
+          BodyMediumText(
+            'Terms & Conditions',
+            color: defaultLinkColor,
+            customStyle: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+            onTap: onTermsConditionsTap,
+          ),
+          BodyMediumText(
+            '.',
+            color: defaultTextColor,
+          ),
         ],
       ),
     );
