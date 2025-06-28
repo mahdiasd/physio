@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:physio/app/theme/theme_data.dart';
 import 'package:physio/l10n/arb/app_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -27,11 +28,8 @@ class App extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         debugShowCheckedModeBanner: false,
         supportedLocales: AppLocalizations.supportedLocales,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          textTheme: GoogleFonts.poppinsTextTheme(),
-          useMaterial3: true,
-        ),
+        theme: lightTheme,
+        darkTheme: darkTheme,
       ),
     );
   }
