@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'base_text.dart';
+
+
 class LabelLargeText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
@@ -9,7 +12,9 @@ class LabelLargeText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
+  final VoidCallback? onTap;
 
+  /// Card Tile - 14px / 600
   const LabelLargeText(
       this.text, {
         super.key,
@@ -20,23 +25,22 @@ class LabelLargeText extends StatelessWidget {
         this.overflow = TextOverflow.clip,
         this.softWrap = true,
         this.customStyle,
+        this.onTap,
       });
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final defaultStyle = textTheme.labelLarge;
-
-    return Text(
-      text,
+    return BaseText(
+      text: text,
+      style: Theme.of(context).textTheme.labelLarge,
       textAlign: textAlign,
+      color: color ?? Theme.of(context).colorScheme.onSurface,
       textDirection: textDirection,
       maxLines: maxLines,
       overflow: overflow,
       softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
+      customStyle: customStyle,
+      onTap: onTap,
     );
   }
 }
@@ -50,7 +54,9 @@ class LabelMediumText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
+  final VoidCallback? onTap;
 
+  /// Body Text - 14px / 400
   const LabelMediumText(
       this.text, {
         super.key,
@@ -61,23 +67,22 @@ class LabelMediumText extends StatelessWidget {
         this.overflow = TextOverflow.clip,
         this.softWrap = true,
         this.customStyle,
+        this.onTap,
       });
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final defaultStyle = textTheme.labelMedium;
-
-    return Text(
-      text,
+    return BaseText(
+      text: text,
+      style: Theme.of(context).textTheme.labelMedium,
       textAlign: textAlign,
+      color: color ?? Theme.of(context).colorScheme.onSurface,
       textDirection: textDirection,
       maxLines: maxLines,
       overflow: overflow,
       softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
+      customStyle: customStyle,
+      onTap: onTap,
     );
   }
 }
@@ -91,7 +96,9 @@ class LabelSmallText extends StatelessWidget {
   final TextOverflow overflow;
   final bool softWrap;
   final TextStyle? customStyle;
+  final VoidCallback? onTap;
 
+  /// Button Downside Clickable - 14px / 600
   const LabelSmallText(
       this.text, {
         super.key,
@@ -102,147 +109,22 @@ class LabelSmallText extends StatelessWidget {
         this.overflow = TextOverflow.clip,
         this.softWrap = true,
         this.customStyle,
+        this.onTap,
       });
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final defaultStyle = textTheme.labelSmall;
-
-    return Text(
-      text,
+    return BaseText(
+      text: text,
+      style: Theme.of(context).textTheme.labelSmall,
       textAlign: textAlign,
+      color: color ?? Theme.of(context).colorScheme.onSurface,
       textDirection: textDirection,
       maxLines: maxLines,
       overflow: overflow,
       softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
-    );
-  }
-}
-
-
-class LabelLargeBoldText extends StatelessWidget {
-  final String text;
-  final TextAlign textAlign;
-  final Color? color;
-  final TextDirection textDirection;
-  final int? maxLines;
-  final TextOverflow overflow;
-  final bool softWrap;
-  final TextStyle? customStyle;
-
-  const LabelLargeBoldText(
-      this.text, {
-        super.key,
-        this.textAlign = TextAlign.start,
-        this.color,
-        this.textDirection = TextDirection.ltr,
-        this.maxLines,
-        this.overflow = TextOverflow.clip,
-        this.softWrap = true,
-        this.customStyle,
-      });
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final defaultStyle = textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold);
-
-    return Text(
-      text,
-      textAlign: textAlign,
-      textDirection: textDirection,
-      maxLines: maxLines,
-      overflow: overflow,
-      softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
-    );
-  }
-}
-
-class LabelMediumBoldText extends StatelessWidget {
-  final String text;
-  final TextAlign textAlign;
-  final Color? color;
-  final TextDirection textDirection;
-  final int? maxLines;
-  final TextOverflow overflow;
-  final bool softWrap;
-  final TextStyle? customStyle;
-
-  const LabelMediumBoldText(
-      this.text, {
-        super.key,
-        this.textAlign = TextAlign.start,
-        this.color,
-        this.textDirection = TextDirection.ltr,
-        this.maxLines,
-        this.overflow = TextOverflow.clip,
-        this.softWrap = true,
-        this.customStyle,
-      });
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final defaultStyle = textTheme.labelMedium?.copyWith(fontWeight: FontWeight.bold);
-
-    return Text(
-      text,
-      textAlign: textAlign,
-      textDirection: textDirection,
-      maxLines: maxLines,
-      overflow: overflow,
-      softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
-    );
-  }
-}
-
-class LabelSmallBoldText extends StatelessWidget {
-  final String text;
-  final TextAlign textAlign;
-  final Color? color;
-  final TextDirection textDirection;
-  final int? maxLines;
-  final TextOverflow overflow;
-  final bool softWrap;
-  final TextStyle? customStyle;
-
-  const LabelSmallBoldText(
-      this.text, {
-        super.key,
-        this.textAlign = TextAlign.start,
-        this.color,
-        this.textDirection = TextDirection.ltr,
-        this.maxLines,
-        this.overflow = TextOverflow.clip,
-        this.softWrap = true,
-        this.customStyle,
-      });
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final defaultStyle = textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold);
-
-    return Text(
-      text,
-      textAlign: textAlign,
-      textDirection: textDirection,
-      maxLines: maxLines,
-      overflow: overflow,
-      softWrap: softWrap,
-      style: (customStyle ?? defaultStyle)?.copyWith(
-        color: color,
-      ),
+      customStyle: customStyle,
+      onTap: onTap,
     );
   }
 }

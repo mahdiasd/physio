@@ -6,8 +6,6 @@ import 'package:physio/app/routing/verify/verify_route.dart';
 import 'package:register/register.dart';
 import 'package:utils/utils.dart';
 
-import '../main/main_route.dart';
-
 part 'register_route.g.dart';
 
 @TypedGoRoute<RegisterRoute>(path: "/register")
@@ -23,10 +21,10 @@ class RegisterRoute extends GoRouteData {
       child: Builder(
         builder: (innerContext) {
           return RegisterPage(
-            toVerify: () {
+            navigateToVerify: () {
               innerContext.push(VerifyRoute(bloc.state.email).location);
             },
-            onBack: () => LoginRoute().pushReplacement(innerContext),
+            navigateBack: () => LoginRoute().pushReplacement(innerContext),
           );
         },
       ),

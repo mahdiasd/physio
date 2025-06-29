@@ -3,11 +3,10 @@ import 'package:ui/src/widgets/text/body_text.dart';
 
 class AppPrimaryButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isLoading;
-  final EdgeInsetsGeometry padding;
-  final double borderRadius;
-  final double elevation;
+  final EdgeInsetsGeometry? padding;
+  final double? elevation;
   final Color? textColor;
 
   const AppPrimaryButton({
@@ -15,52 +14,78 @@ class AppPrimaryButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isLoading = false,
-    this.padding = const EdgeInsets.symmetric(vertical: 16),
-    this.borderRadius = 25,
-    this.elevation = 0,
+    this.padding,
+    this.elevation,
     this.textColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDisabled = onPressed == null || isLoading;
 
     return ElevatedButton(
-      onPressed: isLoading ? null : onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
-        padding: padding,
-        elevation: elevation,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
+      onPressed: isDisabled ? null : onPressed,
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return const Color(0xFFD0E8E3); // Disabled background
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return _darken(colorScheme.primary, 0.1); // Hover darker
+          }
+          return colorScheme.primary; // Default
+        }),
+        foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return const Color(0xFF9FB7B2); // Disabled text
+          }
+          return textColor ?? colorScheme.onPrimary;
+        }),
+        padding: WidgetStateProperty.all(
+          padding ?? const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
         ),
-        textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+        elevation: WidgetStateProperty.all(elevation ?? 4),
+        shadowColor: WidgetStateProperty.all(
+            Colors.black.withAlpha((0.1 * 255).round()), // 10% black shadow
+        ),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(1000), // Full radius
+          ),
+        ),
       ),
       child: isLoading
           ? SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation(colorScheme.onPrimary),
-              ),
-            )
-          : BodyLargeBoldText(
-              text,
-              color: textColor ?? colorScheme.onPrimary,
-            ),
+        width: 20,
+        height: 20,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation(
+              textColor ?? colorScheme.onPrimary),
+        ),
+      )
+          : BodyLargeText(
+        text,
+        color: textColor ?? colorScheme.onPrimary,
+      ),
     );
+  }
+
+  Color _darken(Color color, double amount) {
+    final hsl = HSLColor.fromColor(color);
+    final darkened =
+    hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+    return darkened.toColor();
   }
 }
 
 class AppPrimaryContainerButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isLoading;
-  final EdgeInsetsGeometry padding;
-  final double borderRadius;
-  final double elevation;
+  final EdgeInsetsGeometry? padding;
+  final double? elevation;
   final Color? textColor;
 
   const AppPrimaryContainerButton({
@@ -68,42 +93,69 @@ class AppPrimaryContainerButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isLoading = false,
-    this.padding = const EdgeInsets.symmetric(vertical: 14),
-    this.borderRadius = 25,
-    this.elevation = 0,
+    this.padding,
+    this.elevation,
     this.textColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDisabled = onPressed == null || isLoading;
 
     return ElevatedButton(
-      onPressed: isLoading ? null : onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: colorScheme.primaryContainer,
-        foregroundColor: colorScheme.onPrimaryContainer,
-        padding: padding,
-        elevation: elevation,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
+      onPressed: isDisabled ? null : onPressed,
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return const Color(0xFFD0E8E3); // Disabled background
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return _darken(colorScheme.primaryContainer, 0.05); // Hover
+          }
+          return colorScheme.primaryContainer; // Default
+        }),
+        foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return const Color(0xFF9FB7B2); // Disabled text
+          }
+          return textColor ?? colorScheme.onPrimaryContainer;
+        }),
+        padding: WidgetStateProperty.all(
+          padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         ),
-        textStyle: Theme.of(context).textTheme.bodyLarge,
+        elevation: WidgetStateProperty.all(elevation ?? 4),
+        shadowColor: WidgetStateProperty.all(
+            Colors.black.withAlpha((0.1 * 255).round()), // Shadow same as primary
+        ),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(1000),
+          ),
+        ),
       ),
       child: isLoading
           ? SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor:
-                    AlwaysStoppedAnimation(colorScheme.onPrimaryContainer),
-              ),
-            )
-          : BodyLargeBoldText(
-              text,
-              color: textColor ?? colorScheme.onPrimaryContainer,
-            ),
+        width: 20,
+        height: 20,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation(
+              textColor ?? colorScheme.onPrimaryContainer),
+        ),
+      )
+          : BodyLargeText(
+        text,
+        color: textColor ?? colorScheme.onPrimaryContainer,
+      ),
     );
   }
+
+  Color _darken(Color color, double amount) {
+    final hsl = HSLColor.fromColor(color);
+    final darkened =
+    hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+    return darkened.toColor();
+  }
 }
+

@@ -51,42 +51,16 @@ class LoginContent extends StatelessWidget {
         children: [
           if (!ResponsiveBreakpoints.of(context).isMobile)
             Expanded(
-              child: Container(
-                color: Colors.grey,
-                child: Column(spacing: 50, children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 100, left: 24, right: 24),
-                    child: Column(
-                      spacing: 16,
-                      children: [
-                        HeadlineLargeBoldText("Rose Physio HUB",
-                            textAlign: TextAlign.center,
-                            color: theme.colorScheme.onPrimary),
-                        BodyMediumText(
-                            "Your personal space to follow your care plan, track your progress, and stay connected with your practitioner.",
-                            textAlign: TextAlign.center,
-                            color: theme.colorScheme.onPrimary),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 250,
-                    height: 250,
-                    child: Image.asset(
-                      "assets/images/login_vector.png",
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                ]),
-              ),
+              child:  WebLeftSection(),
             ),
           Expanded(
             child: Center(
               child: ConstrainedBox(
                 constraints:
                     BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
-                child: LoginForm(),
+                child: AdaptiveFormLayout(
+                  child: LoginForm(),
+                ),
               ),
             ),
           ),
@@ -102,105 +76,147 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            spacing: 16,
-            children: [
-              HeadlineLargeBoldText("Login"),
-              if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-                BodyMediumText(
-                    textAlign: TextAlign.center,
-                    "Login to check your programmes, book appointments, and chat with your practitioner."),
-            ],
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      child: isMobile
+          ? _buildMobileLayout(context, theme)
+          : _buildWebLayout(context, theme),
+    );
+  }
+
+  Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
+    return OverflowDetectingColumn(
+      spacing: 100,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // This will work when content fits
+      children: [
+        _buildHeader(context),
+        _buildFormFields(context),
+        _buildActions(context, theme),
+      ],
+    );
+  }
+
+  Widget _buildWebLayout(BuildContext context, ThemeData theme) {
+    return OverflowDetectingColumn(
+      spacing: 120,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildHeader(context),
+        _buildFormFields(context),
+        _buildActions(context, theme),
+      ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Column(
+      spacing: 24,
+      children: [
+        DisplayLargeText("Login", color : Theme.of(context).colorScheme.primary),
+
+        if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
+          HeadlineSmallText(
+            textAlign: TextAlign.center,
+            "Login to check your programmes, book appointments, and chat with your practitioner.",
           ),
-          BlocBuilder<LoginBloc, LoginState>(
-            builder: (context, state) {
-              return Column(spacing: 16, children: [
-                AppTextField(
-                  value: state.email,
-                  keyboardType: TextInputType.emailAddress,
-                  maxLines: 1,
-                  hint: "Enter your email",
-                  title: "Email Address",
-                  onChanged: (text) {
-                    context.read<LoginBloc>().add(EmailChanged(text));
-                  },
-                ),
-                AppTextField(
-                  value: state.password,
-                  keyboardType: TextInputType.text,
-                  maxLines: 1,
-                  obscureText: state.isPasswordObscured,
-                  trailingIcon: IconButton(
-                    icon: Icon(
-                      state.isPasswordObscured
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () => context
-                        .read<LoginBloc>()
-                        .add(TogglePasswordVisibility()),
-                  ),
-                  hint: "Enter your password",
-                  title: "Password",
-                  onChanged: (text) {
-                    context.read<LoginBloc>().add(PasswordChanged(text));
-                  },
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: BodyMediumText(
-                    "Forgot Password?",
-                    color: theme.colorScheme.primary,
-                    onTap: () {
-                      context.read<LoginBloc>().add(ForgotPasswordPressed());
-                    },
-                  ),
-                ),
-              ]);
-            },
-          ),
-          Column(
-            spacing: 12,
+      ],
+    );
+  }
+
+  Widget _buildFormFields(BuildContext context) {
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            spacing: 24,
             children: [
-              BlocBuilder<LoginBloc, LoginState>(
-                buildWhen: (previous, current) =>
-                    previous.isLoading != current.isLoading,
-                builder: (context, state) {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: AppPrimaryButton(
-                      text: "Login",
-                      onPressed: () {
-                        context.read<LoginBloc>().add(LoginPressed());
-                      },
-                      isLoading: state.isLoading,
-                    ),
-                  );
+              AppTextField(
+                value: state.email,
+                keyboardType: TextInputType.emailAddress,
+                maxLines: 1,
+                hint: "Enter your email",
+                title: "Email Address",
+                onChanged: (text) {
+                  context.read<LoginBloc>().add(EmailChanged(text));
                 },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 4,
-                children: [
-                  LabelMediumText(
-                    'No Account Yet?',
+              AppTextField(
+                value: state.password,
+                keyboardType: TextInputType.text,
+                maxLines: 1,
+                obscureText: state.isPasswordObscured,
+                trailingIcon: IconButton(
+                  icon: Icon(
+                    state.isPasswordObscured
+                        ? Icons.visibility_off
+                        : Icons.visibility,
                   ),
-                  BodyMediumBoldText(
-                    'Sign Up',
-                    color: theme.colorScheme.primary,
-                    onTap: () {
-                      context.read<LoginBloc>().add(RegisterPressed());
-                    },
-                  ),
-                ],
+                  onPressed: () =>
+                      context.read<LoginBloc>().add(TogglePasswordVisibility()),
+                ),
+                hint: "Enter your password",
+                title: "Password",
+                onChanged: (text) {
+                  context.read<LoginBloc>().add(PasswordChanged(text));
+                },
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: BodyMediumText(
+                  "Forgot Password?",
+                  color: Theme.of(context).colorScheme.secondary,
+                  onTap: () {
+                    context.read<LoginBloc>().add(ForgotPasswordPressed());
+                  },
+                ),
               ),
             ],
-          )
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildActions(BuildContext context, ThemeData theme) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        spacing: 12,
+        children: [
+          BlocBuilder<LoginBloc, LoginState>(
+            buildWhen: (previous, current) =>
+                previous.isLoading != current.isLoading,
+            builder: (context, state) {
+              return SizedBox(
+                width: double.infinity,
+                child: AppPrimaryButton(
+                  text: "Login",
+                  onPressed: () {
+                    context.read<LoginBloc>().add(LoginPressed());
+                  },
+                  isLoading: state.isLoading,
+                ),
+              );
+            },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 4,
+            children: [
+              LabelMediumText('No Account Yet?'),
+              BodyLargeText(
+                'Sign Up',
+                color: theme.colorScheme.secondary,
+                onTap: () {
+                  context.read<LoginBloc>().add(RegisterPressed());
+                },
+              ),
+            ],
+          ),
         ],
       ),
     );

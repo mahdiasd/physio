@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ui/src/widgets/text/body_text.dart';
-import 'package:ui/src/widgets/text/label_text.dart';
 
-const _borderRadius = 8.0;
+import '../../../ui.dart';
 
 class AppTextField extends StatefulWidget {
   final String value;
@@ -63,6 +61,9 @@ class _AppTextFieldState extends State<AppTextField> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
 
+  static const double _borderRadius = 10; // 10px border radius
+  static const double _borderWidth = 0.5; // 0.5px border width
+
   @override
   void initState() {
     super.initState();
@@ -71,22 +72,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
     _controller.addListener(() {
       if (_controller.text != widget.value) {
-        // For verification code inputs, limit to single digit
-        if (widget.keyboardType == TextInputType.number &&
-            widget.textAlign == TextAlign.center &&
-            _controller.text.length > 1) {
-          // Keep only the last entered digit
-          final newValue = _controller.text.characters.last;
-          _controller.value = TextEditingValue(
-            text: newValue,
-            selection: TextSelection.fromPosition(
-              TextPosition(offset: newValue.length),
-            ),
-          );
-          widget.onChanged(newValue);
-        } else {
-          widget.onChanged(_controller.text);
-        }
+        widget.onChanged(_controller.text);
       }
     });
   }
@@ -112,7 +98,7 @@ class _AppTextFieldState extends State<AppTextField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final isClearVisible = widget.showClearIcon &&
+    final bool isClearVisible = widget.showClearIcon &&
         widget.value.isNotEmpty &&
         widget.enabled &&
         !widget.readOnly;
@@ -121,85 +107,83 @@ class _AppTextFieldState extends State<AppTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.title != null) ...[
-          BodyMediumText(
-            widget.title!,
-          ),
+          BodyMediumText(widget.title!, color: theme.colorScheme.onSurface,),
           SizedBox(height: widget.titleSpacing),
         ],
-        KeyboardListener(
-          focusNode: FocusNode(),
-          onKeyEvent: (KeyEvent event) {
-            if (event is KeyDownEvent &&
-                event.logicalKey == LogicalKeyboardKey.backspace &&
-                widget.keyboardType == TextInputType.number &&
-                widget.textAlign == TextAlign.center &&
-                _controller.text.isEmpty) {
-              widget.onChanged('');
-            }
-          },
-          child: TextField(
-            controller: _controller,
-            focusNode: _focusNode,
-            enabled: widget.enabled,
-            readOnly: widget.readOnly,
-            minLines: widget.minLines,
-            maxLines: widget.maxLines,
-            obscureText: widget.obscureText,
-            keyboardType: widget.keyboardType,
-            textDirection: widget.textDirection,
-            textAlign: widget.textAlign,
-            style: widget.textStyle ?? theme.textTheme.bodyMedium,
-            inputFormatters: widget.keyboardType == TextInputType.number &&
-                    widget.textAlign == TextAlign.center
-                ? [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(1),
-                  ]
-                : null,
-            decoration: InputDecoration(
-              hintText: widget.hint,
-              hintStyle: widget.placeholderStyle ??
-                  theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.hintColor,
-                  ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(_borderRadius),
-                borderSide: BorderSide(
-                  color: theme.colorScheme.outlineVariant,
-                ),
+        TextField(
+          controller: _controller,
+          focusNode: _focusNode,
+          enabled: widget.enabled,
+          readOnly: widget.readOnly,
+          minLines: widget.minLines,
+          maxLines: widget.maxLines,
+          obscureText: widget.obscureText,
+          keyboardType: widget.keyboardType,
+          textDirection: widget.textDirection,
+          textAlign: widget.textAlign,
+          style: widget.textStyle ??
+              theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurface, // Text color
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(_borderRadius),
-                borderSide: BorderSide(
-                  color: theme.colorScheme.primary,
+          decoration: InputDecoration(
+            hintText: widget.hint,
+            hintStyle: widget.placeholderStyle ??
+                theme.textTheme.bodyMedium?.copyWith(
+                  color: const Color(0xFF9A9A9A), // Placeholder color
                 ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(_borderRadius),
-                borderSide: BorderSide(
-                  color: theme.colorScheme.error,
-                ),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(_borderRadius),
-                borderSide: BorderSide(
-                  color: theme.colorScheme.error,
-                ),
-              ),
-              filled: true,
-              fillColor: theme.colorScheme.surfaceContainerHigh,
-              errorText: widget.isError ? widget.errorText : null,
-              prefixIcon: widget.leadingIcon ??
-                  (isClearVisible ? _buildClearIcon(context) : null),
-              suffixIcon: widget.trailingIcon,
+            filled: true,
+            fillColor: theme.colorScheme.surfaceContainerLow, // Background color
+            errorText: widget.isError ? widget.errorText : null,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 14,
+              horizontal: 12,
             ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(_borderRadius),
+              borderSide: const BorderSide(
+                color: Color(0xFFE1E1E1), // Border color
+                width: _borderWidth,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(_borderRadius),
+              borderSide: BorderSide(
+                color: theme.colorScheme.primary,
+                width: _borderWidth,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(_borderRadius),
+              borderSide: BorderSide(
+                color: theme.colorScheme.error,
+                width: _borderWidth,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(_borderRadius),
+              borderSide: BorderSide(
+                color: theme.colorScheme.error,
+                width: _borderWidth,
+              ),
+            ),
+            prefixIcon: widget.leadingIcon,
+            suffixIcon: isClearVisible
+                ? _buildClearIcon(context)
+                : widget.trailingIcon,
           ),
+          inputFormatters: widget.keyboardType == TextInputType.number &&
+              widget.textAlign == TextAlign.center
+              ? [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(1),
+          ]
+              : null,
         ),
         if (widget.label != null) ...[
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           LabelSmallText(
             widget.label!,
-            color: theme.colorScheme.outline,
+            color: theme.colorScheme.scrim,
           ),
         ],
       ],
@@ -220,3 +204,4 @@ class _AppTextFieldState extends State<AppTextField> {
     );
   }
 }
+
