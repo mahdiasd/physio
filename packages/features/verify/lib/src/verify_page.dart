@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 import 'bloc/verify_bloc.dart';
 import 'bloc/verify_effect.dart';
 import 'bloc/verify_event.dart';
+import 'bloc/verify_state.dart';
 
 class VerifyPage extends StatelessWidget {
   final VoidCallback navigateBack;
@@ -46,43 +48,16 @@ class VerifyContent extends StatelessWidget {
         children: [
           if (!ResponsiveBreakpoints.of(context).isMobile)
             Expanded(
-              child: Container(
-                color: Colors.grey,
-                child: Column(spacing: 50, children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 100, left: 24, right: 24),
-                    child: Column(
-                      spacing: 16,
-                      children: [
-                        HeadlineLargeBoldText("Rose Physio HUB",
-                            textAlign: TextAlign.center,
-                            color: theme.colorScheme.onPrimary),
-                        BodyMediumText(
-                            "Your personal space to follow your care plan, track your progress, and stay connected with your practitioner.",
-                            textAlign: TextAlign.center,
-                            color: theme.colorScheme.onPrimary),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 250,
-                    height: 250,
-                    child: Image.asset(
-                      "assets/images/login_vector.png",
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                ]),
-              ),
+              child: WebLeftSection(),
             ),
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: 500,
+                constraints:
+                    BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
+                child: AdaptiveFormLayout(
+                  child: VerifyForm(),
                 ),
-                child: VerifyForm(),
               ),
             ),
           ),
@@ -136,93 +111,156 @@ class _VerifyFormState extends State<VerifyForm> {
 
   @override
   Widget build(BuildContext context) {
-    final isVerified =
-        context.select((VerifyBloc bloc) => bloc.state.isVerified);
-    final isLoading = context.select((VerifyBloc bloc) => bloc.state.isLoading);
-    final isResendLoading =
-        context.select((VerifyBloc bloc) => bloc.state.isResendLoading);
+    final theme = Theme.of(context);
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildHeader(context, isVerified),
-          if (!isVerified)
-            VerificationCodeField(
-              labelText: 'Enter Verification Code',
-              onChanged: (text) {
-                context.read<VerifyBloc>().add(CodeChange(text));
-              },
-            ),
-          _buildFooterSection(context, isVerified, isLoading, isResendLoading),
-        ],
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      child: isMobile
+          ? _buildMobileLayout(context, theme)
+          : _buildWebLayout(context, theme),
     );
   }
 
-  Widget _buildHeader(BuildContext context, bool isVerified) {
+  Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
+    return BlocBuilder<VerifyBloc, VerifyState>(
+      builder: (context, state) {
+        return OverflowDetectingColumn(
+          spacing: 100,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildHeader(context, state.isVerified, state.email),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 64),
+              child: _buildFormFields(context, state.isVerified),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 64),
+              child: _buildActions(context, theme, state),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildWebLayout(BuildContext context, ThemeData theme) {
+    return BlocBuilder<VerifyBloc, VerifyState>(
+      builder: (context, state) {
+        return OverflowDetectingColumn(
+          spacing: 120,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildHeader(context, state.isVerified,state.email),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 64),
+              child: _buildFormFields(context, state.isVerified),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 64),
+              child: _buildActions(context, theme, state),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, bool isVerified, String email) {
     return Column(
-      spacing: 16,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      spacing: 24,
       children: [
-        HeadlineLargeBoldText(
+        DisplayLargeText(
           isVerified ? "Email Verified" : "Verify Your Email",
           textAlign: TextAlign.center,
+          color: Theme.of(context).colorScheme.primary,
         ),
-        BodySmallText(
-          textAlign: TextAlign.center,
-          !isVerified
-              ? "We've sent a 4-digit verification code to [client email]."
-              : "Your email has been successfully verified.",
-        ),
-        BodySmallText(
-          textAlign: TextAlign.center,
-          !isVerified
-              ? "Please enter the code below to confirm your email address."
-              : "You're all set to get started!",
+        Column(
+          spacing: 8,
+          children: [
+            HeadlineMediumText(
+              textAlign: TextAlign.center,
+              !isVerified
+                  ? "We've sent a 4-digit verification code to $email"
+                  : "Your email has been successfully verified.",
+            ),
+            HeadlineSmallText(
+              textAlign: TextAlign.center,
+              !isVerified
+                  ? "Please enter the code below to confirm your email address."
+                  : "You're all set to get started!",
+            ),
+          ],
         ),
       ],
     );
   }
 
-  Widget _buildFooterSection(
-    BuildContext context,
-    bool isVerified,
-    bool isLoading,
-    bool isResendLoading,
-  ) {
+  Widget _buildFormFields(BuildContext context, bool isVerified) {
+    if (isVerified) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
-      spacing: 16,
+      spacing: 24,
       children: [
-        Row(
+        VerificationCodeInput(
+          labelText: 'Enter Verification Code',
+          onChange: (text) {
+            context.read<VerifyBloc>().add(CodeChange(text));
+          },
+        ),
+        _buildResendSection(context),
+      ],
+    );
+  }
+
+  Widget _buildResendSection(BuildContext context) {
+    return BlocBuilder<VerifyBloc, VerifyState>(
+      buildWhen: (previous, current) =>
+          previous.isResendLoading != current.isResendLoading,
+      builder: (context, state) {
+        return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 4,
           children: [
-            BodyMediumText("Didn't get the code?"),
-            isResendLoading
-                ? SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : BodyMediumBoldText(
-                    "Resend Code",
-                    color: Theme.of(context).colorScheme.primary,
-                    onTap: () {
-                      _onResendCode(context);
-                    },
-                  )
+            LabelMediumText("Didn't get the code?"),
+            if (state.isResendLoading)
+              const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            else if (_secondsLeft > 0)
+              LabelMediumText(
+                "${_secondsLeft}s",
+                color: Theme.of(context).colorScheme.secondary,
+              )
+            else
+              BodyLargeText(
+                "Resend Code",
+                color: Theme.of(context).colorScheme.secondary,
+                onTap: () => _onResendCode(context),
+              ),
           ],
-        ),
+        );
+      },
+    );
+  }
+
+  Widget _buildActions(
+      BuildContext context, ThemeData theme, VerifyState state) {
+    return Column(
+      spacing: 12,
+      children: [
         SizedBox(
           width: double.infinity,
           child: AppPrimaryButton(
-            text: isVerified ? "Confirm" : "Continue",
+            text: state.isVerified ? "Confirm" : "Continue",
             onPressed: () {
               context.read<VerifyBloc>().add(VerifyClick());
             },
-            isLoading: isLoading,
+            isLoading: state.isLoading,
           ),
         ),
       ],

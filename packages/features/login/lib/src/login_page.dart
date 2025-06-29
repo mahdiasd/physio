@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:login/src/scrollable_column/overflow_detection_column.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
 
@@ -52,7 +51,7 @@ class LoginContent extends StatelessWidget {
         children: [
           if (!ResponsiveBreakpoints.of(context).isMobile)
             Expanded(
-              child: WebLeftSection(),
+              child:  WebLeftSection(),
             ),
           Expanded(
             child: Center(
@@ -68,91 +67,6 @@ class LoginContent extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class WebLeftSection extends StatelessWidget {
-  const WebLeftSection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      color: const Color(0xFFEFF6F5),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            spacing: 16,
-            children: [
-              HeadlineLargeBoldText(
-                "Rose Physio HUB",
-                textAlign: TextAlign.center,
-                color: theme.colorScheme.onPrimary,
-              ),
-              BodyMediumText(
-                "Your personal space to follow your care plan, track your progress, and stay connected with your practitioner.",
-                textAlign: TextAlign.center,
-                color: theme.colorScheme.onPrimary,
-              ),
-            ],
-          ),
-          const SizedBox(height: 40),
-          ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 400,
-            ),
-            child: Image.asset(
-              "assets/images/login_vector.png",
-              fit: BoxFit.contain,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class AdaptiveFormLayout extends StatelessWidget {
-  final Widget child;
-  final double minHeight;
-
-  const AdaptiveFormLayout({
-    super.key,
-    required this.child,
-    this.minHeight = 800,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final availableHeight = screenHeight -
-        MediaQuery.of(context).padding.top -
-        MediaQuery.of(context).padding.bottom;
-
-    if (isMobile) {
-      return child;
-    }
-
-    if (availableHeight >= minHeight) {
-      return SizedBox(
-        height: minHeight,
-        child: child,
-      );
-    } else {
-      return SizedBox(
-        height: availableHeight,
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: minHeight),
-            child: child,
-          ),
-        ),
-      );
-    }
   }
 }
 
@@ -201,9 +115,10 @@ class LoginForm extends StatelessWidget {
     return Column(
       spacing: 24,
       children: [
-        HeadlineLargeBoldText("Login"),
+        DisplayLargeText("Login", color : Theme.of(context).colorScheme.primary),
+
         if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-          BodyMediumText(
+          HeadlineSmallText(
             textAlign: TextAlign.center,
             "Login to check your programmes, book appointments, and chat with your practitioner.",
           ),
@@ -214,90 +129,96 @@ class LoginForm extends StatelessWidget {
   Widget _buildFormFields(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
-        return Column(
-          spacing: 24,
-          children: [
-            AppTextField(
-              value: state.email,
-              keyboardType: TextInputType.emailAddress,
-              maxLines: 1,
-              hint: "Enter your email",
-              title: "Email Address",
-              onChanged: (text) {
-                context.read<LoginBloc>().add(EmailChanged(text));
-              },
-            ),
-            AppTextField(
-              value: state.password,
-              keyboardType: TextInputType.text,
-              maxLines: 1,
-              obscureText: state.isPasswordObscured,
-              trailingIcon: IconButton(
-                icon: Icon(
-                  state.isPasswordObscured
-                      ? Icons.visibility_off
-                      : Icons.visibility,
-                ),
-                onPressed: () =>
-                    context.read<LoginBloc>().add(TogglePasswordVisibility()),
-              ),
-              hint: "Enter your password",
-              title: "Password",
-              onChanged: (text) {
-                context.read<LoginBloc>().add(PasswordChanged(text));
-              },
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: BodyMediumText(
-                "Forgot Password?",
-                color: Theme.of(context).colorScheme.primary,
-                onTap: () {
-                  context.read<LoginBloc>().add(ForgotPasswordPressed());
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            spacing: 24,
+            children: [
+              AppTextField(
+                value: state.email,
+                keyboardType: TextInputType.emailAddress,
+                maxLines: 1,
+                hint: "Enter your email",
+                title: "Email Address",
+                onChanged: (text) {
+                  context.read<LoginBloc>().add(EmailChanged(text));
                 },
               ),
-            ),
-          ],
+              AppTextField(
+                value: state.password,
+                keyboardType: TextInputType.text,
+                maxLines: 1,
+                obscureText: state.isPasswordObscured,
+                trailingIcon: IconButton(
+                  icon: Icon(
+                    state.isPasswordObscured
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                  ),
+                  onPressed: () =>
+                      context.read<LoginBloc>().add(TogglePasswordVisibility()),
+                ),
+                hint: "Enter your password",
+                title: "Password",
+                onChanged: (text) {
+                  context.read<LoginBloc>().add(PasswordChanged(text));
+                },
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: BodyMediumText(
+                  "Forgot Password?",
+                  color: Theme.of(context).colorScheme.secondary,
+                  onTap: () {
+                    context.read<LoginBloc>().add(ForgotPasswordPressed());
+                  },
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
   }
 
   Widget _buildActions(BuildContext context, ThemeData theme) {
-    return Column(
-      spacing: 12,
-      children: [
-        BlocBuilder<LoginBloc, LoginState>(
-          buildWhen: (previous, current) =>
-              previous.isLoading != current.isLoading,
-          builder: (context, state) {
-            return SizedBox(
-              width: double.infinity,
-              child: AppPrimaryButton(
-                text: "Login",
-                onPressed: () {
-                  context.read<LoginBloc>().add(LoginPressed());
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        spacing: 12,
+        children: [
+          BlocBuilder<LoginBloc, LoginState>(
+            buildWhen: (previous, current) =>
+                previous.isLoading != current.isLoading,
+            builder: (context, state) {
+              return SizedBox(
+                width: double.infinity,
+                child: AppPrimaryButton(
+                  text: "Login",
+                  onPressed: () {
+                    context.read<LoginBloc>().add(LoginPressed());
+                  },
+                  isLoading: state.isLoading,
+                ),
+              );
+            },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 4,
+            children: [
+              LabelMediumText('No Account Yet?'),
+              BodyLargeText(
+                'Sign Up',
+                color: theme.colorScheme.secondary,
+                onTap: () {
+                  context.read<LoginBloc>().add(RegisterPressed());
                 },
-                isLoading: state.isLoading,
               ),
-            );
-          },
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 4,
-          children: [
-            LabelMediumText('No Account Yet?'),
-            BodyMediumBoldText(
-              'Sign Up',
-              color: theme.colorScheme.primary,
-              onTap: () {
-                context.read<LoginBloc>().add(RegisterPressed());
-              },
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

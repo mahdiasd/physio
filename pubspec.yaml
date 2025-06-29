@@ -6,7 +6,6 @@ publish_to: none
 environment:
   sdk: ^3.5.0
 
-
 dependencies:
   login:
     path: packages/features/login
@@ -88,3 +87,29 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+
+  fonts:
+    - family: ClashGrotesk-Bold
+      fonts:
+        - asset: assets/fonts/ClashGrotesk-Bold.ttf
+          weight: 700
+    - family: ClashGrotesk-Semibold
+      fonts:
+        - asset: assets/fonts/ClashGrotesk-Semibold.ttf
+          weight: 600
+    - family: ClashGrotesk-Medium
+      fonts:
+        - asset: assets/fonts/ClashGrotesk-Medium.ttf
+          weight: 500
+    - family: ClashGrotesk-Regular
+      fonts:
+        - asset: assets/fonts/ClashGrotesk-Regular.ttf
+          weight: 400
+    - family: ClashGrotesk-Light
+      fonts:
+        - asset: assets/fonts/ClashGrotesk-Light.ttf
+          weight: 300
+    - family: ClashGrotesk-Extralight
+      fonts:
+        - asset: assets/fonts/ClashGrotesk-Extralight.ttf
+          weight: 200

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forgot/forgot.dart';
 import 'package:go_router/go_router.dart';
 import 'package:physio/app/routing/reset_password/reset_password_route.dart';
-import 'package:physio/app/routing/verify/verify_route.dart';
 import 'package:utils/utils.dart';
 
 part 'forgot_route.g.dart';

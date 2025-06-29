@@ -26,9 +26,7 @@ class ForgotPage extends StatelessWidget {
       messageStream: bloc.messageStream,
       effectHandlers: {
         NavigateBack: navigateBack,
-        NavigateToResetPassword: () {
-          navigateToResetPassword();
-        },
+        NavigateToResetPassword: navigateToResetPassword,
       },
       child: ForgotContent(),
     );
@@ -47,42 +45,16 @@ class ForgotContent extends StatelessWidget {
         children: [
           if (!ResponsiveBreakpoints.of(context).isMobile)
             Expanded(
-              child: Container(
-                color: Colors.grey,
-                child: Column(spacing: 50, children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 100, left: 24, right: 24),
-                    child: Column(
-                      spacing: 16,
-                      children: [
-                        HeadlineLargeBoldText("Rose Physio HUB",
-                            textAlign: TextAlign.center,
-                            color: theme.colorScheme.onPrimary),
-                        BodyMediumText(
-                            "Your personal space to follow your care plan, track your progress, and stay connected with your practitioner.",
-                            textAlign: TextAlign.center,
-                            color: theme.colorScheme.onPrimary),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 250,
-                    height: 250,
-                    child: Image.asset(
-                      "assets/images/login_vector.png",
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                ]),
-              ),
+              child: WebLeftSection(),
             ),
           Expanded(
             child: Center(
               child: ConstrainedBox(
                 constraints:
                     BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
-                child: ForgotForm(),
+                child: AdaptiveFormLayout(
+                  child: ForgotForm(),
+                ),
               ),
             ),
           ),
@@ -97,63 +69,102 @@ class ForgotForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            spacing: 16,
-            children: [
-              HeadlineLargeBoldText(
-                "Forgotten Your Password?",
-                textAlign: TextAlign.center,
-              ),
-              if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-                BodyMediumText(
-                    textAlign: TextAlign.center,
-                    "We'll send a verification code to your email so you can reset your password."),
-            ],
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      child: isMobile
+          ? _buildMobileLayout(context, theme)
+          : _buildWebLayout(context, theme),
+    );
+  }
+
+  Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
+    return OverflowDetectingColumn(
+      spacing: 100,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _buildHeader(context),
+        _buildFormFields(context),
+        _buildActions(context, theme),
+      ],
+    );
+  }
+
+  Widget _buildWebLayout(BuildContext context, ThemeData theme) {
+    return OverflowDetectingColumn(
+      spacing: 120,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildHeader(context),
+        _buildFormFields(context),
+        _buildActions(context, theme),
+      ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Column(
+      spacing: 24,
+      children: [
+        DisplayLargeText(
+          "Forgotten Your Password?",
+          textAlign: TextAlign.center,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
+          HeadlineSmallText(
+            textAlign: TextAlign.center,
+            "We'll send a verification code to your email so you can reset your password.",
           ),
-          BlocBuilder<ForgotBloc, ForgotState>(
-            builder: (context, state) {
-              return Column(spacing: 16, children: [
-                AppTextField(
-                  value: state.email,
-                  keyboardType: TextInputType.emailAddress,
-                  maxLines: 1,
-                  hint: "Enter your email",
-                  title: "Email Address",
-                  onChanged: (text) {
-                    context.read<ForgotBloc>().add(EmailChanged(text));
-                  },
-                ),
-              ]);
-            },
-          ),
-          Column(
-            spacing: 12,
-            children: [
-              BlocBuilder<ForgotBloc, ForgotState>(
-                buildWhen: (previous, current) =>
-                    previous.isLoading != current.isLoading,
-                builder: (context, state) {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: AppPrimaryButton(
-                      text: "Continue",
-                      onPressed: () {
-                        context.read<ForgotBloc>().add(SendEmailClick());
-                      },
-                      isLoading: state.isLoading,
-                    ),
-                  );
+      ],
+    );
+  }
+
+  Widget _buildFormFields(BuildContext context) {
+    return BlocBuilder<ForgotBloc, ForgotState>(
+      builder: (context, state) {
+        return Column(
+          spacing: 24,
+          children: [
+            AppTextField(
+              value: state.email,
+              keyboardType: TextInputType.emailAddress,
+              maxLines: 1,
+              hint: "Enter your email",
+              title: "Email Address",
+              onChanged: (text) {
+                context.read<ForgotBloc>().add(EmailChanged(text));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildActions(BuildContext context, ThemeData theme) {
+    return Column(
+      spacing: 12,
+      children: [
+        BlocBuilder<ForgotBloc, ForgotState>(
+          buildWhen: (previous, current) =>
+              previous.isLoading != current.isLoading,
+          builder: (context, state) {
+            return SizedBox(
+              width: double.infinity,
+              child: AppPrimaryButton(
+                text: "Continue",
+                onPressed: () {
+                  context.read<ForgotBloc>().add(SendEmailClick());
                 },
+                isLoading: state.isLoading,
               ),
-            ],
-          )
-        ],
-      ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
