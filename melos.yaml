@@ -31,3 +31,6 @@ scripts:
     description: >
       Continuously watch and rebuild code generation outputs for packages 
       using build_runner, ideal for development mode.
+
+  build:web:
+    run: melos exec --scope="web_app" -- flutter build web --release

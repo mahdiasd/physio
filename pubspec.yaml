@@ -37,6 +37,9 @@ dependencies:
   network:
     path: packages/core/network
 
+  storage:
+    path: packages/core/storage
+
   domain:
     path: packages/domain
 

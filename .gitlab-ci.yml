@@ -1,0 +1,16 @@
+image: cirrusci/flutter:stable
+
+before_script:
+  - flutter pub global activate melos
+  - melos bootstrap
+
+pages:
+  stage: deploy
+  script:
+    - melos exec --scope="web_app" -- flutter build web --release
+    - cp -r packages/web_app/build/web public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main

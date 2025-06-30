@@ -19,6 +19,7 @@ import 'package:network/src/di/network_di.module.dart' as _i292;
 import 'package:register/src/di/register_di.module.dart' as _i536;
 import 'package:reset_password/src/di/reset_password_di.module.dart' as _i1021;
 import 'package:splash/src/di/splash_di.module.dart' as _i49;
+import 'package:storage/src/di/storage_di.module.dart' as _i314;
 import 'package:verify/src/di/verify_di.module.dart' as _i262;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -33,6 +34,7 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     await _i292.NetworkPackageModule().init(gh);
+    await _i314.StoragePackageModule().init(gh);
     await _i24.DataPackageModule().init(gh);
     await _i887.DomainPackageModule().init(gh);
     await _i813.ForgotPackageModule().init(gh);
