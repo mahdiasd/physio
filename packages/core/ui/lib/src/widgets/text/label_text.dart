@@ -14,7 +14,7 @@ class LabelLargeText extends StatelessWidget {
   final TextStyle? customStyle;
   final VoidCallback? onTap;
 
-  /// Card Tile - 14px / 600
+
   const LabelLargeText(
       this.text, {
         super.key,

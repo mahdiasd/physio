@@ -1,3 +1,17 @@
-abstract class MainState {}
+import 'package:main/src/navigation_item.dart';
 
-class MainInitial extends MainState {} 
+class MainState {
+  final NavigationItem currentNavItem;
+
+  MainState({
+    this.currentNavItem = const HomeNavigationItem(),
+  });
+
+  MainState copyWith({
+    NavigationItem? currentNavItem,
+  }) {
+    return MainState(
+      currentNavItem: currentNavItem ?? this.currentNavItem,
+    );
+  }
+}

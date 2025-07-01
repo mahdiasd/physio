@@ -15,6 +15,7 @@ import 'package:forgot/src/di/forgot_di.module.dart' as _i813;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:login/src/di/login_di.module.dart' as _i63;
+import 'package:main/src/di/main_di.module.dart' as _i231;
 import 'package:network/src/di/network_di.module.dart' as _i292;
 import 'package:register/src/di/register_di.module.dart' as _i536;
 import 'package:reset_password/src/di/reset_password_di.module.dart' as _i1021;
@@ -39,6 +40,7 @@ extension GetItInjectableX on _i174.GetIt {
     await _i887.DomainPackageModule().init(gh);
     await _i813.ForgotPackageModule().init(gh);
     await _i63.LoginPackageModule().init(gh);
+    await _i231.MainPackageModule().init(gh);
     await _i536.RegisterPackageModule().init(gh);
     await _i1021.ResetPasswordPackageModule().init(gh);
     await _i49.SplashPackageModule().init(gh);
