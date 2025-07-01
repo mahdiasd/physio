@@ -15,6 +15,6 @@ class VerifyPackageModule extends _i526.MicroPackageModule {
   @override
   _i687.FutureOr<void> init(_i526.GetItHelper gh) {
     gh.factory<_i151.VerifyBloc>(
-        () => _i151.VerifyBloc(gh<_i494.SendOtpCodeUseCase>()));
+        () => _i151.VerifyBloc(gh<_i494.VerifyEmailUseCase>()));
   }
 }

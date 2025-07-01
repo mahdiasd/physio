@@ -19,7 +19,8 @@ abstract class UserApiService {
     required String email,
   });
 
-  Future<Response<NetworkResponse<String>>> sendOtpCodes({
+  Future<Response<NetworkResponse<String>>> verifyEmail({
     required String code,
+    required String email,
   });
 }

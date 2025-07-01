@@ -13,7 +13,8 @@ class UserApiServiceImpl extends UserApiService {
   @override
   Future<Response<NetworkResponse<LoginResponse>>> login(
       {required String email, required String password}) {
-    return dio.post('login', data: {'email': email, 'password': password});
+    return dio
+        .post('v1/auth/login', data: {'email': email, 'password': password});
   }
 
   @override
@@ -22,11 +23,12 @@ class UserApiServiceImpl extends UserApiService {
       required String lastName,
       required String email,
       required String password}) {
-    return dio.post('login', data: {
+    return dio.post('v1/auth/register', data: {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
-      'password': password
+      'password': password,
+      'role': "CLIENT",
     });
   }
 
@@ -39,9 +41,13 @@ class UserApiServiceImpl extends UserApiService {
   }
 
   @override
-  Future<Response<NetworkResponse<String>>> sendOtpCodes({required String code}) {
+  Future<Response<NetworkResponse<String>>> verifyEmail({
+    required String code,
+    required String email,
+  }) {
     return dio.post('otp', data: {
       'code': code,
+      'email': email,
     });
   }
 }

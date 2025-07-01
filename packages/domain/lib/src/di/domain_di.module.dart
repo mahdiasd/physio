@@ -25,8 +25,8 @@ class DomainPackageModule extends _i526.MicroPackageModule {
         () => _i203.LoginUseCase(gh<_i498.UserRepository>()));
     gh.factory<_i531.RegisterUseCase>(
         () => _i531.RegisterUseCase(gh<_i498.UserRepository>()));
-    gh.factory<_i979.SendOtpCodeUseCase>(
-        () => _i979.SendOtpCodeUseCase(gh<_i498.UserRepository>()));
+    gh.factory<_i979.VerifyEmailUseCase>(
+        () => _i979.VerifyEmailUseCase(gh<_i498.UserRepository>()));
     gh.factory<_i706.ValidateEmailUseCase>(
         () => _i706.ValidateEmailUseCase(gh<_i498.UserRepository>()));
   }

@@ -11,14 +11,14 @@ import 'reset_password_state.dart';
 @injectable
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
     with SideEffectMixin<ResetPasswordState, ResetPasswordEffect> {
-  final SendOtpCodeUseCase _sendOtpCodeUseCase;
+  final VerifyEmailUseCase _verifyEmailUseCase;
   final ValidateEmailUseCase _validateEmailUseCase;
 
   void passEmail(String email) {
     add(InitEmail(email));
   }
 
-  ResetPasswordBloc(this._sendOtpCodeUseCase, this._validateEmailUseCase)
+  ResetPasswordBloc(this._verifyEmailUseCase, this._validateEmailUseCase)
       : super(ResetPasswordState()) {
     on<CodeChanged>((event, emit) {
       emit(state.copyWith(code: event.code));
@@ -62,7 +62,10 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
 
     emit(state.copyWith(isLoading: true));
 
-    final result = await _sendOtpCodeUseCase.sendCodes(state.code);
+    final result = await _verifyEmailUseCase.invoke(
+      state.code,
+      state.email,
+    );
 
     emit(state.copyWith(
       isLoading: false,

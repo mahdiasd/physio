@@ -11,9 +11,9 @@ import 'verify_state.dart';
 @injectable
 class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     with SideEffectMixin<VerifyState, VerifyEffect> {
-  final SendOtpCodeUseCase _sendOtpCodeUseCase;
+  final VerifyEmailUseCase _verifyEmailUseCase;
 
-  VerifyBloc(this._sendOtpCodeUseCase) : super(VerifyState()) {
+  VerifyBloc(this._verifyEmailUseCase) : super(VerifyState()) {
     on<CodeChange>((event, emit) {
       emit(state.copyWith(code: event.value));
     });
@@ -45,7 +45,7 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
 
     emit(state.copyWith(isLoading: true));
 
-    final result = await _sendOtpCodeUseCase.sendCodes(state.code);
+    final result = await _verifyEmailUseCase.invoke(state.code, state.email);
 
     emit(state.copyWith(isLoading: false, isVerified: true));
 
@@ -64,8 +64,13 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     Emitter<VerifyState> emit,
   ) async {
     emit(state.copyWith(isResendLoading: true));
-    final result = await _sendOtpCodeUseCase.sendCodes(state.code);
+    final result = await _verifyEmailUseCase.invoke(
+      state.code,
+      state.email,
+    );
+
     emit(state.copyWith(isResendLoading: false));
+
     switch (result) {
       case Ok<String>():
         break;

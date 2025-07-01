@@ -46,6 +46,7 @@ class UserRepositoryImpl extends UserRepository {
       case Ok<LoginResponse>():
         return Result.ok(_mapToUser(result.value));
       case Error<LoginResponse>():
+        PrintHelper.error(result.error.message, location: "UserRepo");
         return Result.error(result.error);
     }
   }
@@ -82,10 +83,11 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Result<String>> sendOtpCodes({required String code}) async {
+  Future<Result<String>> verifyEmail({required String code, required String email}) async {
     final result = await ApiCaller.safeApiCall<String>(
-          () => _userApiService.sendOtpCodes(
+          () => _userApiService.verifyEmail(
         code: code,
+        email: email,
       ),
     );
 

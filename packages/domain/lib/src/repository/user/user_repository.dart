@@ -12,5 +12,8 @@ abstract class UserRepository {
 
   Future<Result<String>> validateEmail({required String email});
 
-  Future<Result<String>> sendOtpCodes({required String code});
+  Future<Result<String>> verifyEmail({
+    required String code,
+    required String email,
+  });
 }
