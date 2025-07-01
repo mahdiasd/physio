@@ -70,7 +70,9 @@ class _MainContentState extends State<MainContent> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isMobile = ResponsiveBreakpoints
+        .of(context)
+        .isMobile;
 
     return BlocBuilder<MainBloc, MainState>(
       builder: (context, state) {
@@ -92,7 +94,10 @@ class _MainContentState extends State<MainContent> {
           AnimatedContainer(
             duration: const Duration(milliseconds: 400),
             width: sidebarWidth,
-            color: Theme.of(context).colorScheme.surfaceContainerLow,
+            color: Theme
+                .of(context)
+                .colorScheme
+                .surfaceContainerLow,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
               child: Column(
@@ -102,7 +107,10 @@ class _MainContentState extends State<MainContent> {
                   if (!isSidebarCollapsed)
                     HeadlineMediumText(
                       "Rose Physio HUB",
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme
+                          .of(context)
+                          .colorScheme
+                          .primary,
                     ),
                   if (!isSidebarCollapsed) const SizedBox(height: 32),
                   Row(
@@ -158,35 +166,83 @@ class _MainContentState extends State<MainContent> {
     );
   }
 
+  // Widget _buildSidebarButton(BuildContext context,
+  //     NavigationItem item,
+  //     bool isSelected,
+  //     int index,) {
+  //   final tintColor =
+  //   isSelected ? Theme
+  //       .of(context)
+  //       .colorScheme
+  //       .primary : Color(0xFF6A6A6A);
+  //   return InkWell(
+  //     borderRadius: BorderRadius.circular(8),
+  //     onTap: () =>
+  //         context.read<MainBloc>().add(PageChanged(
+  //             widget.navigationItems.firstWhere((nav) => nav.index == index))),
+  //     child: Row(
+  //       children: [
+  //         AppImage(
+  //           source: item.icon,
+  //           tintColor: tintColor,
+  //         ),
+  //         if (!isSidebarCollapsed) ...[
+  //           const SizedBox(width: 8),
+  //           LabelLargeText(
+  //             item.label,
+  //             color: tintColor,
+  //           ),
+  //         ],
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget _buildSidebarButton(
-    BuildContext context,
-    NavigationItem item,
-    bool isSelected,
-    int index,
-  ) {
-    final tintColor =
-        isSelected ? Theme.of(context).colorScheme.primary : Color(0xFF6A6A6A);
+      BuildContext context,
+      NavigationItem item,
+      bool isSelected,
+      int index,
+      ) {
+    final Color backgroundColor;
+    final Color contentColor;
+
+    if (isSelected) {
+      backgroundColor = Theme.of(context).colorScheme.primary;
+      contentColor = Theme.of(context).colorScheme.onPrimary;
+    } else {
+      backgroundColor = Colors.transparent;
+      contentColor = Color(0xFF6A6A6A);
+    }
+
     return InkWell(
       borderRadius: BorderRadius.circular(8),
-      onTap: () => context.read<MainBloc>().add(PageChanged(
-          widget.navigationItems.firstWhere((nav) => nav.index == index))),
-      child: Row(
-        children: [
-          AppImage(
-            source: item.icon,
-            tintColor: tintColor,
-          ),
-          if (!isSidebarCollapsed) ...[
-            const SizedBox(width: 8),
-            LabelLargeText(
-              item.label,
-              color: tintColor,
+      onTap: () => context
+          .read<MainBloc>()
+          .add(PageChanged(widget.navigationItems.firstWhere((nav) => nav.index == index))),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            AppImage(
+              source: item.icon,
+              tintColor: contentColor,
             ),
+            if (!isSidebarCollapsed) ...[
+              const SizedBox(width: 8),
+              LabelLargeText(
+                item.label,
+                color: contentColor,
+              ),
+            ],
           ],
-        ],
+        ),
       ),
-    );
-  }
+    );}
 
   Widget _buildMobileLayout(BuildContext context, MainState state) {
     return Scaffold(
@@ -196,20 +252,36 @@ class _MainContentState extends State<MainContent> {
         currentIndex: state.currentNavItem.index,
         onTap: (index) {
           context.read<MainBloc>().add(PageChanged(
-              widget.navigationItems.firstWhere((nav) => nav.index == index)));
+              widget.navigationItems.firstWhere((nav) =>
+              nav.index == index)));
         },
-        selectedItemColor: Theme.of(context).colorScheme.primary,
+        selectedItemColor: Theme
+            .of(context)
+            .colorScheme
+            .primary,
+        selectedLabelStyle: Theme
+            .of(context)
+            .textTheme
+            .labelMedium,
+        unselectedLabelStyle: Theme
+            .of(context)
+            .textTheme
+            .labelMedium,
         unselectedItemColor: const Color(0xFF6A6A6A),
         items: ([...widget.navigationItems]
-              ..sort((a, b) => a.index.compareTo(b.index)))
-            .map((item) => BottomNavigationBarItem(
-                  icon: AppImage(
-                    source: item.icon,
-                  ),
-                  label: item.label,
-                ))
-            .toList(),
-      ),
+          ..sort((a, b) => a.index.compareTo(b.index)))
+            .map((item) =>
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: const EdgeInsets.only(bottom: 4.0),
+                child: AppImage(
+                  source: item.icon,
+                ),
+              ),
+              label: item.label,
+            ))
+            .toList(),)
+      ,
     );
   }
 }
