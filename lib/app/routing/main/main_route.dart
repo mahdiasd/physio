@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:main/main.dart';
+import 'package:utils/utils.dart';
 
 part 'main_route.g.dart';
 
@@ -17,13 +19,20 @@ class MainRoute extends ShellRouteData {
 
   @override
   Widget builder(BuildContext context, GoRouterState state, Widget child) {
-    return MainPage(
-      child: child,
-      onHomePressed: () => HomeRoute().go(context),
-      onLibraryPressed: () => LibraryRoute().go(context),
-      onProgramsPressed: () => ProgramsRoute().go(context),
-      onAppointmentsPressed: () => AppointmentsRoute().go(context),
-      onAccountPressed: () => AccountRoute().go(context),
+    return BlocProvider(
+      create: (context) => getIt<MainBloc>(),
+      child: Builder(
+        builder: (innerContext) {
+          return MainPage(
+            child: child,
+            onHomePressed: () => HomeRoute().go(context),
+            onLibraryPressed: () => LibraryRoute().go(context),
+            onProgramsPressed: () => ProgramsRoute().go(context),
+            onAppointmentsPressed: () => AppointmentsRoute().go(context),
+            onAccountPressed: () => AccountRoute().go(context),
+          );
+        },
+      ),
     );
   }
 }

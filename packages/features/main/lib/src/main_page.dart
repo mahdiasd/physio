@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:ui/ui.dart';
+
 import 'bloc/main_bloc.dart';
+import 'bloc/main_effect.dart';
+import 'bloc/main_event.dart';
+import 'bloc/main_state.dart';
+import 'navigation_item.dart';
 
 class MainPage extends StatelessWidget {
   final Widget child;
@@ -9,9 +16,9 @@ class MainPage extends StatelessWidget {
   final VoidCallback onProgramsPressed;
   final VoidCallback onAppointmentsPressed;
   final VoidCallback onAccountPressed;
-  
+
   const MainPage({
-    super.key, 
+    super.key,
     required this.child,
     required this.onHomePressed,
     required this.onLibraryPressed,
@@ -22,105 +29,187 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => MainBloc(),
-      child: MainContent(
-        child: child,
-        onHomePressed: onHomePressed,
-        onLibraryPressed: onLibraryPressed,
-        onProgramsPressed: onProgramsPressed,
-        onAppointmentsPressed: onAppointmentsPressed,
-        onAccountPressed: onAccountPressed,
-      ),
+    final bloc = context.read<MainBloc>();
+    return BlocListenerWidget(
+      effectsStream: bloc.effectsStream,
+      messageStream: bloc.messageStream,
+      effectHandlers: {
+        NavigateToHome: onHomePressed,
+        NavigateToAppointment: onAppointmentsPressed,
+        NavigateToProgram: onProgramsPressed,
+        NavigateToLibrary: onLibraryPressed,
+        NavigateToAccount: onAccountPressed,
+      },
+      child: MainContent(child: child),
     );
   }
 }
 
-class MainContent extends StatelessWidget {
+class MainContent extends StatefulWidget {
   final Widget child;
-  final VoidCallback onHomePressed;
-  final VoidCallback onLibraryPressed;
-  final VoidCallback onProgramsPressed;
-  final VoidCallback onAppointmentsPressed;
-  final VoidCallback onAccountPressed;
-  
+
   const MainContent({
-    super.key, 
+    super.key,
     required this.child,
-    required this.onHomePressed,
-    required this.onLibraryPressed,
-    required this.onProgramsPressed,
-    required this.onAppointmentsPressed,
-    required this.onAccountPressed,
   });
+
+  final List<NavigationItem> navigationItems = const [
+    HomeNavigationItem(),
+    LibraryNavigationItem(),
+    ProgramsNavigationItem(),
+    AppointmentsNavigationItem(),
+    AccountNavigationItem(),
+  ];
+
+  @override
+  State<MainContent> createState() => _MainContentState();
+}
+
+class _MainContentState extends State<MainContent> {
+  bool isSidebarCollapsed = false;
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
+    return BlocBuilder<MainBloc, MainState>(
+      builder: (context, state) {
+        if (isMobile) {
+          return _buildMobileLayout(context, state);
+        } else {
+          return _buildDesktopLayout(context, state);
+        }
+      },
+    );
+  }
+
+  Widget _buildDesktopLayout(BuildContext context, MainState state) {
+    final sidebarWidth = isSidebarCollapsed ? 57.0 : 250.0;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Main Screen'),
-      ),
       body: Row(
         children: [
-          // Navigation sidebar
-          Container(
-            width: 200,
-            color: Colors.grey[200],
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildNavigationButton(
-                  context,
-                  'Home',
-                  onHomePressed,
-                ),
-                const SizedBox(height: 16),
-                _buildNavigationButton(
-                  context,
-                  'Library',
-                  onLibraryPressed,
-                ),
-                const SizedBox(height: 16),
-                _buildNavigationButton(
-                  context,
-                  'Programs',
-                  onProgramsPressed,
-                ),
-                const SizedBox(height: 16),
-                _buildNavigationButton(
-                  context,
-                  'Appointments',
-                  onAppointmentsPressed,
-                ),
-                const SizedBox(height: 16),
-                _buildNavigationButton(
-                  context,
-                  'Account',
-                  onAccountPressed,
-                ),
-              ],
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 400),
+            width: sidebarWidth,
+            color: Theme.of(context).colorScheme.surfaceContainerLow,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!isSidebarCollapsed)
+                    HeadlineMediumText(
+                      "Rose Physio HUB",
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  if (!isSidebarCollapsed) const SizedBox(height: 32),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (!isSidebarCollapsed)
+                        LabelLargeText(
+                          "Menu",
+                          color: Color(0xFF6A6A6A),
+                        ),
+                      AppImage(
+                        source: "assets/images/ic_arrow.svg",
+                        rotationAngle: isSidebarCollapsed ? 180 : 0,
+                        tintColor: Color(0xFF6A6A6A),
+                        onTap: () {
+                          setState(() {
+                            isSidebarCollapsed = !isSidebarCollapsed;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  ...() {
+                    final sortedItems = [...widget.navigationItems]
+                      ..sort((a, b) => a.index.compareTo(b.index));
+
+                    return sortedItems.map((item) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: _buildSidebarButton(
+                          context,
+                          item,
+                          state.currentNavItem.index == item.index,
+                          item.index,
+                        ),
+                      );
+                    });
+                  }(),
+                ],
+              ),
             ),
           ),
           // Main content area
           Expanded(
-            child: child,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
+              child: widget.child,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildNavigationButton(
+  Widget _buildSidebarButton(
     BuildContext context,
-    String label,
-    VoidCallback onPressed,
+    NavigationItem item,
+    bool isSelected,
+    int index,
   ) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(180, 50),
+    final tintColor =
+        isSelected ? Theme.of(context).colorScheme.primary : Color(0xFF6A6A6A);
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: () => context.read<MainBloc>().add(PageChanged(
+          widget.navigationItems.firstWhere((nav) => nav.index == index))),
+      child: Row(
+        children: [
+          AppImage(
+            source: item.icon,
+            tintColor: tintColor,
+          ),
+          if (!isSidebarCollapsed) ...[
+            const SizedBox(width: 8),
+            LabelLargeText(
+              item.label,
+              color: tintColor,
+            ),
+          ],
+        ],
       ),
-      child: Text(label),
     );
   }
-} 
+
+  Widget _buildMobileLayout(BuildContext context, MainState state) {
+    return Scaffold(
+      body: widget.child,
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: state.currentNavItem.index,
+        onTap: (index) {
+          context.read<MainBloc>().add(PageChanged(
+              widget.navigationItems.firstWhere((nav) => nav.index == index)));
+        },
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: const Color(0xFF6A6A6A),
+        items: ([...widget.navigationItems]
+              ..sort((a, b) => a.index.compareTo(b.index)))
+            .map((item) => BottomNavigationBarItem(
+                  icon: AppImage(
+                    source: item.icon,
+                  ),
+                  label: item.label,
+                ))
+            .toList(),
+      ),
+    );
+  }
+}

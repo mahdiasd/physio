@@ -9,7 +9,7 @@ import 'login/login_route.dart';
 import 'register/register_route.dart';
 
 final router = GoRouter(
-  initialLocation: LoginRoute().location,
+  initialLocation: HomeRoute().location,
   routes: [$splashRoute, $loginRoute, $registerRoute, $mainRoute, $forgotRoute, $verifyRoute, $resetPasswordRoute],
   routerNeglect: false,
 );

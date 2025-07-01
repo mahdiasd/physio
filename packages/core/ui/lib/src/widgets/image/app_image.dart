@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-
-import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:math' as math;
 
 class AppImage extends StatelessWidget {
   final String source;
@@ -12,6 +10,9 @@ class AppImage extends StatelessWidget {
   final BoxFit fit;
   final Widget? placeholder;
   final Widget? errorWidget;
+  final Color? tintColor;
+  final double? rotationAngle;
+  final VoidCallback? onTap;
 
   const AppImage({
     super.key,
@@ -21,33 +22,42 @@ class AppImage extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.placeholder,
     this.errorWidget,
+    this.tintColor,
+    this.rotationAngle,
+    this.onTap,
   });
 
   bool get _isNetwork => source.startsWith('http');
   bool get _isAsset => !source.startsWith('http') && !source.startsWith('/');
   bool get _isFile => source.startsWith('/');
-  bool get _isSvg => source.toLowerCase().endsWith('.svg');
+  bool get _isSvg => source.endsWith('.svg');
 
   @override
   Widget build(BuildContext context) {
+    Widget imageWidget;
+    final iconThemeColor = IconTheme.of(context).color;
+    final finalTintColor = tintColor ?? iconThemeColor;
+
     if (_isNetwork) {
       if (_isSvg) {
-        return SvgPicture.network(
+        imageWidget = SvgPicture.network(
           source,
           width: width,
           height: height,
-          fit: fit,
-          placeholderBuilder: (context) => placeholder ?? _defaultLoading(),
+          colorFilter: finalTintColor != null ? ColorFilter.mode(finalTintColor, BlendMode.srcIn) : null,
+          placeholderBuilder: (context) => placeholder ?? _defaultPlaceholder(),
         );
       } else {
-        return Image.network(
+        imageWidget = Image.network(
           source,
           width: width,
           height: height,
           fit: fit,
+          color: tintColor,
+          colorBlendMode: tintColor != null ? BlendMode.srcIn : null,
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
-            return placeholder ?? _defaultLoading();
+            return placeholder ?? _defaultPlaceholder();
           },
           errorBuilder: (context, error, stackTrace) {
             return errorWidget ?? _defaultError();
@@ -56,51 +66,60 @@ class AppImage extends StatelessWidget {
       }
     } else if (_isAsset) {
       if (_isSvg) {
-        return SvgPicture.asset(
+        imageWidget = SvgPicture.asset(
           source,
           width: width,
           height: height,
-          fit: fit,
-          placeholderBuilder: (context) => placeholder ?? _defaultLoading(),
-          colorFilter: null, // در صورت نیاز می‌تونی ColorFilter بذاری
+          colorFilter: finalTintColor != null ? ColorFilter.mode(finalTintColor, BlendMode.srcIn) : null,
         );
       } else {
-        return Image.asset(
+        imageWidget = Image.asset(
           source,
           width: width,
           height: height,
           fit: fit,
+          color: tintColor,
+          colorBlendMode: tintColor != null ? BlendMode.srcIn : null,
           errorBuilder: (context, error, stackTrace) {
             return errorWidget ?? _defaultError();
           },
         );
       }
     } else if (_isFile) {
-      if (_isSvg) {
-        return SvgPicture.file(
-          File(source),
-          width: width,
-          height: height,
-          fit: fit,
-          placeholderBuilder: (context) => placeholder ?? _defaultLoading(),
-        );
-      } else {
-        return Image.file(
-          File(source),
-          width: width,
-          height: height,
-          fit: fit,
-          errorBuilder: (context, error, stackTrace) {
-            return errorWidget ?? _defaultError();
-          },
-        );
-      }
+      return Image.file(
+        File(source),
+        width: width,
+        height: height,
+        fit: fit,
+        errorBuilder: (context, error, stackTrace) {
+          return errorWidget ?? _defaultError();
+        },
+      );
     } else {
-      return errorWidget ?? _defaultError();
+      imageWidget = errorWidget ?? _defaultError();
     }
-  }
 
-  Widget _defaultLoading() => Center(
+    if (rotationAngle != null) {
+      imageWidget = Transform.rotate(
+        angle: rotationAngle! * (math.pi / 180),
+        child: imageWidget,
+      );
+    }
+
+    if (onTap != null) {
+      imageWidget = MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: onTap,
+          behavior: HitTestBehavior.translucent,
+          child: imageWidget,
+        ),
+      );
+    }
+
+    return imageWidget;
+  }
+  Widget _defaultPlaceholder() => Center(
     child: SizedBox(
       width: 24,
       height: 24,
@@ -112,4 +131,3 @@ class AppImage extends StatelessWidget {
     child: Icon(Icons.broken_image, size: 40, color: Colors.grey),
   );
 }
-
