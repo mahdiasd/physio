@@ -1,21 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_response.dart';
+part of 'verify_email_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
-    LoginResponse(
-      user: UserResponse.fromJson(json['user'] as Map<String, dynamic>),
+VerifyEmailResponse _$VerifyEmailResponseFromJson(Map<String, dynamic> json) =>
+    VerifyEmailResponse(
       accessToken: json['accessToken'] as String,
       refreshToken: json['refreshToken'] as String,
     );
 
-Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
+Map<String, dynamic> _$VerifyEmailResponseToJson(
+        VerifyEmailResponse instance) =>
     <String, dynamic>{
-      'user': instance.user,
       'accessToken': instance.accessToken,
       'refreshToken': instance.refreshToken,
     };

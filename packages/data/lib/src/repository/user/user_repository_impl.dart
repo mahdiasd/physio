@@ -3,13 +3,15 @@ import 'package:data/src/mapper/user/user_role_mapper.dart';
 import 'package:domain/domain.dart';
 import 'package:injectable/injectable.dart';
 import 'package:network/network.dart';
+import 'package:storage/storage.dart';
 import 'package:utils/utils.dart';
 
 @LazySingleton(as: UserRepository)
 class UserRepositoryImpl extends UserRepository {
   final UserApiService _userApiService;
+  final StorageService _storageService;
 
-  UserRepositoryImpl(this._userApiService);
+  UserRepositoryImpl(this._userApiService, this._storageService);
 
   @override
   Future<Result<User>> login({
@@ -22,6 +24,8 @@ class UserRepositoryImpl extends UserRepository {
 
     switch (result) {
       case Ok<LoginResponse>():
+        await _storageService.write(key: StorageKeys.accessToken, value: result.value.accessToken);
+        await _storageService.write(key: StorageKeys.refreshToken, value: result.value.refreshToken);
         return Result.ok(_mapToUser(result.value));
       case Error<LoginResponse>():
         return Result.error(result.error);
@@ -71,6 +75,26 @@ class UserRepositoryImpl extends UserRepository {
     }
   }
 
+
+  @override
+  Future<Result<bool>> verifyEmail({required String code, required String email}) async {
+    final result = await ApiCaller.safeApiCall<VerifyEmailResponse>(
+          () => _userApiService.verifyEmail(
+        code: code,
+        email: email,
+      ),
+    );
+
+    switch (result) {
+      case Ok<VerifyEmailResponse>():
+        await _storageService.write(key: StorageKeys.accessToken, value: result.value.accessToken);
+        await _storageService.write(key: StorageKeys.refreshToken, value: result.value.refreshToken);
+        return Result.ok(true);
+      case Error<VerifyEmailResponse>():
+        return Result.error(result.error);
+    }
+  }
+
   User _mapToUser(LoginResponse loginResponse) {
     return User(
       id: loginResponse.user.id,
@@ -83,20 +107,4 @@ class UserRepositoryImpl extends UserRepository {
     );
   }
 
-  @override
-  Future<Result<String>> verifyEmail({required String code, required String email}) async {
-    final result = await ApiCaller.safeApiCall<String>(
-          () => _userApiService.verifyEmail(
-        code: code,
-        email: email,
-      ),
-    );
-
-    switch (result) {
-      case Ok<String>():
-        return Result.ok(result.value);
-      case Error<String>():
-        return Result.error(result.error);
-    }
-  }
 }

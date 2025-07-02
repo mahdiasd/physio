@@ -8,7 +8,7 @@ class VerifyEmailUseCase {
 
   VerifyEmailUseCase(this._userRepository);
 
-  Future<Result<String>> invoke(String code, String email) {
+  Future<Result<bool>> invoke(String code, String email) {
     return _userRepository.verifyEmail(code: code, email:  email);
   }
 }

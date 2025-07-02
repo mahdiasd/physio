@@ -12,7 +12,7 @@ abstract class UserRepository {
 
   Future<Result<String>> validateEmail({required String email});
 
-  Future<Result<String>> verifyEmail({
+  Future<Result<bool>> verifyEmail({
     required String code,
     required String email,
   });

@@ -19,7 +19,7 @@ abstract class UserApiService {
     required String email,
   });
 
-  Future<Response<NetworkResponse<String>>> verifyEmail({
+  Future<Response<NetworkResponse<VerifyEmailResponse>>> verifyEmail({
     required String code,
     required String email,
   });

@@ -3,3 +3,4 @@ library;
 
 export 'src/service/storage_service.dart';
 export 'src/di/storage_di.dart';
+export 'src/key/storage_keys.dart';

@@ -14,6 +14,9 @@ dependencies:
   domain:
     path: ../domain
 
+  storage:
+    path: ../core/storage
+
   network:
     path: ../core/network
 

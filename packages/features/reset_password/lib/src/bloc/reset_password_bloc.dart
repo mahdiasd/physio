@@ -72,10 +72,10 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
     ));
 
     switch (result) {
-      case Ok<String>():
+      case Ok<bool>():
         emitEffect(NavigateToMain());
         break;
-      case Error<String>():
+      case Error<bool>():
         emitMessage(result.error.toUiMessage());
         break;
     }

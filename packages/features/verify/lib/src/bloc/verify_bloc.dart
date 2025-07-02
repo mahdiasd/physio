@@ -47,13 +47,13 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
 
     final result = await _verifyEmailUseCase.invoke(state.code, state.email);
 
-    emit(state.copyWith(isLoading: false, isVerified: true));
 
     switch (result) {
-      case Ok<String>():
-        emit(state.copyWith(isVerified: true));
+      case Ok<bool>():
+        emit(state.copyWith(isVerified: true, isLoading: false));
         break;
-      case Error<String>():
+      case Error<bool>():
+        emit(state.copyWith(isLoading: false));
         emitMessage(result.error.toUiMessage());
         break;
     }
@@ -72,9 +72,9 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     emit(state.copyWith(isResendLoading: false));
 
     switch (result) {
-      case Ok<String>():
+      case Ok<bool>():
         break;
-      case Error<String>():
+      case Error<bool>():
         emitMessage(result.error.toUiMessage());
         break;
     }
