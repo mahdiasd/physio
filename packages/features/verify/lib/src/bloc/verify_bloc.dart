@@ -24,6 +24,10 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
 
     on<VerifyClick>(_onVerify);
 
+    on<ContinueClick>((event, emit) {
+      emitEffect(NavigateToMain());
+    });
+
     on<ResendCodeClicked>(_resend);
   }
 
@@ -46,7 +50,6 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     emit(state.copyWith(isLoading: true));
 
     final result = await _verifyEmailUseCase.invoke(state.code, state.email);
-
 
     switch (result) {
       case Ok<bool>():

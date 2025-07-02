@@ -53,8 +53,9 @@ class VerifyContent extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
+                constraints: BoxConstraints(
+                    maxWidth: AppConstant.webRightSectionMaxWidth,
+                    maxHeight: double.infinity),
                 child: AdaptiveFormLayout(
                   child: VerifyForm(),
                 ),
@@ -151,7 +152,7 @@ class _VerifyFormState extends State<VerifyForm> {
           spacing: 120,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildHeader(context, state.isVerified,state.email),
+            _buildHeader(context, state.isVerified, state.email),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 64),
               child: _buildFormFields(context, state.isVerified),
@@ -258,7 +259,10 @@ class _VerifyFormState extends State<VerifyForm> {
           child: AppPrimaryButton(
             text: state.isVerified ? "Confirm" : "Continue",
             onPressed: () {
-              context.read<VerifyBloc>().add(VerifyClick());
+              if (state.isVerified)
+                context.read<VerifyBloc>().add(VerifyClick());
+              else
+                context.read<VerifyBloc>().add(ContinueClick());
             },
             isLoading: state.isLoading,
           ),
