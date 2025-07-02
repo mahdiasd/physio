@@ -2,7 +2,8 @@
 library;
 
 export 'src/domain.dart';
-export 'src/model/user.dart';
+export 'src/model/user/user.dart';
+export 'src/model/user/user_role.dart';
 export 'src/model/config/update/update.dart';
 export 'src/model/config/update/update_state.dart';
 export 'src/model/config/config.dart';
@@ -20,4 +21,3 @@ export 'src/usecase/config/get_config_use_case.dart';
 
 export 'src/di/domain_di.dart';
 
-// export 'src/di/domain_di.module.dart';

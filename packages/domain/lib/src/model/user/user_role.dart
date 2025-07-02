@@ -1,0 +1,7 @@
+enum UserRole{
+  CLIENT,
+  PRACTITIONER,
+  MANAGER,
+  STAFF,
+  ADMIN
+}

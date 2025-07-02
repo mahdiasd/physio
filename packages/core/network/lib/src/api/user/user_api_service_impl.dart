@@ -18,7 +18,7 @@ class UserApiServiceImpl extends UserApiService {
   }
 
   @override
-  Future<Response<NetworkResponse<LoginResponse>>> register(
+  Future<Response<NetworkResponse<RegisterResponse>>> register(
       {required String firstName,
       required String lastName,
       required String email,

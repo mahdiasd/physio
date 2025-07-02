@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:network/src/dto/response/paging_meta_response.dart';
 
 part 'error_response.g.dart';
 
@@ -16,7 +15,21 @@ class ErrorResponse {
 
   Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
 
+  @JsonKey(fromJson: _parseMessage)
   final String message;
+
   final String error;
   final int statusCode;
+
+  static String _parseMessage(dynamic json) {
+    if (json == null) return '';
+
+    if (json is String) {
+      return json;
+    } else if (json is List) {
+      return json.whereType<String>().join('\n');
+    } else {
+      return json.toString();
+    }
+  }
 }

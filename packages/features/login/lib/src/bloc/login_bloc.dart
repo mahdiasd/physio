@@ -5,6 +5,7 @@ import 'package:login/src/bloc/login_event.dart';
 import 'package:login/src/bloc/login_state.dart';
 import 'package:ui/ui.dart';
 import 'package:utils/src/model/result.dart';
+import 'package:utils/utils.dart';
 
 import 'login_effect.dart';
 
@@ -14,8 +15,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>
   final LoginUseCase _loginUseCase;
 
   LoginBloc(this._loginUseCase) : super(LoginState()) {
-    print("***************************************************** LoginBloc");
-
     on<EmailChanged>((event, emit) {
       emit(state.copyWith(email: event.email));
     });
@@ -44,7 +43,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>
     LoginPressed event,
     Emitter<LoginState> emit,
   ) async {
-    print("***************************************************** _onLoginSubmitted");
     emit(state.copyWith(isLoading: true));
     final result = await _loginUseCase.login(state.email, state.password);
     emit(state.copyWith(isLoading: false));
@@ -52,10 +50,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>
     switch (result) {
       case Ok<User>():
         emitEffect(NavigateToMain());
-        print("***************************************************** Ok<User>()");
         break;
       case Error<User>():
-        print("***************************************************** Error<User>()");
+        PrintHelper.error(result.error.message);
         emitMessage(result.error.toUiMessage());
         break;
     }

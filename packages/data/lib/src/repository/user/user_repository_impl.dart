@@ -1,3 +1,5 @@
+import 'package:data/src/mapper/user/register_mapper.dart';
+import 'package:data/src/mapper/user/user_role_mapper.dart';
 import 'package:domain/domain.dart';
 import 'package:injectable/injectable.dart';
 import 'package:network/network.dart';
@@ -33,7 +35,7 @@ class UserRepositoryImpl extends UserRepository {
     required String email,
     required String password,
   }) async {
-    final result = await ApiCaller.safeApiCall<LoginResponse>(
+    final result = await ApiCaller.safeApiCall<RegisterResponse>(
       () => _userApiService.register(
         firstName: firstName,
         lastName: lastName,
@@ -43,9 +45,9 @@ class UserRepositoryImpl extends UserRepository {
     );
 
     switch (result) {
-      case Ok<LoginResponse>():
-        return Result.ok(_mapToUser(result.value));
-      case Error<LoginResponse>():
+      case Ok<RegisterResponse>():
+        return Result.ok(result.value.toDomain());
+      case Error<RegisterResponse>():
         PrintHelper.error(result.error.message, location: "UserRepo");
         return Result.error(result.error);
     }
@@ -72,13 +74,12 @@ class UserRepositoryImpl extends UserRepository {
   User _mapToUser(LoginResponse loginResponse) {
     return User(
       id: loginResponse.user.id,
+      email: loginResponse.user.email,
       firstName: loginResponse.user.firstName,
       lastName: loginResponse.user.lastName,
       username: loginResponse.user.username,
-      avatar: loginResponse.user.avatar,
-      mySessionCount: loginResponse.user.mySessionCount,
-      totalSessions: loginResponse.user.totalSessions,
-      post: loginResponse.user.post,
+      role: loginResponse.user.role.toUserRole(),
+      status: loginResponse.user.status,
     );
   }
 

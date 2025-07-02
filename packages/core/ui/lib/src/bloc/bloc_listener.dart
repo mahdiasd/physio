@@ -84,7 +84,6 @@ class _BlocListenerWidgetState extends State<BlocListenerWidget> {
         description: message.message,
       );
     } else if (message.status == UiMessageStatus.Warning) {
-      // اگه بعداً warningToast اضافه کردی، اینجا استفاده کن
     }
   }
 }

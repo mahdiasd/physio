@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter/foundation.dart';
 
-import '../utils/network_log_interceptor.dart'; // Import for kDebugMode
+import '../utils/network_log_interceptor.dart';
 
 @module
 abstract class NetworkModule {
@@ -10,7 +10,7 @@ abstract class NetworkModule {
   Dio dio() {
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.rosephysiohub.com/api',
+        baseUrl: 'https://api.rosephysiohub.com/',
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 3),
         headers: {

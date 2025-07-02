@@ -150,31 +150,31 @@ extension CustomClashGroteskTextStyles on TextTheme {
 }
 
 /*
-╔══════════════════════════════════════════════════════════════════════════════════════╗
-║                            Material 3 TextTheme Mapping                              ║
-╠══════════════════════════════════════════════════════════════════════════════════════╣
-║ طراح استایل                    │ Material 3 Style      │ سایز │ وزن │ توضیحات         ║
-╠══════════════════════════════════════════════════════════════════════════════════════╣
-║ Page Header                    │ displaySmall          │ 36px │ 600 │ ✓ مطابقت کامل  ║
-║ Web Big Card - date & Time     │ titleLarge           │ 22px │ 500 │ ✓ مطابقت کامل  ║
-║ Page Subtitle                  │ headlineSmall        │ 20px │ 400 │ سایز override   ║
-║ Page Title                     │ headlineMedium       │ 20px │ 600 │ سایز override   ║
-║ Section Title                  │ titleMedium          │ 18px │ 500 │ سایز override   ║
-║ Web Big Card - Detail          │ bodyLarge            │ 16px │ 400 │ ✓ مطابقت کامل  ║
-║ List Title                     │ titleSmall           │ 15px │ 500 │ سایز override   ║
-║ Main Button                    │ labelLarge           │ 16px │ 500 │ سایز override   ║
-║ Input Field Title              │ Extension Method     │ 15px │ 400 │ استایل جداگانه  ║
-║ Placeholder                    │ bodyMedium           │ 14px │ 400 │ ✓ مطابقت کامل  ║
-║ Card Tile                      │ Extension Method     │ 14px │ 600 │ استایل جداگانه  ║
-║ Body                           │ bodyMedium           │ 14px │ 400 │ ✓ مطابقت کامل  ║
-║ Button Downside Clickable      │ Extension Method     │ 14px │ 600 │ استایل جداگانه  ║
-║ Bottom Navigation              │ labelMedium          │ 12px │ 500 │ ✓ مطابقت کامل  ║
-║ List Item Title                │ Extension Method     │ 10px │ 400 │ استایل جداگانه  ║
-║ List Item Subtitle             │ Extension Method     │  9px │ 400 │ استایل جداگانه  ║
-║ List Item Title (Big)          │ displayLarge         │ 13px │ 400 │ repurposed      ║
-║ List Item Subtitle (Big)       │ bodySmall            │ 12px │ 400 │ ✓ مطابقت کامل  ║
-║ Captions                       │ labelSmall           │ 11px │ 400 │ ✓ مطابقت کامل  ║
-╚══════════════════════════════════════════════════════════════════════════════════════╝
+╔═════════════════════════════════════════════════════════════════════╗
+║                   Material 3 TextTheme Mapping                      ║
+╠═════════════════════════════════════════════════════════════════════╣
+║ Material 3 Style               │ وزن │ سایز │              توضیحات  ║
+╠═════════════════════════════════════════════════════════════════════╣
+║ Page Header                    │ displaySmall         │ 36px │ 600  ║
+║ Web Big Card - date & Time     │ titleLarge           │ 22px │ 500  ║
+║ Page Subtitle                  │ headlineSmall        │ 20px │ 400  ║
+║ Page Title                     │ headlineMedium       │ 20px │ 600  ║
+║ Section Title                  │ titleMedium          │ 18px │ 500  ║
+║ Web Big Card - Detail          │ bodyLarge            │ 16px │ 400  ║
+║ List Title                     │ titleSmall           │ 15px │ 500  ║
+║ Main Button                    │ labelLarge           │ 16px │ 500  ║
+║ Input Field Title              │ Extension Method     │ 15px │ 400  ║
+║ Placeholder                    │ bodyMedium           │ 14px │ 400  ║
+║ Card Tile                      │ Extension Method     │ 14px │ 600  ║
+║ Body                           │ bodyMedium           │ 14px │ 400  ║
+║ Button Downside Clickable      │ Extension Method     │ 14px │ 600  ║
+║ Bottom Navigation              │ labelMedium          │ 12px │ 500  ║
+║ List Item Title                │ Extension Method     │ 10px │ 400  ║
+║ List Item Subtitle             │ Extension Method     │  9px │ 400  ║
+║ List Item Title (Big)          │ displayLarge         │ 13px │ 400  ║
+║ List Item Subtitle (Big)       │ bodySmall            │ 12px │ 400  ║
+║ Captions                       │ labelSmall           │ 11px │ 400  ║
+╚═════════════════════════════════════════════════════════════════════╝
 
 Important notes:
 • Styles that did not have a suitable Material 3 equivalent were placed in the Extension

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:toastification/toastification.dart';
 
+import '../../../ui.dart';
+
 void successToast({
   required String title ,
   required String description ,
@@ -15,8 +17,8 @@ void successToast({
   toastification.show(
     type: ToastificationType.success,
     style: ToastificationStyle.flat,
-    title: Text(title),
-    description: Text(description),
+    title: HeadlineMediumText(title),
+    description: BodyMediumText(description),
     alignment: alignment,
     autoCloseDuration: autoCloseDuration,
     animationBuilder: (context, animation, alignment, child) {
@@ -44,8 +46,8 @@ void errorToast({
   toastification.show(
     type: ToastificationType.error,
     style: ToastificationStyle.flat,
-    title: Text(title),
-    description: Text(description),
+    title: HeadlineMediumText(title),
+    description: BodyMediumText(description),
     alignment: alignment,
     autoCloseDuration: autoCloseDuration,
     animationBuilder: (context, animation, alignment, child) {
@@ -73,8 +75,8 @@ void warningToast({
   toastification.show(
     type: ToastificationType.warning,
     style: ToastificationStyle.flat,
-    title: Text(title),
-    description: Text(description),
+    title: HeadlineMediumText(title),
+    description: BodyMediumText(description),
     alignment: alignment,
     autoCloseDuration: autoCloseDuration,
     animationBuilder: (context, animation, alignment, child) {
