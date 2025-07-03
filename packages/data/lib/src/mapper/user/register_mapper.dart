@@ -8,7 +8,6 @@ extension RegisterResponseMapper on RegisterResponse {
         email: this.email ?? "",
         firstName: this.firstName ?? "",
         lastName: this.lastName ?? "",
-        username: this.username ?? "",
         role: this.role.toUserRole(),
         status: this.status,
       );

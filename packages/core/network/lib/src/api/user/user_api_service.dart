@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:network/network.dart';
 
-import '../../dto/user/reset_password_response.dart';
-
 abstract class UserApiService {
   Future<Response<NetworkResponse<LoginResponse>>> login({
     required String email,

@@ -138,7 +138,6 @@ class UserRepositoryImpl extends UserRepository {
       email: loginResponse.user.email,
       firstName: loginResponse.user.firstName,
       lastName: loginResponse.user.lastName,
-      username: loginResponse.user.username,
       role: loginResponse.user.role.toUserRole(),
       status: loginResponse.user.status,
     );

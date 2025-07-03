@@ -9,8 +9,7 @@ import 'package:utils/utils.dart';
 import 'login_effect.dart';
 
 @injectable
-class LoginBloc extends Bloc<LoginEvent, LoginState>
-    with SideEffectMixin<LoginState, LoginEffect> {
+class LoginBloc extends Bloc<LoginEvent, LoginState> with SideEffectMixin<LoginState, LoginEffect> {
   final LoginUseCase _loginUseCase;
 
   LoginBloc(this._loginUseCase) : super(LoginState()) {
@@ -51,8 +50,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>
         emitEffect(NavigateToMain());
         break;
       case Error<User>():
-        PrintHelper.error(result.error.message);
-        emitMessage(result.error.toUiMessage());
+        final errorCode = (result.error.code ?? 0);
+        if (errorCode > 209 && errorCode < 310) {
+          await Future<void>.delayed(Duration(seconds: 5));
+          emitMessage(result.error.toUiMessage());
+          emitEffect(NavigateToVerify());
+        } else {
+          PrintHelper.error(result.error.message);
+          emitMessage(result.error.toUiMessage());
+        }
         break;
     }
   }

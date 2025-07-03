@@ -52,8 +52,7 @@ class ResetPasswordContent extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                    maxWidth: 500, maxHeight: double.infinity),
+                constraints: const BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
                 child: const AdaptiveFormLayout(
                   child: ResetPasswordForm(),
                 ),
@@ -115,9 +114,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       child: OverflowDetectingColumn(
         spacing: isMobile ? 80 : 80,
-        mainAxisAlignment: isMobile
-            ? MainAxisAlignment.spaceBetween
-            : MainAxisAlignment.center,
+        mainAxisAlignment: isMobile ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
         children: [
           _buildHeader(context),
           _buildFormFields(context),
@@ -164,21 +161,16 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
               obscureText: state.isPasswordObscured,
               trailingIcon: IconButton(
                 icon: Icon(
-                  state.isPasswordObscured
-                      ? Icons.visibility_off
-                      : Icons.visibility,
+                  state.isPasswordObscured ? Icons.visibility_off : Icons.visibility,
                 ),
-                onPressed: () => context
-                    .read<ResetPasswordBloc>()
-                    .add(TogglePasswordVisibility()),
+                onPressed: () => context.read<ResetPasswordBloc>().add(TogglePasswordVisibility()),
               ),
               hint: "Enter your new password",
               title: "New Password",
               onChanged: (text) {
                 context.read<ResetPasswordBloc>().add(PasswordChanged(text));
               },
-              label:
-              "It must be a combination of minimum 8 letters, numbers, and symbols.",
+              label: "It must be a combination of minimum 8 letters, numbers, and symbols.",
             ),
             AppTextField(
               value: state.confirmPassword,
@@ -187,23 +179,16 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
               obscureText: state.isRepeatPasswordObscured,
               trailingIcon: IconButton(
                 icon: Icon(
-                  state.isRepeatPasswordObscured
-                      ? Icons.visibility_off
-                      : Icons.visibility,
+                  state.isRepeatPasswordObscured ? Icons.visibility_off : Icons.visibility,
                 ),
-                onPressed: () => context
-                    .read<ResetPasswordBloc>()
-                    .add(ToggleRepeatPasswordVisibility()),
+                onPressed: () => context.read<ResetPasswordBloc>().add(ToggleRepeatPasswordVisibility()),
               ),
               hint: "Enter your password again",
               title: "Rewrite New Password",
               onChanged: (text) {
-                context
-                    .read<ResetPasswordBloc>()
-                    .add(RepeatPasswordChanged(text));
+                context.read<ResetPasswordBloc>().add(RepeatPasswordChanged(text));
               },
-              label:
-              "It must be a combination of minimum 8 letters, numbers, and symbols.",
+              label: "It must be a combination of minimum 8 letters, numbers, and symbols.",
             ),
           ],
         );
@@ -213,10 +198,9 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
 
   Widget _buildActions(BuildContext context) {
     return BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
-      buildWhen: (previous, current) =>
-      previous.isLoading != current.isLoading ||
-          previous.isResendLoading != current.isResendLoading,
+      buildWhen: (previous, current) => previous.isLoading != current.isLoading || previous.isResendLoading != current.isResendLoading,
       builder: (context, state) {
+        final canResend = _secondsLeft == 0 && !state.isResendLoading;
         return Column(
           spacing: 12,
           children: [
@@ -227,15 +211,20 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                 const LabelMediumText("Didn't get the code?"),
                 state.isResendLoading
                     ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-                    : BodyLargeText(
-                  "Resend Code",
-                  color: Theme.of(context).colorScheme.secondary,
-                  onTap: () => _onResendCode(context),
-                ),
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : canResend
+                        ? BodyLargeText(
+                            "Resend Code",
+                            color: Theme.of(context).colorScheme.secondary,
+                            onTap: () => _onResendCode(context),
+                          )
+                        : BodyLargeText(
+                            "Resend in $_secondsLeft s",
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
               ],
             ),
             SizedBox(

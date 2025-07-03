@@ -67,7 +67,7 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState> with SideEffectMixin<Ver
   ) async {
     emit(state.copyWith(isResendLoading: true));
 
-    final result = await _resendOTPUseCase.resendFromVerify(state.email);
+    final result = await _resendOTPUseCase.resendFromForgot(state.email);
 
     emit(state.copyWith(isResendLoading: false));
 

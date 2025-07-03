@@ -10,7 +10,6 @@ extension UserResponseMapper on UserResponse {
         email: email,
         firstName: firstName,
         lastName: lastName,
-        username: username,
         role: role.toUserRole(),
         status: status,
       );

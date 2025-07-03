@@ -13,6 +13,7 @@ class LoginPage extends StatelessWidget {
   final VoidCallback navigateBack;
   final VoidCallback navigateToRegister;
   final VoidCallback navigateToForgotPassword;
+  final VoidCallback navigateToVerify;
 
   const LoginPage({
     super.key,
@@ -20,6 +21,7 @@ class LoginPage extends StatelessWidget {
     required this.navigateBack,
     required this.navigateToRegister,
     required this.navigateToForgotPassword,
+    required this.navigateToVerify,
   });
 
   @override
@@ -33,6 +35,7 @@ class LoginPage extends StatelessWidget {
         NavigateToMain: navigateToMain,
         NavigateToRegister: navigateToRegister,
         NavigateToForgotPassword: navigateToForgotPassword,
+        NavigateToVerify: navigateToVerify,
       },
       child: LoginContent(),
     );

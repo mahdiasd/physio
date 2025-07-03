@@ -6,7 +6,6 @@ class User {
     required this.email,
     required this.firstName,
     required this.lastName,
-    required this.username,
     required this.role,
     this.status,
   });
@@ -15,7 +14,6 @@ class User {
   final String email;
   final String firstName;
   final String lastName;
-  final String username;
   final UserRole role;
   final String? status;
 }

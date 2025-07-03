@@ -69,6 +69,8 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> wit
 
     switch (result) {
       case Ok<bool>():
+        emitMessage(UiMessage.success("Password change successfully"));
+        await Future<void>.delayed(Duration(seconds: 3));
         emitEffect(NavigateToMain());
         break;
       case Error<bool>():
