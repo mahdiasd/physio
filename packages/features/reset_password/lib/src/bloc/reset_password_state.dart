@@ -4,7 +4,7 @@ class ResetPasswordState {
   final bool isLoading;
   final bool isResendLoading;
   final String password;
-  final String repeatPassword;
+  final String confirmPassword;
   final bool isPasswordObscured;
   final bool isRepeatPasswordObscured;
 
@@ -16,7 +16,7 @@ class ResetPasswordState {
     this.isPasswordObscured = true,
     this.isRepeatPasswordObscured = true,
     this.password = "",
-    this.repeatPassword = "",
+    this.confirmPassword = "",
   });
 
   ResetPasswordState copyWith({
@@ -37,7 +37,7 @@ class ResetPasswordState {
       isPasswordObscured: isPasswordObscured ?? this.isPasswordObscured,
       isRepeatPasswordObscured: isRepeatPasswordObscured ?? this.isRepeatPasswordObscured,
       password: password ?? this.password,
-      repeatPassword: repeatPassword ?? this.repeatPassword,
+      confirmPassword: repeatPassword ?? this.confirmPassword,
     );
   }
 }

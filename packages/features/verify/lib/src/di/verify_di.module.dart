@@ -14,7 +14,9 @@ class VerifyPackageModule extends _i526.MicroPackageModule {
 // initializes the registration of main-scope dependencies inside of GetIt
   @override
   _i687.FutureOr<void> init(_i526.GetItHelper gh) {
-    gh.factory<_i151.VerifyBloc>(
-        () => _i151.VerifyBloc(gh<_i494.SendOtpCodeUseCase>()));
+    gh.factory<_i151.VerifyBloc>(() => _i151.VerifyBloc(
+          gh<_i494.VerifyEmailUseCase>(),
+          gh<_i494.ResendOTPUseCase>(),
+        ));
   }
 }

@@ -6,13 +6,11 @@ part 'user_response.g.dart';
 class UserResponse {
   UserResponse({
     required this.id,
+    required this.email,
     required this.firstName,
     required this.lastName,
-    required this.username,
-    required this.avatar,
-    required this.mySessionCount,
-    required this.totalSessions,
-    required this.post,
+    required this.role,
+    this.status,
   });
 
   factory UserResponse.fromJson(Map<String, dynamic> json) =>
@@ -20,13 +18,10 @@ class UserResponse {
 
   Map<String, dynamic> toJson() => _$UserResponseToJson(this);
 
-  final String? id;
-  @JsonKey(name: 'first_name')
-  final String? firstName;
-  final String? lastName;
-  final String? username;
-  final String? avatar;
-  final int? mySessionCount;
-  final int? totalSessions;
-  final String? post;
+  final String id;
+  final String email;
+  final String firstName;
+  final String lastName;
+  final String role;
+  final String? status;
 }

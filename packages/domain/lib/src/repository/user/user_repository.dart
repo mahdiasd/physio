@@ -1,4 +1,4 @@
-import 'package:domain/src/model/user.dart';
+import 'package:domain/src/model/user/user.dart';
 import 'package:utils/utils.dart';
 
 abstract class UserRepository {
@@ -12,5 +12,20 @@ abstract class UserRepository {
 
   Future<Result<String>> validateEmail({required String email});
 
-  Future<Result<String>> sendOtpCodes({required String code});
+  Future<Result<bool>> verifyEmail({
+    required String code,
+    required String email,
+  });
+
+  Future<Result<bool>> resetPassword({
+    required String email,
+    required String code,
+    required String password,
+    required String confirmPassword,
+  });
+
+  Future<Result<bool>> resendOTP({
+    required String email,
+    required String type,
+  });
 }

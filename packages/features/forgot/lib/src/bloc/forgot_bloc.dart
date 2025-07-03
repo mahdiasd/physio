@@ -25,9 +25,6 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState>
     ForgotEvent event,
     Emitter<ForgotState> emit,
   ) async {
-    // TODO After connect to api.
-    // emitEffect(NavigateToResetPassword());
-
     final email = state.email.trim();
 
     if (!isValidFormat(email)) {
@@ -36,7 +33,7 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState>
     }
 
     emit(state.copyWith(isLoading: true));
-    final result = await _validateEmailUseCase.validateEmail(email);
+    final result = await _validateEmailUseCase.invoke(email);
     emit(state.copyWith(isLoading: false));
 
     switch (result) {
@@ -50,7 +47,6 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState>
   }
 
   bool isValidFormat(String email) {
-    final regex = RegExp(r"^[\w\.\-]+@[\w\-]+\.[a-zA-Z]{2,}$");
-    return regex.hasMatch(email);
+    return email.contains("@") && email.length > 5;
   }
 }

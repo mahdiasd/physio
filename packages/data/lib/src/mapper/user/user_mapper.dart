@@ -1,3 +1,4 @@
+import 'package:data/src/mapper/user/user_role_mapper.dart';
 import 'package:domain/domain.dart';
 import 'package:network/network.dart';
 
@@ -6,13 +7,11 @@ extension UserResponseMapper on UserResponse {
   /// Converts a UserResponse to a User domain model
   User toDomain() => User(
         id: id,
+        email: email,
         firstName: firstName,
         lastName: lastName,
-        username: username,
-        avatar: avatar,
-        mySessionCount: mySessionCount,
-        totalSessions: totalSessions,
-        post: post,
+        role: role.toUserRole(),
+        status: status,
       );
 }
 

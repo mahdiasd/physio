@@ -14,6 +14,30 @@ class UiMessage {
     this.status = UiMessageStatus.Error,
     this.type = UiMessageType.Device,
   });
+
+  /// Factory constructor for success messages with device type
+  factory UiMessage.success(
+    String message, {
+    UiMessageType type = UiMessageType.Device,
+  }) {
+    return UiMessage(
+      message: message,
+      status: UiMessageStatus.Success,
+      type: type,
+    );
+  }
+
+  /// Factory constructor for error messages with device type
+  factory UiMessage.error(
+    String message, {
+    UiMessageType type = UiMessageType.Device,
+  }) {
+    return UiMessage(
+      message: message,
+      status: UiMessageStatus.Error,
+      type: type,
+    );
+  }
 }
 
 extension ErrorToUiMessageExt on AppException {

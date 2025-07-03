@@ -9,11 +9,11 @@ import 'verify_event.dart';
 import 'verify_state.dart';
 
 @injectable
-class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
-    with SideEffectMixin<VerifyState, VerifyEffect> {
-  final SendOtpCodeUseCase _sendOtpCodeUseCase;
+class VerifyBloc extends Bloc<VerifyEvent, VerifyState> with SideEffectMixin<VerifyState, VerifyEffect> {
+  final VerifyEmailUseCase _verifyEmailUseCase;
+  final ResendOTPUseCase _resendOTPUseCase;
 
-  VerifyBloc(this._sendOtpCodeUseCase) : super(VerifyState()) {
+  VerifyBloc(this._verifyEmailUseCase, this._resendOTPUseCase) : super(VerifyState()) {
     on<CodeChange>((event, emit) {
       emit(state.copyWith(code: event.value));
     });
@@ -23,6 +23,10 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     });
 
     on<VerifyClick>(_onVerify);
+
+    on<ContinueClick>((event, emit) {
+      emitEffect(NavigateToMain());
+    });
 
     on<ResendCodeClicked>(_resend);
   }
@@ -38,22 +42,20 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     final isValidCode = state.code.length == 4;
 
     if (!isValidCode) {
-      emitMessage(UiMessage(
-          message: "Please enter all 4 digits of the code correctly."));
+      emitMessage(UiMessage(message: "Please enter all 4 digits of the code correctly."));
       return;
     }
 
     emit(state.copyWith(isLoading: true));
 
-    final result = await _sendOtpCodeUseCase.sendCodes(state.code);
-
-    emit(state.copyWith(isLoading: false, isVerified: true));
+    final result = await _verifyEmailUseCase.invoke(state.code, state.email);
 
     switch (result) {
-      case Ok<String>():
-        emit(state.copyWith(isVerified: true));
+      case Ok<bool>():
+        emit(state.copyWith(isVerified: true, isLoading: false));
         break;
-      case Error<String>():
+      case Error<bool>():
+        emit(state.copyWith(isLoading: false));
         emitMessage(result.error.toUiMessage());
         break;
     }
@@ -64,12 +66,16 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     Emitter<VerifyState> emit,
   ) async {
     emit(state.copyWith(isResendLoading: true));
-    final result = await _sendOtpCodeUseCase.sendCodes(state.code);
+
+    final result = await _resendOTPUseCase.resendFromForgot(state.email);
+
     emit(state.copyWith(isResendLoading: false));
+
     switch (result) {
-      case Ok<String>():
+      case Ok<bool>():
+        emitMessage(UiMessage(message: "OTP has been resent to your email.", status: UiMessageStatus.Success));
         break;
-      case Error<String>():
+      case Error<bool>():
         emitMessage(result.error.toUiMessage());
         break;
     }

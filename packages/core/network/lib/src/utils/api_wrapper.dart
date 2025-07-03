@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:network/src/dto/response/network_response.dart';
 
 class ApiWrapper {
-  /// GET
   static Future<Response<NetworkResponse<T>>> getRequest<T>(
       Dio dio,
       String path, {
@@ -57,7 +56,6 @@ class ApiWrapper {
     return _parseNetworkResponse<T>(response, fromJsonT);
   }
 
-  /// DELETE
   static Future<Response<NetworkResponse<T>>> deleteRequest<T>(
       Dio dio,
       String path, {
@@ -76,7 +74,6 @@ class ApiWrapper {
     return _parseNetworkResponse<T>(response, fromJsonT);
   }
 
-  /// ✅ Private: پارس کردن پاسخ
   static Response<NetworkResponse<T>> _parseNetworkResponse<T>(
       Response<Map<String, dynamic>> response,
       T Function(Object? json) fromJsonT,

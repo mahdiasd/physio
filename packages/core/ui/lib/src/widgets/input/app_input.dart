@@ -61,8 +61,8 @@ class _AppTextFieldState extends State<AppTextField> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
 
-  static const double _borderRadius = 10; // 10px border radius
-  static const double _borderWidth = 0.5; // 0.5px border width
+  static const double _borderRadius = 10;
+  static const double _borderWidth = 0.5;
 
   @override
   void initState() {
@@ -107,7 +107,10 @@ class _AppTextFieldState extends State<AppTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.title != null) ...[
-          BodyMediumText(widget.title!, color: theme.colorScheme.onSurface,),
+          Text(
+            widget.title!,
+            style: theme.textTheme.inputFieldTitle,
+          ),
           SizedBox(height: widget.titleSpacing),
         ],
         TextField(
@@ -121,18 +124,14 @@ class _AppTextFieldState extends State<AppTextField> {
           keyboardType: widget.keyboardType,
           textDirection: widget.textDirection,
           textAlign: widget.textAlign,
-          style: widget.textStyle ??
-              theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface, // Text color
-              ),
+          style: widget.textStyle ?? theme.textTheme.bodyMedium,
           decoration: InputDecoration(
             hintText: widget.hint,
-            hintStyle: widget.placeholderStyle ??
-                theme.textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF9A9A9A), // Placeholder color
-                ),
+            hintStyle: widget.placeholderStyle ?? theme.textTheme.bodyMedium?.copyWith(
+              color: const Color(0xFF9A9A9A),
+            ),
             filled: true,
-            fillColor: theme.colorScheme.surfaceContainerLow, // Background color
+            fillColor: theme.colorScheme.surfaceContainerLow,
             errorText: widget.isError ? widget.errorText : null,
             contentPadding: const EdgeInsets.symmetric(
               vertical: 14,
@@ -141,7 +140,7 @@ class _AppTextFieldState extends State<AppTextField> {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(_borderRadius),
               borderSide: const BorderSide(
-                color: Color(0xFFE1E1E1), // Border color
+                color: Color(0xFFE1E1E1),
                 width: _borderWidth,
               ),
             ),
@@ -181,9 +180,9 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
         if (widget.label != null) ...[
           const SizedBox(height: 4),
-          LabelSmallText(
+          Text(
             widget.label!,
-            color: theme.colorScheme.scrim,
+            style: theme.textTheme.labelSmall,
           ),
         ],
       ],
@@ -204,4 +203,3 @@ class _AppTextFieldState extends State<AppTextField> {
     );
   }
 }
-

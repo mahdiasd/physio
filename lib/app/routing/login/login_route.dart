@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:login/login.dart';
 import 'package:physio/app/routing/forgot/forgot_route.dart';
 import 'package:physio/app/routing/register/register_route.dart';
+import 'package:physio/app/routing/verify/verify_route.dart';
 import 'package:utils/utils.dart';
 
 import '../main/main_route.dart';
@@ -17,8 +18,9 @@ class LoginRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
+    final bloc = getIt<LoginBloc>();
     return BlocProvider(
-      create: (context) => getIt<LoginBloc>(),
+      create: (context) => bloc,
       child: Builder(
         builder: (innerContext) {
           return LoginPage(
@@ -29,6 +31,9 @@ class LoginRoute extends GoRouteData {
             },
             navigateToForgotPassword: () {
               innerContext.push(ForgotRoute().location);
+            },
+            navigateToVerify: () {
+              innerContext.push(VerifyRoute(bloc.state.email).location);
             },
           );
         },

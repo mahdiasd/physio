@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:network/network.dart';
-import 'package:network/src/dto/response/network_response.dart';
 
 abstract class UserApiService {
   Future<Response<NetworkResponse<LoginResponse>>> login({
@@ -8,7 +7,7 @@ abstract class UserApiService {
     required String password,
   });
 
-  Future<Response<NetworkResponse<LoginResponse>>> register({
+  Future<Response<NetworkResponse<RegisterResponse>>> register({
     required String firstName,
     required String lastName,
     required String email,
@@ -19,7 +18,21 @@ abstract class UserApiService {
     required String email,
   });
 
-  Future<Response<NetworkResponse<String>>> sendOtpCodes({
+  Future<Response<NetworkResponse<VerifyEmailResponse>>> verifyEmail({
     required String code,
+    required String email,
   });
+
+  Future<Response<NetworkResponse<EmptyResponse>>> resendOTP({
+    required String email,
+    required String type,
+  });
+
+  Future<Response<NetworkResponse<ResetPasswordResponse>>> resetPassword({
+    required String email,
+    required String code,
+    required String password,
+    required String confirmPassword,
+  });
+
 }

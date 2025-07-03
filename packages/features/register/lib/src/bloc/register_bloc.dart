@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:register/src/bloc/register_event.dart';
 import 'package:register/src/bloc/register_state.dart';
 import 'package:ui/ui.dart';
-import 'package:utils/src/model/result.dart';
+import 'package:utils/utils.dart';
 
 import 'register_effect.dart';
 
@@ -14,8 +14,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState>
   final RegisterUseCase _registerUseCase;
 
   RegisterBloc(this._registerUseCase) : super(RegisterState()) {
-    print("***************************************************** RegisterBloc");
-
     on<FirstNameChanged>((event, emit) {
       emit(state.copyWith(firstName: event.firstName));
     });
@@ -36,9 +34,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState>
       emit(state.copyWith(isPasswordObscured: !state.isPasswordObscured));
     });
 
-    on<RegisterPressed>((event, emit) {
+    on<RegisterPressed>((event, emit) async {
       if (_isFormValid(state)) {
-        _onRegisterSubmitted(event, emit);
+        await _onRegisterSubmitted(event, emit);
       }
     });
 
@@ -83,21 +81,35 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState>
   ) async {
     emit(state.copyWith(isLoading: true));
 
-    final result = await _registerUseCase.register(
-      state.firstName,
-      state.lastName,
-      state.email,
-      state.password,
-    );
-    emit(state.copyWith(isLoading: false));
+    try {
+      final result = await _registerUseCase.register(
+        state.firstName,
+        state.lastName,
+        state.email,
+        state.password,
+      );
 
-    switch (result) {
-      case Ok<User>():
-        emitEffect(NavigateToVerify());
-        break;
-      case Error<User>():
-        emitMessage(result.error.toUiMessage());
-        break;
+      emit(state.copyWith(isLoading: false));
+
+      switch (result) {
+        case Ok<User>():
+          emitEffect(NavigateToVerify());
+          break;
+        case Error<User>():
+          emitMessage(result.error.toUiMessage());
+          PrintHelper.error(
+            result.error.toUiMessage().message,
+            location: "user_bloc",
+          );
+          break;
+      }
+    } catch (e, stackTrace) {
+      emitMessage(UiMessage(message: 'An unexpected error occurred.'));
+      PrintHelper.error(
+        'Exception: $e\nStackTrace: $stackTrace',
+        location: "user_bloc",
+      );
+      emit(state.copyWith(isLoading: false));
     }
   }
 }
