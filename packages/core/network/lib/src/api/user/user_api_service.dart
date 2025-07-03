@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:network/network.dart';
-import 'package:network/src/dto/response/network_response.dart';
+
+import '../../dto/user/reset_password_response.dart';
 
 abstract class UserApiService {
   Future<Response<NetworkResponse<LoginResponse>>> login({
@@ -23,4 +24,17 @@ abstract class UserApiService {
     required String code,
     required String email,
   });
+
+  Future<Response<NetworkResponse<EmptyResponse>>> resendOTP({
+    required String email,
+    required String type,
+  });
+
+  Future<Response<NetworkResponse<ResetPasswordResponse>>> resetPassword({
+    required String email,
+    required String code,
+    required String password,
+    required String confirmPassword,
+  });
+
 }

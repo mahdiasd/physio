@@ -10,6 +10,7 @@ class ForgotState {
   ForgotState copyWith({
     String? email,
     bool? isLoading,
+    bool? isResendLoading,
   }) {
     return ForgotState(
       email: email ?? this.email,

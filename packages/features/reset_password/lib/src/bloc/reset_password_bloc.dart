@@ -9,17 +9,15 @@ import 'reset_password_event.dart';
 import 'reset_password_state.dart';
 
 @injectable
-class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
-    with SideEffectMixin<ResetPasswordState, ResetPasswordEffect> {
-  final VerifyEmailUseCase _verifyEmailUseCase;
-  final ValidateEmailUseCase _validateEmailUseCase;
+class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> with SideEffectMixin<ResetPasswordState, ResetPasswordEffect> {
+  final ResetPasswordUseCase _resetPasswordUseCase;
+  final ResendOTPUseCase _resendOTPUseCase;
 
   void passEmail(String email) {
     add(InitEmail(email));
   }
 
-  ResetPasswordBloc(this._verifyEmailUseCase, this._validateEmailUseCase)
-      : super(ResetPasswordState()) {
+  ResetPasswordBloc(this._resetPasswordUseCase, this._resendOTPUseCase) : super(ResetPasswordState()) {
     on<CodeChanged>((event, emit) {
       emit(state.copyWith(code: event.code));
     });
@@ -41,13 +39,12 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
     });
 
     on<ToggleRepeatPasswordVisibility>((event, emit) {
-      emit(state.copyWith(
-          isRepeatPasswordObscured: !state.isRepeatPasswordObscured));
+      emit(state.copyWith(isRepeatPasswordObscured: !state.isRepeatPasswordObscured));
     });
 
     on<ResetPasswordClick>(_onResetPassword);
 
-    on<ResendCodeClicked>(_resendVerifyCode);
+    on<ResendCodeClicked>(_resend);
   }
 
   Future<void> _onResetPassword(
@@ -55,21 +52,20 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
     Emitter<ResetPasswordState> emit,
   ) async {
     if (state.code.length != 4) {
-      emitMessage(UiMessage(
-          message: "Please enter all 4 digits of the code correctly."));
+      emitMessage(UiMessage(message: "Please enter all 4 digits of the code correctly."));
       return;
     }
 
     emit(state.copyWith(isLoading: true));
 
-    final result = await _verifyEmailUseCase.invoke(
-      state.code,
-      state.email,
+    final result = await _resetPasswordUseCase.invoke(
+      email: state.email,
+      code: state.code,
+      password: state.password,
+      confirmPassword: state.confirmPassword,
     );
 
-    emit(state.copyWith(
-      isLoading: false,
-    ));
+    emit(state.copyWith(isLoading: false));
 
     switch (result) {
       case Ok<bool>():
@@ -81,18 +77,21 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState>
     }
   }
 
-  Future<void> _resendVerifyCode(
+  Future<void> _resend(
     ResetPasswordEvent event,
     Emitter<ResetPasswordState> emit,
   ) async {
     emit(state.copyWith(isResendLoading: true));
-    print(state.email);
-    final result = await _validateEmailUseCase.validateEmail(state.email);
+
+    final result = await _resendOTPUseCase.resendFromVerify(state.email);
+
     emit(state.copyWith(isResendLoading: false));
+
     switch (result) {
-      case Ok<String>():
+      case Ok<bool>():
+        emitMessage(UiMessage(message: "OTP has been resent to your email.", status: UiMessageStatus.Success));
         break;
-      case Error<String>():
+      case Error<bool>():
         emitMessage(result.error.toUiMessage());
         break;
     }

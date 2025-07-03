@@ -15,6 +15,8 @@ export './src/dto/user/login_response.dart';
 export './src/dto/user/register_response.dart';
 export './src/dto/user/user_response.dart';
 export './src/dto/user/verify_email_response.dart';
+export './src/dto/user/reset_password_response.dart';
+export './src/dto/empty/empty_response.dart';
 export './src/network.dart';
 export './src/utils/api_caller.dart';
 export './src/utils/api_wrapper.dart';

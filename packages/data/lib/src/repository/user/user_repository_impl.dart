@@ -75,11 +75,10 @@ class UserRepositoryImpl extends UserRepository {
     }
   }
 
-
   @override
   Future<Result<bool>> verifyEmail({required String code, required String email}) async {
     final result = await ApiCaller.safeApiCall<VerifyEmailResponse>(
-          () => _userApiService.verifyEmail(
+      () => _userApiService.verifyEmail(
         code: code,
         email: email,
       ),
@@ -95,6 +94,44 @@ class UserRepositoryImpl extends UserRepository {
     }
   }
 
+  @override
+  Future<Result<bool>> resendOTP({required String email, required String type}) async {
+    final result = await ApiCaller.safeApiCall<EmptyResponse>(
+      () => _userApiService.resendOTP(
+        email: email,
+        type: type,
+      ),
+    );
+
+    switch (result) {
+      case Ok<EmptyResponse>():
+        return Result.ok(true);
+      case Error<EmptyResponse>():
+        return Result.error(result.error);
+    }
+  }
+
+  @override
+  Future<Result<bool>> resetPassword({required String email, required String code, required String password, required String confirmPassword}) async {
+    final result = await ApiCaller.safeApiCall<ResetPasswordResponse>(
+      () => _userApiService.resetPassword(
+        email: email,
+        code: code,
+        password: password,
+        confirmPassword: confirmPassword,
+      ),
+    );
+
+    switch (result) {
+      case Ok<ResetPasswordResponse>():
+        await _storageService.write(key: StorageKeys.accessToken, value: result.value.accessToken);
+        await _storageService.write(key: StorageKeys.refreshToken, value: result.value.refreshToken);
+        return Result.ok(true);
+      case Error<ResetPasswordResponse>():
+        return Result.error(result.error);
+    }
+  }
+
   User _mapToUser(LoginResponse loginResponse) {
     return User(
       id: loginResponse.user.id,
@@ -106,5 +143,4 @@ class UserRepositoryImpl extends UserRepository {
       status: loginResponse.user.status,
     );
   }
-
 }

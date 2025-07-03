@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 import 'package:login/src/bloc/login_event.dart';
 import 'package:login/src/bloc/login_state.dart';
 import 'package:ui/ui.dart';
-import 'package:utils/src/model/result.dart';
 import 'package:utils/utils.dart';
 
 import 'login_effect.dart';

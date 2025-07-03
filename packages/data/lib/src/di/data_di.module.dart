@@ -8,6 +8,8 @@ import 'dart:async' as _i687;
 
 import 'package:data/src/repository/config/config_repository_impl.dart'
     as _i194;
+import 'package:data/src/repository/storage/storage_repository_impl.dart'
+    as _i643;
 import 'package:data/src/repository/user/user_repository_impl.dart' as _i931;
 import 'package:domain/domain.dart' as _i494;
 import 'package:injectable/injectable.dart' as _i526;
@@ -24,5 +26,7 @@ class DataPackageModule extends _i526.MicroPackageModule {
           gh<_i372.UserApiService>(),
           gh<_i431.StorageService>(),
         ));
+    gh.lazySingleton<_i494.StorageRepository>(
+        () => _i643.StorageRepositoryImpl(gh<_i431.StorageService>()));
   }
 }

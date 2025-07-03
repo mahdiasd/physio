@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:network/network.dart';
-import 'package:network/src/dto/response/network_response.dart';
 
 @LazySingleton(as: UserApiService)
 class UserApiServiceImpl extends UserApiService {
@@ -21,8 +20,7 @@ class UserApiServiceImpl extends UserApiService {
         'email': email,
         'password': password,
       },
-      fromJsonT: (json) =>
-          LoginResponse.fromJson(json as Map<String, dynamic>),
+      fromJsonT: (json) => LoginResponse.fromJson(json as Map<String, dynamic>),
     );
   }
 
@@ -43,8 +41,7 @@ class UserApiServiceImpl extends UserApiService {
         'password': password,
         'role': "CLIENT",
       },
-      fromJsonT: (json) =>
-          RegisterResponse.fromJson(json as Map<String, dynamic>),
+      fromJsonT: (json) => RegisterResponse.fromJson(json as Map<String, dynamic>),
     );
   }
 
@@ -54,7 +51,7 @@ class UserApiServiceImpl extends UserApiService {
   }) {
     return ApiWrapper.postRequest<String>(
       dio,
-      'validate',
+      'v1/auth/forgot',
       data: {
         'email': email,
       },
@@ -74,8 +71,38 @@ class UserApiServiceImpl extends UserApiService {
         'code': code,
         'email': email,
       },
-      fromJsonT: (json) =>
-          VerifyEmailResponse.fromJson(json as Map<String, dynamic>),
+      fromJsonT: (json) => VerifyEmailResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<Response<NetworkResponse<EmptyResponse>>> resendOTP({
+    required String email,
+    required String type,
+  }) {
+    return ApiWrapper.postRequest<EmptyResponse>(
+      dio,
+      'v1/auth/resend',
+      data: {
+        'email': email,
+        'type': type,
+      },
+      fromJsonT: (json) => EmptyResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<Response<NetworkResponse<ResetPasswordResponse>>> resetPassword({required String email, required String code, required String password, required String confirmPassword}) {
+    return ApiWrapper.postRequest<ResetPasswordResponse>(
+      dio,
+      'v1/auth/reset',
+      data: {
+        'email': email,
+        'code': code,
+        'password': password,
+        'confirmPassword': confirmPassword,
+      },
+      fromJsonT: (json) => ResetPasswordResponse.fromJson(json as Map<String, dynamic>),
     );
   }
 }

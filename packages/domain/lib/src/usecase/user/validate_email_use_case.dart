@@ -8,7 +8,7 @@ class ValidateEmailUseCase {
 
   ValidateEmailUseCase(this._userRepository);
 
-  Future<Result<String>> validateEmail(String email) {
+  Future<Result<String>> invoke(String email) {
     return _userRepository.validateEmail(email: email);
   }
 }

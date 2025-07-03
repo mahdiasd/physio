@@ -181,7 +181,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
               "It must be a combination of minimum 8 letters, numbers, and symbols.",
             ),
             AppTextField(
-              value: state.repeatPassword,
+              value: state.confirmPassword,
               keyboardType: TextInputType.text,
               maxLines: 1,
               obscureText: state.isRepeatPasswordObscured,

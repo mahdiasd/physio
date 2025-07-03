@@ -1,23 +1,21 @@
-/// A Very Good Project created by Very Good CLI.
-library;
-
-export 'src/domain.dart';
-export 'src/model/user/user.dart';
-export 'src/model/user/user_role.dart';
-export 'src/model/config/update/update.dart';
-export 'src/model/config/update/update_state.dart';
-export 'src/model/config/config.dart';
-
-// Entities
-export 'src/repository/user/user_repository.dart';
-export 'src/repository/config/config_repository.dart';
-
-// Use Cases
-export 'src/usecase/user/login_use_case.dart';
-export 'src/usecase/user/register_use_case.dart';
-export 'src/usecase/user/validate_email_use_case.dart';
-export 'src/usecase/user/send_otp_codes_use_case.dart';
-export 'src/usecase/config/get_config_use_case.dart';
-
-export 'src/di/domain_di.dart';
+//GENERATED BARREL FILE
+export './src/di/domain_di.dart';
+export './src/di/domain_di.module.dart';
+export './src/domain.dart';
+export './src/model/config/config.dart';
+export './src/model/config/update/update.dart';
+export './src/model/config/update/update_state.dart';
+export './src/model/user/user.dart';
+export './src/model/user/user_role.dart';
+export './src/repository/config/config_repository.dart';
+export './src/repository/storage/storage_repository.dart';
+export './src/repository/user/user_repository.dart';
+export './src/usecase/config/get_config_use_case.dart';
+export './src/usecase/storage/read_access_token_use_case.dart';
+export './src/usecase/user/login_use_case.dart';
+export './src/usecase/user/register_use_case.dart';
+export './src/usecase/user/send_otp_codes_use_case.dart';
+export './src/usecase/user/validate_email_use_case.dart';
+export './src/usecase/user/resend_otp_use_case.dart';
+export './src/usecase/user/reset_password_use_case.dart';
 

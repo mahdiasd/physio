@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 import 'package:register/src/bloc/register_event.dart';
 import 'package:register/src/bloc/register_state.dart';
 import 'package:ui/ui.dart';
-import 'package:utils/src/model/result.dart';
 import 'package:utils/utils.dart';
 
 import 'register_effect.dart';

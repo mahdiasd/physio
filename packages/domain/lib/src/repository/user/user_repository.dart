@@ -16,4 +16,16 @@ abstract class UserRepository {
     required String code,
     required String email,
   });
+
+  Future<Result<bool>> resetPassword({
+    required String email,
+    required String code,
+    required String password,
+    required String confirmPassword,
+  });
+
+  Future<Result<bool>> resendOTP({
+    required String email,
+    required String type,
+  });
 }

@@ -9,11 +9,11 @@ import 'verify_event.dart';
 import 'verify_state.dart';
 
 @injectable
-class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
-    with SideEffectMixin<VerifyState, VerifyEffect> {
+class VerifyBloc extends Bloc<VerifyEvent, VerifyState> with SideEffectMixin<VerifyState, VerifyEffect> {
   final VerifyEmailUseCase _verifyEmailUseCase;
+  final ResendOTPUseCase _resendOTPUseCase;
 
-  VerifyBloc(this._verifyEmailUseCase) : super(VerifyState()) {
+  VerifyBloc(this._verifyEmailUseCase, this._resendOTPUseCase) : super(VerifyState()) {
     on<CodeChange>((event, emit) {
       emit(state.copyWith(code: event.value));
     });
@@ -42,8 +42,7 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     final isValidCode = state.code.length == 4;
 
     if (!isValidCode) {
-      emitMessage(UiMessage(
-          message: "Please enter all 4 digits of the code correctly."));
+      emitMessage(UiMessage(message: "Please enter all 4 digits of the code correctly."));
       return;
     }
 
@@ -67,15 +66,14 @@ class VerifyBloc extends Bloc<VerifyEvent, VerifyState>
     Emitter<VerifyState> emit,
   ) async {
     emit(state.copyWith(isResendLoading: true));
-    final result = await _verifyEmailUseCase.invoke(
-      state.code,
-      state.email,
-    );
+
+    final result = await _resendOTPUseCase.resendFromVerify(state.email);
 
     emit(state.copyWith(isResendLoading: false));
 
     switch (result) {
       case Ok<bool>():
+        emitMessage(UiMessage(message: "OTP has been resent to your email.", status: UiMessageStatus.Success));
         break;
       case Error<bool>():
         emitMessage(result.error.toUiMessage());
