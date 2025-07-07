@@ -12,6 +12,8 @@ export './src/model/config/update/update.dart';
 export './src/model/config/update/update_state.dart';
 export './src/model/user/user.dart';
 export './src/model/user/user_role.dart';
+export './src/model/blog_post/blog_post.dart';
+export './src/model/blog_post/blog_post_status.dart';
 export './src/repository/config/config_repository.dart';
 export './src/repository/storage/storage_repository.dart';
 export './src/repository/user/user_repository.dart';

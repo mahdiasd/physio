@@ -24,5 +24,6 @@ export './src/network.dart';
 export './src/utils/api_caller.dart';
 export './src/utils/api_wrapper.dart';
 export './src/utils/network_log_interceptor.dart';
+export './src/dto/blog_post/blog_post_response.dart';
 
 
