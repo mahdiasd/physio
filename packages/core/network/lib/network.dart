@@ -1,10 +1,13 @@
 //GENERATED BARREL FILE
+export './src/di/network_di.module.dart';
+export './src/dto/file/file_response.dart';
+export './src/dto/video/video_response.dart';
+export './src/dto/video_category/video_category_response.dart';
 export './src/api/config/config_api_service.dart';
 export './src/api/config/config_api_service_impl.dart';
 export './src/api/user/user_api_service.dart';
 export './src/api/user/user_api_service_impl.dart';
 export './src/di/network_di.dart';
-export './src/di/network_di.module.dart';
 export './src/di/network_module.dart';
 export './src/dto/config/config_response.dart';
 export './src/dto/config/update_response.dart';
@@ -21,4 +24,5 @@ export './src/network.dart';
 export './src/utils/api_caller.dart';
 export './src/utils/api_wrapper.dart';
 export './src/utils/network_log_interceptor.dart';
+
 

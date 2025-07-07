@@ -1,6 +1,11 @@
 //GENERATED BARREL FILE
-export './src/di/domain_di.dart';
 export './src/di/domain_di.module.dart';
+export './src/model/file/physio_file.dart';
+export './src/model/video/video.dart';
+export './src/model/video/video_visibility.dart';
+export './src/model/video/video_status.dart';
+export './src/model/video_category/video_category.dart';
+export './src/di/domain_di.dart';
 export './src/domain.dart';
 export './src/model/config/config.dart';
 export './src/model/config/update/update.dart';

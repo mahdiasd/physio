@@ -15,6 +15,9 @@ dependencies:
   utils:
     path: ../utils
 
+  domain:
+    path: ../../domain
+
   bloc: ^8.1.4
   flutter:
     sdk: flutter
