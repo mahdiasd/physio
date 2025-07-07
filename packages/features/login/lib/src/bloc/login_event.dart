@@ -12,6 +12,8 @@ class PasswordChanged extends LoginEvent {
 
 class LoginPressed extends LoginEvent {}
 
+class ResetPasswordPressed extends LoginEvent {} // from showResetPasswordDialog btn.
+
 class TogglePasswordVisibility extends LoginEvent {}
 
 class ForgotPasswordPressed extends LoginEvent {}

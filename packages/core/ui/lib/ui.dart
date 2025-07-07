@@ -14,6 +14,7 @@ export 'src/widgets/input/app_input.dart';
 export 'src/widgets/input/verification_code_field.dart';
 export 'src/widgets/buttons/app_button.dart';
 export 'src/widgets/image/app_image.dart';
+export 'src/widgets/dialog/app_dialog.dart';
 export 'src/bloc/bloc_listener.dart';
 export 'src/bloc/ui_message_listener.dart';
 export 'src/theme/app_colors.dart';

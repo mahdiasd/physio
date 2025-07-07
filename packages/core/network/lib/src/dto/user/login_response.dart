@@ -7,6 +7,7 @@ part 'login_response.g.dart';
 class LoginResponse {
   LoginResponse({
     required this.user,
+    this.isFirstLogin = false,
     required this.accessToken,
     required this.refreshToken,
   });
@@ -17,6 +18,8 @@ class LoginResponse {
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
 
   final UserResponse user;
+
+  final bool isFirstLogin;
 
   final String accessToken;
 

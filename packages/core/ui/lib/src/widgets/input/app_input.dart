@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ui/src/widgets/text/other_texts.dart';
 
 import '../../../ui.dart';
 
@@ -98,19 +99,13 @@ class _AppTextFieldState extends State<AppTextField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final bool isClearVisible = widget.showClearIcon &&
-        widget.value.isNotEmpty &&
-        widget.enabled &&
-        !widget.readOnly;
+    final bool isClearVisible = widget.showClearIcon && widget.value.isNotEmpty && widget.enabled && !widget.readOnly;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.title != null) ...[
-          Text(
-            widget.title!,
-            style: theme.textTheme.inputFieldTitle,
-          ),
+          InputFieldTitleText(widget.title!),
           SizedBox(height: widget.titleSpacing),
         ],
         TextField(
@@ -127,9 +122,10 @@ class _AppTextFieldState extends State<AppTextField> {
           style: widget.textStyle ?? theme.textTheme.bodyMedium,
           decoration: InputDecoration(
             hintText: widget.hint,
-            hintStyle: widget.placeholderStyle ?? theme.textTheme.bodyMedium?.copyWith(
-              color: const Color(0xFF9A9A9A),
-            ),
+            hintStyle: widget.placeholderStyle ??
+                theme.textTheme.bodyMedium?.copyWith(
+                  color: const Color(0xFF9A9A9A),
+                ),
             filled: true,
             fillColor: theme.colorScheme.surfaceContainerLow,
             errorText: widget.isError ? widget.errorText : null,
@@ -166,16 +162,13 @@ class _AppTextFieldState extends State<AppTextField> {
               ),
             ),
             prefixIcon: widget.leadingIcon,
-            suffixIcon: isClearVisible
-                ? _buildClearIcon(context)
-                : widget.trailingIcon,
+            suffixIcon: isClearVisible ? _buildClearIcon(context) : widget.trailingIcon,
           ),
-          inputFormatters: widget.keyboardType == TextInputType.number &&
-              widget.textAlign == TextAlign.center
+          inputFormatters: widget.keyboardType == TextInputType.number && widget.textAlign == TextAlign.center
               ? [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(1),
-          ]
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(1),
+                ]
               : null,
         ),
         if (widget.label != null) ...[
