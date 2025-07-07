@@ -9,6 +9,7 @@ part of 'login_response.dart';
 LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
     LoginResponse(
       user: UserResponse.fromJson(json['user'] as Map<String, dynamic>),
+      isFirstLogin: json['isFirstLogin'] as bool? ?? false,
       accessToken: json['accessToken'] as String,
       refreshToken: json['refreshToken'] as String,
     );
@@ -16,6 +17,7 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
     <String, dynamic>{
       'user': instance.user,
+      'isFirstLogin': instance.isFirstLogin,
       'accessToken': instance.accessToken,
       'refreshToken': instance.refreshToken,
     };

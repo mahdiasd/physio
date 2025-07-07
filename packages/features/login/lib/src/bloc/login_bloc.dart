@@ -25,12 +25,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with SideEffectMixin<LoginS
       emit(state.copyWith(isPasswordObscured: !state.isPasswordObscured));
     });
 
+    on<ResetPasswordPressed>((event, emit) {
+      emit(state.copyWith(isShowResetPassDialog: false));
+      emitEffect(NavigateToResetPassword());
+    });
+
     on<ForgotPasswordPressed>((event, emit) {
       emitEffect(NavigateToForgotPassword());
     });
 
     on<RegisterPressed>((event, emit) {
-      print("RegisterPressed");
       emitEffect(NavigateToRegister());
     });
 
@@ -42,14 +46,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with SideEffectMixin<LoginS
     Emitter<LoginState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
-    final result = await _loginUseCase.login(state.email, state.password);
+    final result = await _loginUseCase.invoke(state.email, state.password);
     emit(state.copyWith(isLoading: false));
 
     switch (result) {
-      case Ok<User>():
-        emitEffect(NavigateToMain());
+      case Ok<Map<String, dynamic>>():
+        if (result.value["isFirstLogin"] == true) {
+          emit(state.copyWith(isShowResetPassDialog: true));
+        } else {
+          emitEffect(NavigateToMain());
+        }
         break;
-      case Error<User>():
+      case Error<Map<String, dynamic>>():
         final errorCode = (result.error.code ?? 0);
         if (errorCode > 209 && errorCode < 310) {
           await Future<void>.delayed(Duration(seconds: 5));

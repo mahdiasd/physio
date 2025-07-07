@@ -93,7 +93,6 @@ TextTheme appTextTheme = const TextTheme(
   ),
 );
 
-// Extension برای استایل‌های خاص
 extension CustomClashGroteskTextStyles on TextTheme {
   // Card Tile - SemiBold (600) - 14px
   TextStyle get cardTile => const TextStyle(

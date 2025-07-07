@@ -14,19 +14,24 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl(this._userApiService, this._storageService);
 
   @override
-  Future<Result<User>> login({
+  Future<Result<Map<String, dynamic>>> login({
     required String email,
     required String password,
   }) async {
     final result = await ApiCaller.safeApiCall<LoginResponse>(
-      () => _userApiService.login(email: email, password: password),
+          () => _userApiService.login(email: email, password: password),
     );
 
     switch (result) {
       case Ok<LoginResponse>():
         await _storageService.write(key: StorageKeys.accessToken, value: result.value.accessToken);
         await _storageService.write(key: StorageKeys.refreshToken, value: result.value.refreshToken);
-        return Result.ok(_mapToUser(result.value));
+
+        return Result.ok({
+          "user": _mapToUser(result.value),
+          "isFirstLogin": result.value.isFirstLogin,
+        });
+
       case Error<LoginResponse>():
         return Result.error(result.error);
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/src/widgets/text/body_text.dart';
+import 'package:ui/src/widgets/text/label_text.dart';
 
 class AppPrimaryButton extends StatelessWidget {
   final String text;
@@ -21,7 +22,7 @@ class AppPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
     final isDisabled = onPressed == null || isLoading;
 
     return ElevatedButton(
@@ -32,23 +33,24 @@ class AppPrimaryButton extends StatelessWidget {
             return const Color(0xFFD0E8E3); // Disabled background
           }
           if (states.contains(WidgetState.hovered)) {
-            return _darken(colorScheme.primary, 0.1); // Hover darker
+            return _darken(theme.colorScheme.primary, 0.1); // Hover darker
           }
-          return colorScheme.primary; // Default
+          return theme.colorScheme.primary; // Default
         }),
         foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
           if (states.contains(WidgetState.disabled)) {
             return const Color(0xFF9FB7B2); // Disabled text
           }
-          return textColor ?? colorScheme.onPrimary;
+          return textColor ?? theme.colorScheme.onPrimary;
         }),
         padding: WidgetStateProperty.all(
           padding ?? const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
         ),
         elevation: WidgetStateProperty.all(elevation ?? 4),
         shadowColor: WidgetStateProperty.all(
-            Colors.black.withAlpha((0.1 * 255).round()), // 10% black shadow
+          Colors.black.withAlpha((0.1 * 255).round()), // 10% black shadow
         ),
+        textStyle: WidgetStateProperty.all(theme.textTheme.labelLarge),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(1000), // Full radius
@@ -57,25 +59,23 @@ class AppPrimaryButton extends StatelessWidget {
       ),
       child: isLoading
           ? SizedBox(
-        width: 20,
-        height: 20,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation(
-              textColor ?? colorScheme.onPrimary),
-        ),
-      )
-          : BodyLargeText(
-        text,
-        color: textColor ?? colorScheme.onPrimary,
-      ),
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation(textColor ?? theme.colorScheme.onPrimary),
+              ),
+            )
+          : LabelLargeText(
+              text,
+              color: textColor ?? theme.colorScheme.onPrimary,
+            ),
     );
   }
 
   Color _darken(Color color, double amount) {
     final hsl = HSLColor.fromColor(color);
-    final darkened =
-    hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+    final darkened = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
     return darkened.toColor();
   }
 }
@@ -126,7 +126,7 @@ class AppPrimaryContainerButton extends StatelessWidget {
         ),
         elevation: WidgetStateProperty.all(elevation ?? 4),
         shadowColor: WidgetStateProperty.all(
-            Colors.black.withAlpha((0.1 * 255).round()), // Shadow same as primary
+          Colors.black.withAlpha((0.1 * 255).round()), // Shadow same as primary
         ),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
@@ -136,26 +136,23 @@ class AppPrimaryContainerButton extends StatelessWidget {
       ),
       child: isLoading
           ? SizedBox(
-        width: 20,
-        height: 20,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation(
-              textColor ?? colorScheme.onPrimaryContainer),
-        ),
-      )
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation(textColor ?? colorScheme.onPrimaryContainer),
+              ),
+            )
           : BodyLargeText(
-        text,
-        color: textColor ?? colorScheme.onPrimaryContainer,
-      ),
+              text,
+              color: textColor ?? colorScheme.onPrimaryContainer,
+            ),
     );
   }
 
   Color _darken(Color color, double amount) {
     final hsl = HSLColor.fromColor(color);
-    final darkened =
-    hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+    final darkened = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
     return darkened.toColor();
   }
 }
-

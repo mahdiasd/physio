@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:login/login.dart';
 import 'package:physio/app/routing/forgot/forgot_route.dart';
 import 'package:physio/app/routing/register/register_route.dart';
+import 'package:physio/app/routing/reset_password/reset_password_route.dart';
 import 'package:physio/app/routing/verify/verify_route.dart';
 import 'package:utils/utils.dart';
 
@@ -34,6 +35,9 @@ class LoginRoute extends GoRouteData {
             },
             navigateToVerify: () {
               innerContext.push(VerifyRoute(bloc.state.email).location);
+            },
+            navigateToResetPassword: () {
+              innerContext.go(ResetPasswordRoute(bloc.state.email).location);
             },
           );
         },

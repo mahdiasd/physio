@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 import '../login.dart';
 import 'bloc/login_effect.dart';
@@ -14,6 +15,7 @@ class LoginPage extends StatelessWidget {
   final VoidCallback navigateToRegister;
   final VoidCallback navigateToForgotPassword;
   final VoidCallback navigateToVerify;
+  final VoidCallback navigateToResetPassword;
 
   const LoginPage({
     super.key,
@@ -22,22 +24,43 @@ class LoginPage extends StatelessWidget {
     required this.navigateToRegister,
     required this.navigateToForgotPassword,
     required this.navigateToVerify,
+    required this.navigateToResetPassword,
   });
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<LoginBloc>();
-    return BlocListenerWidget(
-      effectsStream: bloc.effectsStream,
-      messageStream: bloc.messageStream,
-      effectHandlers: {
-        NavigateBack: navigateBack,
-        NavigateToMain: navigateToMain,
-        NavigateToRegister: navigateToRegister,
-        NavigateToForgotPassword: navigateToForgotPassword,
-        NavigateToVerify: navigateToVerify,
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state.isShowResetPassDialog) {
+          showAdaptiveDialog<void>(
+            context: context,
+            builder: (context) {
+              return AppDialog(
+                title: "Reset Password",
+                description: "It seems like it's your first login. Please reset your password.",
+                buttonText: "Reset Password",
+                onButtonPressed: () {
+                  context.read<LoginBloc>().add(ResetPasswordPressed());
+                },
+              );
+            },
+          );
+        }
       },
-      child: LoginContent(),
+      child: BlocListenerWidget(
+        effectsStream: bloc.effectsStream,
+        messageStream: bloc.messageStream,
+        effectHandlers: {
+          NavigateBack: navigateBack,
+          NavigateToMain: navigateToMain,
+          NavigateToResetPassword: navigateToResetPassword,
+          NavigateToRegister: navigateToRegister,
+          NavigateToForgotPassword: navigateToForgotPassword,
+          NavigateToVerify: navigateToVerify,
+        },
+        child: LoginContent(),
+      ),
     );
   }
 }
@@ -54,13 +77,12 @@ class LoginContent extends StatelessWidget {
         children: [
           if (!ResponsiveBreakpoints.of(context).isMobile)
             Expanded(
-              child:  WebLeftSection(),
+              child: WebLeftSection(),
             ),
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
+                constraints: BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
                 child: AdaptiveFormLayout(
                   child: LoginForm(),
                 ),
@@ -83,9 +105,7 @@ class LoginForm extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      child: isMobile
-          ? _buildMobileLayout(context, theme)
-          : _buildWebLayout(context, theme),
+      child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
 
@@ -118,8 +138,7 @@ class LoginForm extends StatelessWidget {
     return Column(
       spacing: 24,
       children: [
-        DisplayLargeText("Login", color : Theme.of(context).colorScheme.primary),
-
+        DisplayLargeText("Login", color: Theme.of(context).colorScheme.primary),
         if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
           HeadlineSmallText(
             textAlign: TextAlign.center,
@@ -154,12 +173,9 @@ class LoginForm extends StatelessWidget {
                 obscureText: state.isPasswordObscured,
                 trailingIcon: IconButton(
                   icon: Icon(
-                    state.isPasswordObscured
-                        ? Icons.visibility_off
-                        : Icons.visibility,
+                    state.isPasswordObscured ? Icons.visibility_off : Icons.visibility,
                   ),
-                  onPressed: () =>
-                      context.read<LoginBloc>().add(TogglePasswordVisibility()),
+                  onPressed: () => context.read<LoginBloc>().add(TogglePasswordVisibility()),
                 ),
                 hint: "Enter your password",
                 title: "Password",
@@ -191,8 +207,7 @@ class LoginForm extends StatelessWidget {
         spacing: 12,
         children: [
           BlocBuilder<LoginBloc, LoginState>(
-            buildWhen: (previous, current) =>
-                previous.isLoading != current.isLoading,
+            buildWhen: (previous, current) => previous.isLoading != current.isLoading,
             builder: (context, state) {
               return SizedBox(
                 width: double.infinity,

@@ -1,6 +1,7 @@
 sealed class LoginEffect {}
 
 class NavigateToMain extends LoginEffect {}
+class NavigateToResetPassword extends LoginEffect {}
 class NavigateToVerify extends LoginEffect {}
 class NavigateBack extends LoginEffect {}
 class NavigateToRegister extends LoginEffect {}
