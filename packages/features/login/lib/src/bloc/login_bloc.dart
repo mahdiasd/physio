@@ -35,7 +35,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with SideEffectMixin<LoginS
     });
 
     on<RegisterPressed>((event, emit) {
-      print("RegisterPressed");
       emitEffect(NavigateToRegister());
     });
 
