@@ -31,7 +31,7 @@ class BlogPostResponse {
   final String slug;
   final String excerpt;
   final String content;
-  final FileResponse featuredImage;
+  final String featuredImage;
   final String status;
   final DateTime? publishedAt;
   final int viewCount;

@@ -1,5 +1,4 @@
 import '../../../domain.dart';
-import 'blog_post_status.dart';
 
 class BlogPost {
   BlogPost({
@@ -22,7 +21,7 @@ class BlogPost {
   final String slug;
   final String excerpt;
   final String content;
-  final PhysioFile featuredImage;
+  final String featuredImage;
   final BlogPostStatus status;
   final DateTime? publishedAt;
   final int viewCount;

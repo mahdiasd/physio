@@ -1,17 +1,22 @@
+import 'package:domain/domain.dart';
+
 sealed class VideoLibraryEvent {}
 
-class CodeChange extends VideoLibraryEvent {
-  final String value;
+class OnRefresh extends VideoLibraryEvent {}
+class OnSearchClick extends VideoLibraryEvent {}
+class OnSelectCategory extends VideoLibraryEvent {}
+class OnMoreRecentVideosClick extends VideoLibraryEvent {}
+class OnMoreMostViewedVideosClick extends VideoLibraryEvent {}
+class OnMoreShouldersVideosClick extends VideoLibraryEvent {}
+class OnMoreBlogPostClick extends VideoLibraryEvent {}
+class OnMoreCategoriesClick extends VideoLibraryEvent {}
 
-  CodeChange(this.value);
+class OnVideoClick extends VideoLibraryEvent {
+  final Video video;
+  OnVideoClick(this.video);
 }
 
-class InitEmail extends VideoLibraryEvent {
-  final String email;
-  InitEmail(this.email);
+class OnBlogPostClick extends VideoLibraryEvent {
+  final BlogPost post;
+  OnBlogPostClick(this.post);
 }
-
-
-class VideoLibraryClick extends VideoLibraryEvent {}
-class ContinueClick extends VideoLibraryEvent {}
-class ResendCodeClicked extends VideoLibraryEvent {}

@@ -14,8 +14,7 @@ BlogPostResponse _$BlogPostResponseFromJson(Map<String, dynamic> json) =>
       slug: json['slug'] as String,
       excerpt: json['excerpt'] as String,
       content: json['content'] as String,
-      featuredImage:
-          FileResponse.fromJson(json['featuredImage'] as Map<String, dynamic>),
+      featuredImage: json['featuredImage'] as String,
       status: json['status'] as String,
       publishedAt: json['publishedAt'] == null
           ? null

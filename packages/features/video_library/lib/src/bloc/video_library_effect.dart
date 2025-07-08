@@ -1,5 +1,8 @@
+import 'package:domain/domain.dart';
+
 sealed class VideoLibraryEffect {}
 
-class NavigateToMain extends VideoLibraryEffect {}
-
-class NavigateBack extends VideoLibraryEffect {}
+class NavigateToSearch extends VideoLibraryEffect {
+  final VideoCategory? category;
+  NavigateToSearch(this.category);
+}

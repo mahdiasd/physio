@@ -11,10 +11,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   utils:
     path: ../../core/utils
+
   ui:
     path: ../../core/ui
+
+  domain:
+    path: ../../domain
 
 
 dev_dependencies:

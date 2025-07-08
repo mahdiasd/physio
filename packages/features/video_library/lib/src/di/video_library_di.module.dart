@@ -15,6 +15,6 @@ class VideoLibraryPackageModule extends _i526.MicroPackageModule {
   @override
   _i687.FutureOr<void> init(_i526.GetItHelper gh) {
     gh.factory<_i864.VideoLibraryBloc>(
-        () => _i864.VideoLibraryBloc(gh<_i494.ResendOTPUseCase>()));
+        () => _i864.VideoLibraryBloc(gh<_i494.GetLibraryUseCase>()));
   }
 }

@@ -9,42 +9,65 @@ import 'package:video_library/src/bloc/video_library_state.dart';
 
 @injectable
 class VideoLibraryBloc extends Bloc<VideoLibraryEvent, VideoLibraryState> with SideEffectMixin<VideoLibraryState, VideoLibraryEffect> {
-  final ResendOTPUseCase _resendOTPUseCase;
+  final GetLibraryUseCase _getLibraryUseCase;
 
-  VideoLibraryBloc(this._resendOTPUseCase) : super(VideoLibraryState()) {
+  VideoLibraryBloc(this._getLibraryUseCase) : super(VideoLibraryState()) {
+    on<OnRefresh>(_getLibrary);
 
+    on<OnSearchClick>((event, emit) {
+      emitEffect(NavigateToSearch(null));
+    });
+
+    on<OnSelectCategory>((event, emit) {
+    });
+
+    on<OnMoreRecentVideosClick>((event, emit) {
+    });
+
+    on<OnMoreMostViewedVideosClick>((event, emit) {
+
+    });
+
+    on<OnMoreShouldersVideosClick>((event, emit) {
+
+    });
+
+    on<OnMoreBlogPostClick>((event, emit) {
+
+    });
+
+    on<OnMoreCategoriesClick>((event, emit) {
+
+    });
+
+    on<OnVideoClick>((event, emit) {
+
+    });
+
+    on<OnBlogPostClick>((event, emit) {
+
+    });
+
+    add(OnRefresh());
   }
 
-  Future<void> _onVideoLibrary(
-    VideoLibraryEvent event,
-    Emitter<VideoLibraryState> emit,
-  ) async {
-    if (state.code.length != 4) {
-      emitMessage(UiMessage(message: "Please enter all 4 digits of the code correctly."));
-      return;
-    }
-
+  Future<void> _getLibrary(
+      VideoLibraryEvent event,
+      Emitter<VideoLibraryState> emit,
+      ) async {
     emit(state.copyWith(isLoading: true));
 
-    final result = await _resetPasswordUseCase.invoke(
-      email: state.email,
-      code: state.code,
-      password: state.password,
-      confirmPassword: state.confirmPassword,
-    );
+    final result = await _getLibraryUseCase.invoke();
 
     emit(state.copyWith(isLoading: false));
 
     switch (result) {
-      case Ok<bool>():
-        emitMessage(UiMessage.success("Password change successfully"));
-        await Future<void>.delayed(Duration(seconds: 3));
-        emitEffect(NavigateToMain());
+      case Ok<VideoLibrary>():
+        emit(state.copyWith(library: result.value));
         break;
-      case Error<bool>():
+      case Error<VideoLibrary>():
         emitMessage(result.error.toUiMessage());
         break;
     }
   }
-
 }

@@ -1,22 +1,21 @@
-import 'package:data/src/mapper/file/file_mapper.dart';
 import 'package:data/src/mapper/video_category/video_category_mapper.dart';
 import 'package:domain/domain.dart';
 import 'package:network/network.dart';
 
 extension VideoResponseMapper on VideoResponse {
   Video toDomain() => Video(
-    id: id,
-    title: title,
-    description: description,
-    file: file.toDomain(),
-    thumbnailFile: thumbnailFile.toDomain(),
-    durationSeconds: durationSeconds,
-    category: category.toDomain(),
-    visibility: visibility.toVideoVisibility(),
-    status: status.toVideoStatus(),
-    viewCount: viewCount,
-    createdAt: createdAt,
-  );
+        id: id,
+        title: title,
+        description: description,
+        url: url,
+        thumbnail: thumbnail,
+        durationSeconds: durationSeconds,
+        category: category.toDomain(),
+        visibility: visibility.toVideoVisibility(),
+        status: status.toVideoStatus(),
+        viewCount: viewCount,
+        createdAt: createdAt,
+      );
 }
 
 extension VideoVisibilityX on String {

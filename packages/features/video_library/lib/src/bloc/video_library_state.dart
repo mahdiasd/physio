@@ -1,31 +1,21 @@
+import 'package:domain/domain.dart';
+
 class VideoLibraryState {
-  final String code;
-  final String email;
-  final bool isVerified;
   final bool isLoading;
-  final bool isResendLoading;
+  final VideoLibrary? library;
 
   VideoLibraryState({
-    this.code = "",
-    this.email = "",
-    this.isVerified = false,
     this.isLoading = false,
-    this.isResendLoading = false,
+    this.library = null,
   });
 
   VideoLibraryState copyWith({
-    String? code,
-    String? email,
-    bool? isVerified,
     bool? isLoading,
-    bool? isResendLoading,
+    VideoLibrary? library,
   }) {
     return VideoLibraryState(
-      code: code ?? this.code,
-      email: email ?? this.email,
-      isVerified: isVerified ?? this.isVerified,
       isLoading: isLoading ?? this.isLoading,
-      isResendLoading: isResendLoading ?? this.isResendLoading,
+      library: library ?? this.library,
     );
   }
 }

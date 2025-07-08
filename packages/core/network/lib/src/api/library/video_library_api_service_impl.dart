@@ -16,12 +16,12 @@ class VideoLibraryApiServiceImpl extends VideoLibraryApiService {
 
 
   @override
-  Future<Response<NetworkResponse<List<VideoLibraryResponse>>>> getVideoLibrary() {
-    return ApiWrapper.getRequest<List<VideoLibraryResponse>>(
+  Future<Response<NetworkResponse<VideoLibraryResponse>>> getVideoLibrary() {
+    return ApiWrapper.getRequest<VideoLibraryResponse>(
       dio,
       'v1/library',
-      fromJsonT: (json) =>
-          (json as List<dynamic>).map((e) => VideoLibraryResponse.fromJson(e as Map<String, dynamic>)).toList(),
+      fromJsonT: (json) => VideoLibraryResponse.fromJson(json as Map<String, dynamic>),
     );
   }
+
 }

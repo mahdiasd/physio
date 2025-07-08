@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:main/main.dart';
 import 'package:utils/utils.dart';
+import 'package:video_library/video_library.dart';
 
 part 'main_route.g.dart';
 
@@ -39,30 +40,34 @@ class MainRoute extends ShellRouteData {
 
 class AccountRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const Text("AccountRoute");
+  Widget build(BuildContext context, GoRouterState state) => const Text("AccountRoute");
 }
 
 class LibraryRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const Text("LibraryRoute");
+  Widget build(BuildContext context, GoRouterState state) => BlocProvider(
+        create: (context) => getIt<VideoLibraryBloc>(),
+        child: Builder(
+          builder: (innerContext) {
+            return VideoLibraryPage(
+              navigateToSearch: () {},
+            );
+          },
+        ),
+      );
 }
 
 class ProgramsRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const Text("ProgramsRoute");
+  Widget build(BuildContext context, GoRouterState state) => const Text("ProgramsRoute");
 }
 
 class AppointmentsRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const Text("AppointmentsRoute");
+  Widget build(BuildContext context, GoRouterState state) => const Text("AppointmentsRoute");
 }
 
 class HomeRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const Text("HomeRoute");
+  Widget build(BuildContext context, GoRouterState state) => const Text("HomeRoute");
 }

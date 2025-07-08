@@ -10,8 +10,8 @@ class VideoResponse {
     required this.id,
     required this.title,
     required this.description,
-    required this.file,
-    required this.thumbnailFile,
+    required this.url,
+    required this.thumbnail,
     required this.durationSeconds,
     required this.category,
     required this.visibility,
@@ -27,8 +27,8 @@ class VideoResponse {
   final String id;
   final String title;
   final String description;
-  final FileResponse file;
-  final FileResponse thumbnailFile;
+  final String url;
+  final String thumbnail;
   final int durationSeconds;
   final VideoCategoryResponse category;
   final String visibility;

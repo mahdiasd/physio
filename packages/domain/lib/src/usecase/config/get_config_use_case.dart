@@ -10,15 +10,5 @@ class GetConfigUseCase {
 
   Future<Result<Config>> getConfig() {
     return _configRepository.getConfig();
-
-    // return Future.value(Result.ok(Config(
-    //   update: Update(
-    //       forceVersion: 1,
-    //       lastVersion: 1,
-    //       suggestVersion: 1,
-    //       message: "message",
-    //       googlePlayUrl: "https://play.google.com/store/apps/details?id=com.gameloft.android.ANMP.GloftA9HM&pcampaignid=merch_published_cluster_promotion_battlestar_browse_all_games",
-    //       appStorePlayUrl: "https://www.apple.com/uk/store"),
-    // )));
   }
 }

@@ -6,11 +6,12 @@ part 'video_library_response.g.dart';
 @JsonSerializable()
 class VideoLibraryResponse {
   VideoLibraryResponse({
-    required this.categories,
-    required this.mainVideo,
-    required this.recentVideos,
-    required this.mostVideos,
-    required this.blogPosts,
+    this.categories = null,
+    this.mainVideo = null,
+    this.recentVideos = null,
+    this.mostVideos = null,
+    this.shouldersVideos = null,
+    this.blogPosts = null,
   });
 
   factory VideoLibraryResponse.fromJson(Map<String, dynamic> json) =>
@@ -18,10 +19,10 @@ class VideoLibraryResponse {
 
   Map<String, dynamic> toJson() => _$VideoLibraryResponseToJson(this);
 
-  final VideoCategoryResponse categories;
-
-  final VideoResponse mainVideo;
-  final List<VideoResponse> recentVideos;
-  final List<VideoResponse> mostVideos;
-  final List<BlogPostResponse> blogPosts;
+  final List<VideoCategoryResponse>? categories;
+  final VideoResponse? mainVideo;
+  final List<VideoResponse>? recentVideos;
+  final List<VideoResponse>? mostVideos;
+  final List<VideoResponse>? shouldersVideos;
+  final List<BlogPostResponse>? blogPosts;
 }

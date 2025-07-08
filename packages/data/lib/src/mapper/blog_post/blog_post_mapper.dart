@@ -11,7 +11,7 @@ extension BlogPostResponseMapper on BlogPostResponse {
     slug: slug,
     excerpt: excerpt,
     content: content,
-    featuredImage: featuredImage.toDomain(),
+    featuredImage: featuredImage,
     status: status.toBlogPostStatus(),
     publishedAt: publishedAt,
     viewCount: viewCount,

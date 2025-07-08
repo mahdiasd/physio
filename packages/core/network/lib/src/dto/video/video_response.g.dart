@@ -11,9 +11,8 @@ VideoResponse _$VideoResponseFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
-      file: FileResponse.fromJson(json['file'] as Map<String, dynamic>),
-      thumbnailFile:
-          FileResponse.fromJson(json['thumbnailFile'] as Map<String, dynamic>),
+      url: json['url'] as String,
+      thumbnail: json['thumbnail'] as String,
       durationSeconds: (json['durationSeconds'] as num).toInt(),
       category: VideoCategoryResponse.fromJson(
           json['category'] as Map<String, dynamic>),
@@ -28,8 +27,8 @@ Map<String, dynamic> _$VideoResponseToJson(VideoResponse instance) =>
       'id': instance.id,
       'title': instance.title,
       'description': instance.description,
-      'file': instance.file,
-      'thumbnailFile': instance.thumbnailFile,
+      'url': instance.url,
+      'thumbnail': instance.thumbnail,
       'durationSeconds': instance.durationSeconds,
       'category': instance.category,
       'visibility': instance.visibility,

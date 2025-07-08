@@ -10,3 +10,7 @@ extension VideoCategoryResponseMapper on VideoCategoryResponse {
     isActive: isActive,
   );
 }
+
+extension VideoCategoryResponseListMapper on List<VideoCategoryResponse> {
+  List<VideoCategory> toDomain() => map((e) => e.toDomain()).toList();
+}
