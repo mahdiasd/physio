@@ -55,7 +55,6 @@ class LibraryContent extends StatelessWidget {
             children: [
               _buildHeader(context),
               if (isMobile) ...[
-                const SizedBox(height: 24),
                 _buildMainVideoSection(),
               ],
               _buildCategoriesLayout(),
@@ -233,7 +232,7 @@ class LibraryContent extends StatelessWidget {
                 itemBuilder: (context, video, _) {
                   return VideoItem(
                     video: video,
-                    aspectRatio: 1.5,
+                    aspectRatio: 1.7,
                     maxWidth: getVideoItemWidth(context),
                     onTap: () => bloc.add(OnVideoClick(video)),
                   );
@@ -252,6 +251,7 @@ class LibraryContent extends StatelessWidget {
         final videos = state.library?.mostVideos ?? [];
         if (videos.isEmpty) return const SizedBox.shrink();
 
+        final isMobile = ResponsiveBreakpoints.of(context).isMobile;
         final bloc = context.read<VideoLibraryBloc>();
 
         return SizedBox(
@@ -285,8 +285,8 @@ class LibraryContent extends StatelessWidget {
                 itemBuilder: (context, video, _) {
                   return VideoItem(
                     video: video,
-                    aspectRatio: 1.5,
-                    maxWidth: getVideoItemWidth(context),
+                    aspectRatio: 1.7,
+                    maxWidth: getVideoItemWidth(context) - (isMobile ? 50 : 0),
                     onTap: () => bloc.add(OnVideoClick(video)),
                   );
                 },
@@ -303,7 +303,7 @@ class LibraryContent extends StatelessWidget {
       builder: (context, state) {
         final videos = state.library?.shouldersVideos ?? [];
         if (videos.isEmpty) return const SizedBox.shrink();
-
+        final isMobile = ResponsiveBreakpoints.of(context).isMobile;
         final bloc = context.read<VideoLibraryBloc>();
 
         return SizedBox(
@@ -337,8 +337,8 @@ class LibraryContent extends StatelessWidget {
                 itemBuilder: (context, video, _) {
                   return VideoItem(
                     video: video,
-                    aspectRatio: 1.5,
-                    maxWidth: getVideoItemWidth(context),
+                    aspectRatio: 1.7,
+                    maxWidth: getVideoItemWidth(context) - (isMobile ? 50 : 0),
                     onTap: () => bloc.add(OnVideoClick(video)),
                   );
                 },
@@ -389,7 +389,7 @@ class LibraryContent extends StatelessWidget {
                 itemBuilder: (context, post, _) {
                   return BlogPostItem(
                     post: post,
-                    aspectRatio: 1.5,
+                    aspectRatio: 1.7,
                     maxWidth: getVideoItemWidth(context),
                     onTap: () => bloc.add(OnBlogPostClick(post)),
                   );

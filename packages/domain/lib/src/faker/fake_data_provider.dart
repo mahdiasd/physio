@@ -127,6 +127,7 @@ class FakeDataProvider {
         mainVideo: getFakeVideos().first,
         recentVideos: getFakeVideos(count: 5),
         mostVideos: getFakeVideos(count: 6),
+        shouldersVideos: getFakeVideos(count: 10),
         blogPosts: getFakeBlogPosts(count: 8));
   }
 }
