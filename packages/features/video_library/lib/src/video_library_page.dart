@@ -182,7 +182,7 @@ class LibraryContent extends StatelessWidget {
                 itemBuilder: (context, category, _) {
                   return CategoryItem(
                     title: category.name,
-                    onTap: () => context.read<VideoLibraryBloc>().add(OnSelectCategory()),
+                    onTap: () => context.read<VideoLibraryBloc>().add(OnSelectCategory(category)),
                   );
                 },
               ),

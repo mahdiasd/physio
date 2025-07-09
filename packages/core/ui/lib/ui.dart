@@ -5,6 +5,7 @@ export 'src/state/ui_state.dart';
 export 'src/ui.dart';
 export 'src/bloc/side_effect_stream.dart';
 export 'src/model/ui_message/ui_message.dart';
+export 'src/model/search/search_param.dart';
 export 'src/widgets/toast/toast.dart';
 export 'src/widgets/text/body_text.dart';
 export 'src/widgets/text/label_text.dart';

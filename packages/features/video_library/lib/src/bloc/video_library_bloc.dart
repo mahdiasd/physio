@@ -15,32 +15,36 @@ class VideoLibraryBloc extends Bloc<VideoLibraryEvent, VideoLibraryState> with S
     on<OnRefresh>(_getLibrary);
 
     on<OnSearchClick>((event, emit) {
-      emitEffect(NavigateToSearch(null));
+      emitEffect(NavigateToSearch(SearchParams()));
     });
 
     on<OnSelectCategory>((event, emit) {
+      emitEffect(NavigateToSearch(SearchParams(videoCategory: event.category)));
     });
 
     on<OnMoreRecentVideosClick>((event, emit) {
+      emitEffect(NavigateToSearch(SearchParams(isRecentVideos: true)));
     });
 
     on<OnMoreMostViewedVideosClick>((event, emit) {
-
+      emitEffect(NavigateToSearch(SearchParams(isMostPopularVideo: true)));
     });
 
     on<OnMoreShouldersVideosClick>((event, emit) {
-
+      emitEffect(NavigateToSearch(SearchParams(isShouldersVideo: true)));
     });
 
-    on<OnMoreBlogPostClick>((event, emit) {
-
-    });
 
     on<OnMoreCategoriesClick>((event, emit) {
 
     });
 
     on<OnVideoClick>((event, emit) {
+
+    });
+
+
+    on<OnMoreBlogPostClick>((event, emit) {
 
     });
 
