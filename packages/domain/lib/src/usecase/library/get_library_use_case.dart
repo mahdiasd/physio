@@ -3,8 +3,6 @@ import 'package:domain/src/faker/fake_data_provider.dart';
 import 'package:utils/utils.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../repository/video_library/video_library_repository.dart';
-
 @injectable
 class GetLibraryUseCase {
   final VideoLibraryRepository _repo;

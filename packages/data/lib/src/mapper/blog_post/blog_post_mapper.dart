@@ -1,4 +1,3 @@
-import 'package:data/src/mapper/file/file_mapper.dart';
 import 'package:data/src/mapper/user/user_mapper.dart';
 import 'package:domain/domain.dart';
 import 'package:network/network.dart';

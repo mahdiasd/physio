@@ -50,7 +50,9 @@ class LibraryRoute extends GoRouteData {
         child: Builder(
           builder: (innerContext) {
             return VideoLibraryPage(
-              navigateToSearch: () {},
+              navigateToSearch: () {
+                innerContext.push(SearchRoute(null).location);
+              },
             );
           },
         ),

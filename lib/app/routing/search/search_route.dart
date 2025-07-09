@@ -5,6 +5,8 @@ import 'package:search/search.dart';
 import 'package:ui/ui.dart';
 import 'package:utils/utils.dart';
 
+part 'search_route.g.dart';
+
 @TypedGoRoute<SearchRoute>(
   path: "/search",
 )

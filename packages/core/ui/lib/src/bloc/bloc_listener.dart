@@ -3,9 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../ui.dart';
+
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+import '../../ui.dart';
+
 class BlocListenerWidget extends StatefulWidget {
   final Stream<dynamic> effectsStream;
-  final Map<Type, VoidCallback> effectHandlers;
+  final Map<Type, void Function(dynamic)> effectHandlers;
   final Stream<UiMessage> messageStream;
   final void Function(UiMessage)? customMessageHandler;
   final Widget child;
@@ -39,7 +46,8 @@ class _BlocListenerWidgetState extends State<BlocListenerWidget> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
             final handler = widget.effectHandlers[effect.runtimeType];
-            handler?.call();
+            // تغییر در اینجا: effect رو به عنوان پارامتر پاس می‌کنیم
+            handler?.call(effect);
           }
         });
       }
