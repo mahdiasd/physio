@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'video_category.g.dart';
+
+@JsonSerializable()
 class VideoCategory {
   VideoCategory({
     required this.id,
@@ -12,4 +17,10 @@ class VideoCategory {
   final String description;
   final String colorCode;
   final bool isActive;
+
+  factory VideoCategory.fromJson(Map<String, dynamic> json) =>
+      _$VideoCategoryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VideoCategoryToJson(this);
+
 }

@@ -166,38 +166,6 @@ class _MainContentState extends State<MainContent> {
     );
   }
 
-  // Widget _buildSidebarButton(BuildContext context,
-  //     NavigationItem item,
-  //     bool isSelected,
-  //     int index,) {
-  //   final tintColor =
-  //   isSelected ? Theme
-  //       .of(context)
-  //       .colorScheme
-  //       .primary : Color(0xFF6A6A6A);
-  //   return InkWell(
-  //     borderRadius: BorderRadius.circular(8),
-  //     onTap: () =>
-  //         context.read<MainBloc>().add(PageChanged(
-  //             widget.navigationItems.firstWhere((nav) => nav.index == index))),
-  //     child: Row(
-  //       children: [
-  //         AppImage(
-  //           source: item.icon,
-  //           tintColor: tintColor,
-  //         ),
-  //         if (!isSidebarCollapsed) ...[
-  //           const SizedBox(width: 8),
-  //           LabelLargeText(
-  //             item.label,
-  //             color: tintColor,
-  //           ),
-  //         ],
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Widget _buildSidebarButton(
       BuildContext context,
       NavigationItem item,

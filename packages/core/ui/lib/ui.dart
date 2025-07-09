@@ -20,6 +20,7 @@ export 'src/widgets/image/app_image.dart';
 export 'src/widgets/dialog/app_dialog.dart';
 export 'src/widgets/category/category_item.dart';
 export 'src/widgets/video/video_item.dart';
+export 'src/widgets/sidebar/WebSideBar.dart';
 export 'src/bloc/bloc_listener.dart';
 export 'src/bloc/ui_message_listener.dart';
 export 'src/theme/app_colors.dart';
