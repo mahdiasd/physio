@@ -9,6 +9,7 @@ import 'dart:async' as _i687;
 import 'package:domain/domain.dart' as _i494;
 import 'package:domain/src/repository/user/user_repository.dart' as _i498;
 import 'package:domain/src/usecase/config/get_config_use_case.dart' as _i927;
+import 'package:domain/src/usecase/library/get_library_use_case.dart' as _i242;
 import 'package:domain/src/usecase/storage/read_access_token_use_case.dart'
     as _i553;
 import 'package:domain/src/usecase/user/login_use_case.dart' as _i203;
@@ -37,6 +38,8 @@ class DomainPackageModule extends _i526.MicroPackageModule {
         () => _i796.ResendOTPUseCase(gh<_i498.UserRepository>()));
     gh.factory<_i491.ResetPasswordUseCase>(
         () => _i491.ResetPasswordUseCase(gh<_i498.UserRepository>()));
+    gh.factory<_i242.GetLibraryUseCase>(
+        () => _i242.GetLibraryUseCase(gh<_i494.VideoLibraryRepository>()));
     gh.factory<_i553.ReadAccessTokenUseCase>(
         () => _i553.ReadAccessTokenUseCase(gh<_i494.StorageRepository>()));
   }

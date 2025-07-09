@@ -11,6 +11,8 @@ import 'package:data/src/repository/config/config_repository_impl.dart'
 import 'package:data/src/repository/storage/storage_repository_impl.dart'
     as _i643;
 import 'package:data/src/repository/user/user_repository_impl.dart' as _i931;
+import 'package:data/src/repository/video_library/video_library_repository_impl.dart'
+    as _i259;
 import 'package:domain/domain.dart' as _i494;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:network/network.dart' as _i372;
@@ -22,6 +24,8 @@ class DataPackageModule extends _i526.MicroPackageModule {
   _i687.FutureOr<void> init(_i526.GetItHelper gh) {
     gh.lazySingleton<_i494.ConfigRepository>(
         () => _i194.ConfigRepositoryImpl(gh<_i372.ConfigApiService>()));
+    gh.lazySingleton<_i494.VideoLibraryRepository>(() =>
+        _i259.VideoLibraryRepositoryImpl(gh<_i372.VideoLibraryApiService>()));
     gh.lazySingleton<_i494.UserRepository>(() => _i931.UserRepositoryImpl(
           gh<_i372.UserApiService>(),
           gh<_i431.StorageService>(),

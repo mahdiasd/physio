@@ -1,15 +1,24 @@
 //GENERATED BARREL FILE
-export './src/di/domain_di.dart';
 export './src/di/domain_di.module.dart';
+export './src/model/file/physio_file.dart';
+export './src/model/video/video.dart';
+export './src/model/video/video_visibility.dart';
+export './src/model/video/video_status.dart';
+export './src/model/video_category/video_category.dart';
+export './src/di/domain_di.dart';
 export './src/domain.dart';
 export './src/model/config/config.dart';
 export './src/model/config/update/update.dart';
 export './src/model/config/update/update_state.dart';
 export './src/model/user/user.dart';
 export './src/model/user/user_role.dart';
+export './src/model/blog_post/blog_post.dart';
+export './src/model/blog_post/blog_post_status.dart';
+export './src/model/library/VideoLibrary.dart';
 export './src/repository/config/config_repository.dart';
 export './src/repository/storage/storage_repository.dart';
 export './src/repository/user/user_repository.dart';
+export './src/repository/video_library/video_library_repository.dart';
 export './src/usecase/config/get_config_use_case.dart';
 export './src/usecase/storage/read_access_token_use_case.dart';
 export './src/usecase/user/login_use_case.dart';
@@ -18,4 +27,5 @@ export './src/usecase/user/send_otp_codes_use_case.dart';
 export './src/usecase/user/validate_email_use_case.dart';
 export './src/usecase/user/resend_otp_use_case.dart';
 export './src/usecase/user/reset_password_use_case.dart';
+export './src/usecase/library/get_library_use_case.dart';
 

@@ -28,6 +28,9 @@ dependencies:
   reset_password:
     path: packages/features/reset_password
 
+  video_library:
+    path: packages/features/video_library
+
   utils:
     path: packages/core/utils
 

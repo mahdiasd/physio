@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../ui.dart';
+import 'app_radius.dart';
+
+extension ThemeDataExtension on ThemeData {
+  AppRadius get radius => AppRadius();
+}
 
 ThemeData lightTheme = ThemeData(
   colorScheme: ColorScheme(
@@ -41,9 +46,16 @@ ThemeData lightTheme = ThemeData(
       // ✅ Outline
       outline: AppColors.outline,
 
-      scrim: AppColors.placeholder),
+      scrim: AppColors.placeholder
+  ),
   useMaterial3: true,
   textTheme: appTextTheme,
+
+  dialogTheme: DialogThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: AppRadius().smallAll, // 12px مشابه کانتینرهای بخش
+    ),
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -84,7 +96,14 @@ ThemeData darkTheme = ThemeData(
 
       // ✅ Outline
       outline: AppColors.darkOutline,
-      scrim: AppColors.darkPlaceholder),
+      scrim: AppColors.darkPlaceholder
+  ),
   useMaterial3: true,
   textTheme: appTextTheme,
+
+  dialogTheme: DialogThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: AppRadius().largeAll, // 12px مشابه کانتینرهای بخش
+    ),
+  ),
 );

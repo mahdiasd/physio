@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ui/src/widgets/text/other_texts.dart';
 
-import '../../../ui.dart';
-
 class AppTextField extends StatefulWidget {
   final String value;
   final ValueChanged<String> onChanged;

@@ -1,0 +1,4 @@
+enum VideoVisibility {
+  private,
+  public,
+}

@@ -22,6 +22,7 @@ import 'package:reset_password/src/di/reset_password_di.module.dart' as _i1021;
 import 'package:splash/src/di/splash_di.module.dart' as _i49;
 import 'package:storage/src/di/storage_di.module.dart' as _i314;
 import 'package:verify/src/di/verify_di.module.dart' as _i262;
+import 'package:video_library/src/di/video_library_di.module.dart' as _i255;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -45,6 +46,7 @@ extension GetItInjectableX on _i174.GetIt {
     await _i1021.ResetPasswordPackageModule().init(gh);
     await _i49.SplashPackageModule().init(gh);
     await _i262.VerifyPackageModule().init(gh);
+    await _i255.VideoLibraryPackageModule().init(gh);
     return this;
   }
 }
