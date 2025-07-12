@@ -31,6 +31,9 @@ dependencies:
   video_library:
     path: packages/features/video_library
 
+  video_detail:
+    path: packages/features/video_detail
+
   search:
     path: packages/features/search
 

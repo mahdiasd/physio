@@ -6,7 +6,6 @@ import 'package:utils/utils.dart';
 import 'search_effect.dart';
 import 'search_event.dart';
 import 'search_state.dart';
-import 'package:domain/src/faker/fake_data_provider.dart';
 
 @injectable
 class SearchBloc extends Bloc<SearchEvent, SearchState>

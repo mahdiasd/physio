@@ -48,7 +48,6 @@ class SearchPage extends StatelessWidget {
   }
 }
 
-
 class SearchContent extends StatelessWidget {
   const SearchContent({super.key});
 

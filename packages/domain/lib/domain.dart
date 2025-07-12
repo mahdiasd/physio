@@ -29,4 +29,5 @@ export './src/usecase/user/validate_email_use_case.dart';
 export './src/usecase/user/resend_otp_use_case.dart';
 export './src/usecase/user/reset_password_use_case.dart';
 export './src/usecase/library/get_library_use_case.dart';
+export './src/faker/fake_data_provider.dart';
 
