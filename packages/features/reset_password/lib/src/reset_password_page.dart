@@ -27,8 +27,8 @@ class ResetPasswordPage extends StatelessWidget {
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
-        NavigateBack: navigateBack,
-        NavigateToMain: navigateToMain,
+        NavigateBack:(_) => navigateBack(),
+        NavigateToMain:(_) => navigateToMain(),
       },
       child: const ResetPasswordContent(),
     );

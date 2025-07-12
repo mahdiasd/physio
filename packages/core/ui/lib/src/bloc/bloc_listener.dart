@@ -4,12 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../ui.dart';
 
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-
-import '../../ui.dart';
-
 class BlocListenerWidget extends StatefulWidget {
   final Stream<dynamic> effectsStream;
   final Map<Type, void Function(dynamic)> effectHandlers;

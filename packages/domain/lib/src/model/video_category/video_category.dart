@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'video_category.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class VideoCategory {
   VideoCategory({
     required this.id,

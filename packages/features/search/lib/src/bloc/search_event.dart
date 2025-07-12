@@ -15,7 +15,7 @@ class SearchTextChanged extends SearchEvent {
 }
 
 class InitData extends SearchEvent {
-  final SearchParam searchParams;
+  final SearchParams searchParams;
 
   InitData(this.searchParams);
 }

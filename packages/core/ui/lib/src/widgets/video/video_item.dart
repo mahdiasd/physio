@@ -1,8 +1,5 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
-import 'package:ui/src/theme/theme_data.dart';
-import 'package:ui/src/widgets/image/app_image.dart';
-import 'package:ui/src/widgets/text/other_texts.dart';
 
 import '../../../ui.dart';
 

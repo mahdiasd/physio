@@ -17,13 +17,24 @@ RouteBase get $searchRoute => GoRouteData.$route(
 
 extension $SearchRouteExtension on SearchRoute {
   static SearchRoute _fromState(GoRouterState state) => SearchRoute(
-        state.uri.queryParameters['search-params-json'],
+        videoCategoryId: state.uri.queryParameters['video-category-id'],
+        recentVideos: _$convertMapValue(
+            'recent-videos', state.uri.queryParameters, _$boolConverter),
+        popularVideos: _$convertMapValue(
+            'popular-videos', state.uri.queryParameters, _$boolConverter),
+        shouldersVideos: _$convertMapValue(
+            'shoulders-videos', state.uri.queryParameters, _$boolConverter),
       );
 
   String get location => GoRouteData.$location(
         '/search',
         queryParams: {
-          if (searchParamsJson != null) 'search-params-json': searchParamsJson,
+          if (videoCategoryId != null) 'video-category-id': videoCategoryId,
+          if (recentVideos != null) 'recent-videos': recentVideos!.toString(),
+          if (popularVideos != null)
+            'popular-videos': popularVideos!.toString(),
+          if (shouldersVideos != null)
+            'shoulders-videos': shouldersVideos!.toString(),
         },
       );
 
@@ -35,4 +46,24 @@ extension $SearchRouteExtension on SearchRoute {
       context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
+}
+
+T? _$convertMapValue<T>(
+  String key,
+  Map<String, String> map,
+  T? Function(String) converter,
+) {
+  final value = map[key];
+  return value == null ? null : converter(value);
+}
+
+bool _$boolConverter(String value) {
+  switch (value) {
+    case 'true':
+      return true;
+    case 'false':
+      return false;
+    default:
+      throw UnsupportedError('Cannot convert "$value" into a bool.');
+  }
 }

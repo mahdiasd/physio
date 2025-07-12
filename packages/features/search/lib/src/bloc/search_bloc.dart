@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 import 'search_effect.dart';
 import 'search_event.dart';
 import 'search_state.dart';
@@ -10,13 +11,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SideEffectMixin<Sea
   // TODO: Add your use cases here
   // final SomeUseCase _someUseCase;
 
-  void passData(SearchParam? searchParams) {
-    add(InitData(searchParams ?? SearchParam()));
+  void passData(SearchParams? searchParams) {
+    add(InitData(searchParams ?? SearchParams()));
+    PrintHelper.info(searchParams?.toJson().toString() ?? "Search Params is null");
   }
 
   SearchBloc() : super(SearchState()) {
-    // TODO: Register your event handlers
-    // on<SomeEvent>(_onSomeEvent);
+    on<InitData>((event, emit) {
+      emit(state.copyWith(searchParams: event.searchParams));
+    });
+
   }
 
 // TODO: Implement your event handlers
