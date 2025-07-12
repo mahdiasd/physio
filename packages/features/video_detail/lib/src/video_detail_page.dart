@@ -10,6 +10,19 @@ import '../video_player.dart';
 import 'bloc/video_detail_effect.dart';
 import 'bloc/video_detail_state.dart';
 
+import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:ui/ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_player/video_player.dart';
+
+import 'package:responsive_framework/responsive_framework.dart';
+
+import '../video_player.dart';
+import 'bloc/video_detail_effect.dart';
+import 'bloc/video_detail_state.dart';
+import 'custom_video_player.dart';
+
 class VideoDetailPage extends StatelessWidget {
   final VoidCallback navigateBack;
 
@@ -46,19 +59,19 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   @override
   void initState() {
     super.initState();
-    // TODO: Initialize video controller based on video URL from state
     _initializeVideo();
   }
 
   void _initializeVideo() {
-    // This is a placeholder - replace with actual video URL from state
     _controller = VideoPlayerController.networkUrl(
       Uri.parse(FakeDataProvider.instance.getFakeVideos(count: 1).first.url),
     )..initialize().then((_) {
-        setState(() {
-          _isInitialized = true;
-        });
+      setState(() {
+        _isInitialized = true;
       });
+      // Auto-play the video after initialization
+      _controller!.play();
+    });
   }
 
   @override
@@ -149,19 +162,9 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   Widget _buildVideoDetail(BuildContext context) {
     final theme = Theme.of(context);
 
-    return ClipRRect(
+    return CustomVideoPlayer(
+      videoUrl: FakeDataProvider.instance.getFakeVideos(count: 1).first.url,
       borderRadius: theme.radius.largeAll,
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Container(
-          color: Colors.black,
-          child: _isInitialized && _controller != null
-              ? VideoPlayer(_controller!)
-              : const Center(
-                  child: CircularProgressIndicator(),
-                ),
-        ),
-      ),
     );
   }
 
@@ -234,7 +237,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   Widget _buildRelatedVideosSection(BuildContext context) {
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
       buildWhen: (previous, current) =>
-          previous.relatedVideos != current.relatedVideos,
+      previous.relatedVideos != current.relatedVideos,
       builder: (context, state) {
         final isMobile =
             ResponsiveBreakpoints.of(context).isMobile;
@@ -248,9 +251,9 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
               if (isMobile)
                 ...state.relatedVideos
                     .map((video) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: VideoItemHorizontal(video: video),
-                        ))
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: VideoItemHorizontal(video: video),
+                ))
                     .toList()
               else
                 ListView.builder(
