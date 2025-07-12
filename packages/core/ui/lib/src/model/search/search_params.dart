@@ -20,4 +20,16 @@ class SearchParams {
       _$SearchParamsFromJson(json);
 
   Map<String, dynamic> toJson() => _$SearchParamsToJson(this);
+
+  SearchParams copyWith({
+    String? videoCategoryId,
+    bool? isRecentVideos,
+    bool? isMostPopularVideo,
+    bool? isShouldersVideo,
+  }) =>
+      SearchParams(
+          videoCategoryId: videoCategoryId ?? this.videoCategoryId,
+          isRecentVideos: isRecentVideos ?? this.isRecentVideos,
+          isMostPopularVideo: isMostPopularVideo ?? this.isMostPopularVideo,
+          isShouldersVideo: isShouldersVideo ?? this.isShouldersVideo);
 }

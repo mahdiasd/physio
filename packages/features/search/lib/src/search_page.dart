@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
-import 'package:utils/utils.dart';
 
 import 'bloc/search_bloc.dart';
 import 'bloc/search_effect.dart';
@@ -21,20 +20,34 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<SearchBloc>();
-    final isMobile = ResponsiveBreakpoints
-        .of(context)
-        .isMobile;
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
-    return BlocListenerWidget(
-      effectsStream: bloc.effectsStream,
-      messageStream: bloc.messageStream,
-      effectHandlers: {
-        NavigateBack: (_) => navigateBack(),
+    return BlocListener<SearchBloc, SearchState>(
+      listener: (BuildContext context, state) {
+        if (state.showCategoryDialog) {
+          showAdaptiveDialog<void>(
+            context: context,
+            builder: (context) {
+              return CategoryDialog(
+                categories: state.categories,
+                onCategorySelected: (category) => bloc.add(CategorySelected(category)),
+              );
+            },
+          );
+        }
       },
-      child: isMobile ? SearchContent() : WebSidebar(child: SearchContent()),
+      child: BlocListenerWidget(
+        effectsStream: bloc.effectsStream,
+        messageStream: bloc.messageStream,
+        effectHandlers: {
+          NavigateBack: (_) => navigateBack(),
+        },
+        child: isMobile ? SearchContent() : WebSidebar(child: SearchContent()),
+      ),
     );
   }
 }
+
 
 class SearchContent extends StatelessWidget {
   const SearchContent({super.key});
@@ -48,7 +61,6 @@ class SearchContent extends StatelessWidget {
         children: [
           _buildHeader(context),
           Expanded(
-            // این خط را اضافه کنید
             child: _buildGridLists(context),
           ),
         ],
@@ -94,6 +106,7 @@ class SearchContent extends StatelessWidget {
               radius: theme.radius.full,
               backgroundPadding: const EdgeInsetsGeometry.all(8),
               tintColor: theme.colorScheme.secondary,
+              onTap: () => bloc.add(ShowCategoryDialog(true)),
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -119,10 +132,7 @@ class SearchContent extends StatelessWidget {
 
   Widget _buildGridLists(BuildContext context) {
     final isMobile = ResponsiveBreakpoints.of(context).smallerOrEqualTo(TABLET);
-    final width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final width = MediaQuery.of(context).size.width;
 
     final bloc = context.read<SearchBloc>();
     final gridCount = isMobile ? 1 : (width / 170).toInt();
@@ -175,3 +185,36 @@ class SearchContent extends StatelessWidget {
     );
   }
 }
+
+class CategoryDialog extends StatelessWidget {
+  final List<VideoCategory> categories;
+  final ValueChanged<VideoCategory> onCategorySelected;
+
+  const CategoryDialog({
+    super.key,
+    required this.categories,
+    required this.onCategorySelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+      title: const TitleMediumText("Select Category"),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: categories.map((category) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: CategoryItem(
+                title: category.name,
+                onTap: () => onCategorySelected(category),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+
