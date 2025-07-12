@@ -52,7 +52,6 @@ class FakeDataProvider {
 
     return List.generate(count, (index) {
       final author = getFakeAuthor(index);
-      final image = getFakeFeaturedImage(index);
       final statusList = BlogPostStatus.values;
 
       return BlogPost(

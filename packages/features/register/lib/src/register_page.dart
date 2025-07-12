@@ -26,8 +26,8 @@ class RegisterPage extends StatelessWidget {
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
-        NavigateBack: navigateBack,
-        NavigateToVerify: navigateToVerify,
+        NavigateBack:(_) => navigateBack(),
+        NavigateToVerify:(_) => navigateToVerify(),
       },
       child: RegisterContent(),
     );

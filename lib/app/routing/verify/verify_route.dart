@@ -22,7 +22,6 @@ class VerifyRoute extends GoRouteData {
     return BlocProvider(
       create: (context)  {
         bloc.passData(email ?? "");
-
         return bloc;
       },
       child: Builder(

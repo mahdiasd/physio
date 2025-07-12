@@ -1,4 +1,4 @@
-import 'package:main/src/navigation_item.dart';
+import 'package:ui/ui.dart';
 
 class MainState {
   final NavigationItem currentNavItem;

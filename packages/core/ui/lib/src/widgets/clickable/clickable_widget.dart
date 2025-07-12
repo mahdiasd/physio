@@ -48,7 +48,7 @@ class _ClickableWidgetState extends State<ClickableWidget> {
     // Add hover effect if enabled
     if (widget.enableHoverEffect && _isHovered) {
       child = ColoredBox(
-        color: widget.hoverColor ?? theme.colorScheme.primary.withOpacity(0.04),
+        color: widget.hoverColor ?? theme.colorScheme.primary.withValues(alpha: 0.04),
         child: child,
       );
     }
@@ -67,8 +67,8 @@ class _ClickableWidgetState extends State<ClickableWidget> {
           onLongPress: widget.onLongPress,
           onDoubleTap: widget.onDoubleTap,
           borderRadius: widget.borderRadius,
-          splashColor: theme.colorScheme.primary.withOpacity(0.1),
-          highlightColor: theme.colorScheme.primary.withOpacity(0.05),
+          splashColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+          highlightColor: theme.colorScheme.primary.withValues(alpha: 0.05),
           child: child,
         )
             : child,

@@ -28,8 +28,8 @@ class VerifyPage extends StatelessWidget {
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
-        NavigateBack: navigateBack,
-        NavigateToMain: navigateToMain,
+        NavigateBack: (_) => navigateBack(),
+        NavigateToMain: (_) => navigateToMain(),
       },
       child: VerifyContent(),
     );
@@ -53,9 +53,7 @@ class VerifyContent extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxWidth: AppConstant.webRightSectionMaxWidth,
-                    maxHeight: double.infinity),
+                constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
                 child: AdaptiveFormLayout(
                   child: VerifyForm(),
                 ),
@@ -117,9 +115,7 @@ class _VerifyFormState extends State<VerifyForm> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      child: isMobile
-          ? _buildMobileLayout(context, theme)
-          : _buildWebLayout(context, theme),
+      child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
 
@@ -181,15 +177,11 @@ class _VerifyFormState extends State<VerifyForm> {
           children: [
             HeadlineMediumText(
               textAlign: TextAlign.center,
-              !isVerified
-                  ? "We've sent a 4-digit verification code to $email"
-                  : "Your email has been successfully verified.",
+              !isVerified ? "We've sent a 4-digit verification code to $email" : "Your email has been successfully verified.",
             ),
             HeadlineSmallText(
               textAlign: TextAlign.center,
-              !isVerified
-                  ? "Please enter the code below to confirm your email address."
-                  : "You're all set to get started!",
+              !isVerified ? "Please enter the code below to confirm your email address." : "You're all set to get started!",
             ),
           ],
         ),
@@ -218,8 +210,7 @@ class _VerifyFormState extends State<VerifyForm> {
 
   Widget _buildResendSection(BuildContext context) {
     return BlocBuilder<VerifyBloc, VerifyState>(
-      buildWhen: (previous, current) =>
-          previous.isResendLoading != current.isResendLoading,
+      buildWhen: (previous, current) => previous.isResendLoading != current.isResendLoading,
       builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -249,8 +240,7 @@ class _VerifyFormState extends State<VerifyForm> {
     );
   }
 
-  Widget _buildActions(
-      BuildContext context, ThemeData theme, VerifyState state) {
+  Widget _buildActions(BuildContext context, ThemeData theme, VerifyState state) {
     return Column(
       spacing: 12,
       children: [

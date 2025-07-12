@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../ui.dart';
 import 'app_radius.dart';
+import 'custom_colors.dart';
 
 extension ThemeDataExtension on ThemeData {
   AppRadius get radius => AppRadius();
+  CustomColors get customColors => brightness == Brightness.light
+      ? CustomColors.light()
+      : CustomColors.dark();
 }
 
 ThemeData lightTheme = ThemeData(

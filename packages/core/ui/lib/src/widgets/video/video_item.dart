@@ -1,8 +1,5 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
-import 'package:ui/src/theme/theme_data.dart';
-import 'package:ui/src/widgets/image/app_image.dart';
-import 'package:ui/src/widgets/text/other_texts.dart';
 
 import '../../../ui.dart';
 
@@ -67,7 +64,84 @@ class VideoItem extends StatelessWidget {
       );
     }
 
-    // استفاده از ClickableWidget
+    return ClickableWidget(
+      onTap: onTap,
+      borderRadius: theme.radius.largeAll,
+      enableHoverEffect: true,
+      child: content,
+    );
+  }
+}
+
+class VideoItemHorizontal extends StatelessWidget {
+  final Video video;
+  final VoidCallback? onTap;
+  final double imageWidth;
+  final double aspectRatio;
+  final double? maxHeight;
+
+  const VideoItemHorizontal({
+    super.key,
+    required this.video,
+    this.onTap,
+    this.aspectRatio = 1.7,
+    this.imageWidth = 120, // Default width for the image
+    this.maxHeight,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    Widget content = Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Image on the left
+        ClipRRect(
+          borderRadius: theme.radius.largeAll,
+          child: SizedBox(
+            width: imageWidth,
+            height: imageWidth / aspectRatio, // 1.5 aspect ratio for image height
+            child: AppImage(
+              radius: theme.radius.large,
+              source: video.thumbnail,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 12),
+
+        Column(
+          spacing: 6,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ListItemTitleText(
+              video.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 4),
+            ListItemSubtitleText(
+              video.category.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    // Apply height constraint if needed
+    if (maxHeight != null) {
+      content = Container(
+        constraints: BoxConstraints(maxHeight: maxHeight!),
+        child: content,
+      );
+    }
+
+    // Apply clickability with hover effect
     return ClickableWidget(
       onTap: onTap,
       borderRadius: theme.radius.largeAll,

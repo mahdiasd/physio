@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -13,7 +10,7 @@ import 'bloc/video_library_event.dart';
 import 'bloc/video_library_state.dart';
 
 class VideoLibraryPage extends StatelessWidget {
-  final VoidCallback navigateToSearch;
+  final void Function(SearchParams searchParams) navigateToSearch;
 
   const VideoLibraryPage({super.key, required this.navigateToSearch});
 
@@ -26,18 +23,20 @@ class VideoLibraryPage extends StatelessWidget {
         effectsStream: bloc.effectsStream,
         messageStream: bloc.messageStream,
         effectHandlers: {
-          NavigateToSearch: navigateToSearch,
+          NavigateToSearch: (effect) {
+            if (effect is NavigateToSearch) {
+              navigateToSearch(effect.searchParams);
+            }
+          },
         },
-        child: LibraryContent(navigateToSearch: navigateToSearch),
+        child: LibraryContent(),
       ),
     );
   }
 }
 
 class LibraryContent extends StatelessWidget {
-  final VoidCallback navigateToSearch;
-
-  const LibraryContent({super.key, required this.navigateToSearch});
+  const LibraryContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -162,16 +161,6 @@ class LibraryContent extends StatelessWidget {
                     child: TitleSmallText('Categories'),
                     onTap: () => bloc.add(OnMoreCategoriesClick()),
                   ),
-                  SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: ClickableWidget(
-                        onTap: () => bloc.add(OnMoreCategoriesClick()),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Theme.of(context).colorScheme.outlineVariant,
-                        ),
-                      ))
                 ],
               ),
               const SizedBox(height: 8),

@@ -29,8 +29,8 @@ class SplashPage extends StatelessWidget {
           effectsStream: bloc.effectsStream,
           messageStream: bloc.messageStream,
           effectHandlers: {
-            NavigateToLogin: onLogin,
-            NavigateToMain: onMain,
+            NavigateToLogin: (_) => onLogin(),
+            NavigateToMain: (_) => onMain(),
           },
           child: SplashContent(),
         );
@@ -46,8 +46,7 @@ class SplashContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
-        if (state.updateState != null &&
-            state.updateState != UpdateState.upToDate) {
+        if (state.updateState != null && state.updateState != UpdateState.upToDate) {
           _showUpdateDialog(context);
         }
       },

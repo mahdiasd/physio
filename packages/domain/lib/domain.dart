@@ -15,6 +15,7 @@ export './src/model/user/user_role.dart';
 export './src/model/blog_post/blog_post.dart';
 export './src/model/blog_post/blog_post_status.dart';
 export './src/model/library/VideoLibrary.dart';
+export './src/model/paging/paging.dart';
 export './src/repository/config/config_repository.dart';
 export './src/repository/storage/storage_repository.dart';
 export './src/repository/user/user_repository.dart';

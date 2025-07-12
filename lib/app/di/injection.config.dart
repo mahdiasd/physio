@@ -19,6 +19,7 @@ import 'package:main/src/di/main_di.module.dart' as _i231;
 import 'package:network/src/di/network_di.module.dart' as _i292;
 import 'package:register/src/di/register_di.module.dart' as _i536;
 import 'package:reset_password/src/di/reset_password_di.module.dart' as _i1021;
+import 'package:search/src/di/search_di.module.dart' as _i1029;
 import 'package:splash/src/di/splash_di.module.dart' as _i49;
 import 'package:storage/src/di/storage_di.module.dart' as _i314;
 import 'package:verify/src/di/verify_di.module.dart' as _i262;
@@ -44,6 +45,7 @@ extension GetItInjectableX on _i174.GetIt {
     await _i231.MainPackageModule().init(gh);
     await _i536.RegisterPackageModule().init(gh);
     await _i1021.ResetPasswordPackageModule().init(gh);
+    await _i1029.SearchPackageModule().init(gh);
     await _i49.SplashPackageModule().init(gh);
     await _i262.VerifyPackageModule().init(gh);
     await _i255.VideoLibraryPackageModule().init(gh);

@@ -19,7 +19,7 @@ class VideoLibraryBloc extends Bloc<VideoLibraryEvent, VideoLibraryState> with S
     });
 
     on<OnSelectCategory>((event, emit) {
-      emitEffect(NavigateToSearch(SearchParams(videoCategory: event.category)));
+      emitEffect(NavigateToSearch(SearchParams(videoCategoryId: event.category.id)));
     });
 
     on<OnMoreRecentVideosClick>((event, emit) {

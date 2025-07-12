@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:main/main.dart';
+import 'package:physio/app/routing/search/search_route.dart';
 import 'package:utils/utils.dart';
 import 'package:video_library/video_library.dart';
 
@@ -50,7 +51,9 @@ class LibraryRoute extends GoRouteData {
         child: Builder(
           builder: (innerContext) {
             return VideoLibraryPage(
-              navigateToSearch: () {},
+              navigateToSearch: (searchParams) {
+                innerContext.push(SearchRouteExtension.fromSearchParams(searchParams).location);
+              },
             );
           },
         ),

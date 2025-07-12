@@ -25,8 +25,8 @@ class ForgotPage extends StatelessWidget {
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
-        NavigateBack: navigateBack,
-        NavigateToResetPassword: navigateToResetPassword,
+        NavigateBack: (_) => navigateBack(),
+        NavigateToResetPassword: (_) => navigateToResetPassword(),
       },
       child: ForgotContent(),
     );

@@ -34,3 +34,9 @@ scripts:
 
   build:web:
     run: melos exec --scope="web_app" -- flutter build web --release
+
+  generate_page:
+    description: "Generate a new page structure. for run, use this command in target package 
+    → dart run ../../../scripts/generate_page.dart search"
+    run: |
+      cd packages/features/\$1 && dart run ../../../scripts/generate_page.dart \$2
