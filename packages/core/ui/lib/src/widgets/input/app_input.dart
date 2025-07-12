@@ -55,6 +55,7 @@ class AppTextField extends StatefulWidget {
   final EdgeInsetsGeometry? contentPadding;
   final Widget? leadingIcon;
   final Widget? trailingIcon;
+  final bool isDense;
 
   // Focus
   final FocusNode? focusNode;
@@ -113,6 +114,7 @@ class AppTextField extends StatefulWidget {
     this.contentPadding,
     this.leadingIcon,
     this.trailingIcon,
+    this.isDense = true, // Default to true for compact design
 
     // Focus & Callbacks
     this.focusNode,
@@ -133,8 +135,8 @@ class _AppTextFieldState extends State<AppTextField> {
   static const double _defaultBorderRadius = 10.0;
   static const double _defaultBorderWidth = 0.5;
   static const EdgeInsetsGeometry _defaultContentPadding = EdgeInsets.symmetric(
-    vertical: 14,
-    horizontal: 12,
+    vertical: 16,
+    horizontal: 16,
   );
 
   @override
@@ -235,13 +237,27 @@ class _AppTextFieldState extends State<AppTextField> {
             errorText: widget.isError ? widget.errorText : null,
             errorStyle: styles.error,
             contentPadding: layout.contentPadding,
+            isDense: widget.isDense,
+            // Add constraints to control height precisely
+            constraints: widget.contentPadding == EdgeInsets.zero
+                ? const BoxConstraints()
+                : null,
             enabledBorder: _buildBorder(colors.border, layout),
             focusedBorder: _buildBorder(colors.focusedBorder, layout),
             errorBorder: _buildBorder(colors.errorBorder, layout),
             focusedErrorBorder: _buildBorder(colors.errorBorder, layout),
             disabledBorder: _buildBorder(colors.disabledBorder, layout),
-            prefixIcon: widget.leadingIcon,
+            prefixIcon: widget.leadingIcon != null
+                ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: widget.leadingIcon,
+            )
+                : null,
+            prefixIconConstraints: widget.leadingIcon != null
+                ? const BoxConstraints(minWidth: 0, minHeight: 0)
+                : null,
             suffixIcon: _buildSuffixIcon(colors),
+            suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
           ),
         ),
 
@@ -290,28 +306,38 @@ class _AppTextFieldState extends State<AppTextField> {
         !widget.readOnly;
 
     if (isClearVisible) {
-      return GestureDetector(
-        onTap: _clearText,
-        child: Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: colors.clearIconBackground,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            Icons.close,
-            color: colors.clearIcon,
-            size: 18,
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: GestureDetector(
+          onTap: _clearText,
+          child: Container(
+            width: 20,
+            height: 20,
+            decoration: BoxDecoration(
+              color: colors.clearIconBackground,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.close,
+              color: colors.clearIcon,
+              size: 14,
+            ),
           ),
         ),
       );
     }
 
-    return widget.trailingIcon;
+    if (widget.trailingIcon != null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: widget.trailingIcon,
+      );
+    }
+
+    return null;
   }
 }
 
-// Helper class for managing colors
 class _AppTextFieldColors {
   final Color text;
   final Color hint;
@@ -353,7 +379,7 @@ class _AppTextFieldColors {
       background: widget.enabled
           ? (widget.backgroundColor ?? colorScheme.surfaceContainerLow)
           : (widget.disabledBackgroundColor ?? customColors.disabled.withValues(alpha: 0.1)),
-      border: widget.borderColor ?? colorScheme.outline,
+      border: widget.borderColor ?? Colors.transparent,
       focusedBorder: widget.focusedBorderColor ?? colorScheme.primary,
       errorBorder: widget.errorBorderColor ?? colorScheme.error,
       disabledBackground: widget.disabledBackgroundColor ?? customColors.disabled.withValues(alpha: 0.1),
@@ -403,7 +429,6 @@ class _AppTextFieldStyles {
   }
 }
 
-// Helper class for managing layout properties
 class _AppTextFieldLayout {
   final BorderRadius borderRadius;
   final double borderWidth;

@@ -1,3 +1,4 @@
+import 'package:domain/domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ui/ui.dart';
@@ -5,6 +6,7 @@ import 'package:utils/utils.dart';
 import 'search_effect.dart';
 import 'search_event.dart';
 import 'search_state.dart';
+import 'package:domain/src/faker/fake_data_provider.dart';
 
 @injectable
 class SearchBloc extends Bloc<SearchEvent, SearchState> with SideEffectMixin<SearchState, SearchEffect> {
@@ -19,6 +21,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SideEffectMixin<Sea
   SearchBloc() : super(SearchState()) {
     on<InitData>((event, emit) {
       emit(state.copyWith(searchParams: event.searchParams));
+      emit(state.copyWith(paging: Paging(content: FakeDataProvider.instance.getFakeVideos(count: 20))));
     });
 
   }

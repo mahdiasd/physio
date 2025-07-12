@@ -14,6 +14,8 @@ export 'src/widgets/text/display_text.dart';
 export 'src/widgets/text/title_text.dart';
 export 'src/widgets/text/other_texts.dart';
 export 'src/widgets/input/app_input.dart';
+export 'src/widgets/list/paginated_grid_view.dart';
+export 'src/widgets/list/paginated_list_view.dart';
 export 'src/widgets/input/verification_code_field.dart';
 export 'src/widgets/buttons/app_button.dart';
 export 'src/widgets/image/app_image.dart';

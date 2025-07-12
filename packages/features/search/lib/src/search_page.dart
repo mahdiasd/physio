@@ -1,7 +1,9 @@
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 import 'bloc/search_bloc.dart';
 import 'bloc/search_effect.dart';
@@ -19,7 +21,9 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<SearchBloc>();
-    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isMobile = ResponsiveBreakpoints
+        .of(context)
+        .isMobile;
 
     return BlocListenerWidget(
       effectsStream: bloc.effectsStream,
@@ -41,30 +45,37 @@ class SearchContent extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: Column(
-        children: [_buildHeader(context)],
+        children: [
+          _buildHeader(context),
+          Expanded(
+            // این خط را اضافه کنید
+            child: _buildGridLists(context),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildHeader(BuildContext context) {
-    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isMobile = ResponsiveBreakpoints.of(context).smallerOrEqualTo(TABLET);
     final theme = Theme.of(context);
 
     if (isMobile) {
       return _buildSearchBar(context);
     } else {
-      return SizedBox(
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            HeadlineMediumText(
-              "Search Result",
-              color: theme.colorScheme.primary,
-            ),
-            _buildSearchBar(context),
-          ],
-        ),
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          HeadlineMediumText(
+            "Search Result",
+            color: theme.colorScheme.primary,
+          ),
+          SizedBox(
+            width: 400,
+            child: _buildSearchBar(context),
+          ),
+        ],
       );
     }
   }
@@ -72,18 +83,94 @@ class SearchContent extends StatelessWidget {
   Widget _buildSearchBar(BuildContext context) {
     final bloc = context.read<SearchBloc>();
     final theme = Theme.of(context);
+
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        return SizedBox(
-          child: AppTextField(
-              value: state.searchText,
-              borderRadius: theme.radius.xxLargeAll,
-              hint: "Search videos, pains, or body parts",
-              trailingIcon: Icon(Icons.search, color: theme.customColors.disabled),
-              onChanged: (text) {
-                bloc.add(SearchTextChanged(text));
-              }),
+        return Row(
+          children: [
+            AppImage(
+              source: "assets/images/ic_filter.svg",
+              backgroundColor: theme.colorScheme.secondaryContainer,
+              radius: theme.radius.full,
+              backgroundPadding: const EdgeInsetsGeometry.all(8),
+              tintColor: theme.colorScheme.secondary,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: AppTextField(
+                value: state.searchText,
+                contentPadding: const EdgeInsetsGeometry.all(12),
+                borderRadius: theme.radius.xxLargeAll,
+                hint: "Search videos, pains, or body parts",
+                trailingIcon: Icon(
+                  Icons.search,
+                  color: theme.customColors.disabled,
+                ),
+                onChanged: (text) {
+                  bloc.add(SearchTextChanged(text));
+                },
+              ),
+            ),
+          ],
         );
+      },
+    );
+  }
+
+  Widget _buildGridLists(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).smallerOrEqualTo(TABLET);
+    final width = MediaQuery
+        .of(context)
+        .size
+        .width;
+
+    final bloc = context.read<SearchBloc>();
+    final gridCount = isMobile ? 1 : (width / 170).toInt();
+
+    return BlocBuilder<SearchBloc, SearchState>(
+      buildWhen: (previous, current) {
+        return previous.paging != current.paging;
+      },
+      builder: (context, state) {
+        if (!isMobile) {
+          return PaginatedGridView<Video>(
+            paging: state.paging,
+            itemBuilder: (context, item, index) {
+              return VideoItem(
+                maxWidth: 170,
+                aspectRatio: 1.7,
+                video: item,
+              );
+            },
+            onRefresh: () async {
+              bloc.add(OnRefresh());
+            },
+            onLoadMore: () async {
+              bloc.add(OnLoadMore());
+            },
+            crossAxisCount: gridCount,
+          );
+        } else {
+          return PaginatedListView(
+            paging: state.paging,
+            itemBuilder: (context, item, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: VideoItemHorizontal(
+                  imageWidth: 120,
+                  aspectRatio: 1.7,
+                  video: item,
+                ),
+              );
+            },
+            onRefresh: () async {
+              bloc.add(OnRefresh());
+            },
+            onLoadMore: () async {
+              bloc.add(OnLoadMore());
+            },
+          );
+        }
       },
     );
   }
