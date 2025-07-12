@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
 
-class SearchPage extends StatefulWidget {
+import 'bloc/search_bloc.dart';
+import 'bloc/search_effect.dart';
+import 'bloc/search_event.dart';
+import 'bloc/search_state.dart';
+
+class SearchPage extends StatelessWidget {
   final VoidCallback navigateBack;
 
   const SearchPage({
@@ -11,106 +17,74 @@ class SearchPage extends StatefulWidget {
   });
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  Widget build(BuildContext context) {
+    final bloc = context.read<SearchBloc>();
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
+    return BlocListenerWidget(
+      effectsStream: bloc.effectsStream,
+      messageStream: bloc.messageStream,
+      effectHandlers: {
+        NavigateBack: (_) => navigateBack(),
+      },
+      child: isMobile ? SearchContent() : WebSidebar(child: SearchContent()),
+    );
+  }
 }
 
-class _SearchPageState extends State<SearchPage> {
-  String _searchQuery = '';
+class SearchContent extends StatelessWidget {
+  const SearchContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
-
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: theme.colorScheme.surface,
       body: Column(
-        children: [
-          _buildHeader(context, isMobile),
-        ],
+        children: [_buildHeader(context)],
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context, bool isMobile) {
-    return Container(
-      padding: EdgeInsets.all(isMobile ? 16 : 24),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        border: Border(
-          bottom: BorderSide(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
-            width: 1,
-          ),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Title
-          Text(
-            'Search Result',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onSurface,
+  Widget _buildHeader(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final theme = Theme.of(context);
+
+    if (isMobile) {
+      return _buildSearchBar(context);
+    } else {
+      return SizedBox(
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            HeadlineMediumText(
+              "Search Result",
+              color: theme.colorScheme.primary,
             ),
-          ),
-          const SizedBox(height: 16),
-
-          // Search Bar
-          _buildSearchBar(context, isMobile),
-        ],
-      ),
-    );
+            _buildSearchBar(context),
+          ],
+        ),
+      );
+    }
   }
 
-  Widget _buildSearchBar(BuildContext context, bool isMobile) {
-    return Row(
-      children: [
-        Expanded(
+  Widget _buildSearchBar(BuildContext context) {
+    final bloc = context.read<SearchBloc>();
+    final theme = Theme.of(context);
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        return SizedBox(
           child: AppTextField(
-            value: _searchQuery,
-            onChanged: (value) {
-              setState(() {
-                _searchQuery = value;
-              });
-            },
-            hint: 'Search videos, programs or body parts...',
-            leadingIcon: AppImage(
-              source: 'assets/images/ic_search.svg',
-              width: 20,
-              height: 20,
-              tintColor: Theme.of(context).customColors.placeholder,
-              backgroundColor: Colors.transparent,
-            ),
-            showClearIcon: _searchQuery.isNotEmpty,
-            borderRadius: BorderRadius.circular(12),
-            backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
-            borderColor: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-            focusedBorderColor: Theme.of(context).colorScheme.primary,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-
-        // Filter Button
-        AppImage(
-          source: 'assets/images/ic_filter.svg',
-          width: 48,
-          height: 48,
-          backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(12),
-          backgroundPadding: const EdgeInsets.all(12),
-          tintColor: Theme.of(context).colorScheme.onSurfaceVariant,
-          onTap: () {
-          },
-        ),
-      ],
+              value: state.searchText,
+              borderRadius: theme.radius.xxLargeAll,
+              hint: "Search videos, pains, or body parts",
+              trailingIcon: Icon(Icons.search, color: theme.customColors.disabled),
+              onChanged: (text) {
+                bloc.add(SearchTextChanged(text));
+              }),
+        );
+      },
     );
   }
-
-
 }
-
