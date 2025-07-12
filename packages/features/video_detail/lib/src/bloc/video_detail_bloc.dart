@@ -1,3 +1,4 @@
+import 'package:domain/domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ui/ui.dart';
@@ -15,6 +16,8 @@ class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState>
   VideoDetailBloc() : super(VideoDetailState()) {
     on<InitData>((event, emit) {
       emit(state.copyWith(videoId: event.videoId));
+      emit(state.copyWith(video: FakeDataProvider.instance.getFakeVideos(count: 10).first));
+      emit(state.copyWith(relatedVideos: FakeDataProvider.instance.getFakeVideos(count: 10)));
     });
   }
 

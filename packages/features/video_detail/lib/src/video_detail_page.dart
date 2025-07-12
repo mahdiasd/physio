@@ -53,8 +53,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   void _initializeVideo() {
     // This is a placeholder - replace with actual video URL from state
     _controller = VideoPlayerController.networkUrl(
-      Uri.parse(
-          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'),
+      Uri.parse(FakeDataProvider.instance.getFakeVideos(count: 1).first.url),
     )..initialize().then((_) {
         setState(() {
           _isInitialized = true;
@@ -75,10 +74,13 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      body: SafeArea(
-        child: isMobile
-            ? _buildMobileLayout(context)
-            : _buildDesktopLayout(context),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SafeArea(
+          child: isMobile
+              ? _buildMobileLayout(context)
+              : _buildDesktopLayout(context),
+        ),
       ),
     );
   }
@@ -123,21 +125,8 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    HeadlineMediumText(
-                      "Search Result",
-                      color: theme.colorScheme.primary,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                // Video player
                 _buildVideoDetail(context),
                 const SizedBox(height: 24),
-                // Video info
                 _buildVideoInfo(context),
                 const SizedBox(height: 16),
                 _buildTags(context),
@@ -147,38 +136,11 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
             ),
           ),
         ),
+
         // Related videos sidebar
         Container(
           width: 320,
-          decoration: BoxDecoration(
-            border: Border(
-              left: BorderSide(
-                color: theme.colorScheme.outlineVariant,
-                width: 1,
-              ),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TitleLargeText("Related Videos"),
-                    Icon(
-                      Icons.chevron_right,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: _buildRelatedVideosList(context),
-              ),
-            ],
-          ),
+          child: _buildRelatedVideosSection(context),
         ),
       ],
     );
@@ -270,32 +232,41 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   }
 
   Widget _buildRelatedVideosSection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TitleLargeText("Related Videos:"),
-        const SizedBox(height: 16),
-        _buildRelatedVideosList(context),
-      ],
-    );
-  }
-
-  Widget _buildRelatedVideosList(BuildContext context) {
-    final relatedVideos = FakeDataProvider.instance.getFakeVideos(count: 5);
-
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: relatedVideos.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 12),
-      itemBuilder: (context, index) {
-        return VideoItemHorizontal(
-          video: relatedVideos[index],
-          imageWidth: 100,
-          aspectRatio: 1.7,
-          onTap: () {
-            // Navigate to video
-          },
+    return BlocBuilder<VideoDetailBloc, VideoDetailState>(
+      buildWhen: (previous, current) =>
+          previous.relatedVideos != current.relatedVideos,
+      builder: (context, state) {
+        final isMobile =
+            ResponsiveBreakpoints.of(context).isMobile;
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 24),
+              const TitleLargeText("Related Videos:"),
+              const SizedBox(height: 24),
+              if (isMobile)
+                ...state.relatedVideos
+                    .map((video) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: VideoItemHorizontal(video: video),
+                        ))
+                    .toList()
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: state.relatedVideos.length,
+                  itemBuilder: (context, index) {
+                    final video = state.relatedVideos[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: VideoItem(video: video),
+                    );
+                  },
+                )
+            ],
+          ),
         );
       },
     );
