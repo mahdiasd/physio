@@ -40,7 +40,7 @@ class VideoLibraryBloc extends Bloc<VideoLibraryEvent, VideoLibraryState> with S
     });
 
     on<OnVideoClick>((event, emit) {
-
+      emitEffect(NavigateToVideoDetail(event.video.id));
     });
 
 

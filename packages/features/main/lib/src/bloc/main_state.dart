@@ -4,7 +4,7 @@ class MainState {
   final NavigationItem currentNavItem;
 
   MainState({
-    this.currentNavItem = const HomeNavigationItem(),
+    this.currentNavItem = const LibraryNavigationItem(),
   });
 
   MainState copyWith({

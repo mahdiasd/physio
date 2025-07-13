@@ -11,10 +11,11 @@ import 'bloc/search_state.dart';
 
 class SearchPage extends StatelessWidget {
   final VoidCallback navigateBack;
+  final ValueChanged<NavigationItem> onSidebarClick;
 
   const SearchPage({
     super.key,
-    required this.navigateBack,
+    required this.navigateBack, required this.onSidebarClick,
   });
 
   @override
@@ -42,7 +43,7 @@ class SearchPage extends StatelessWidget {
         effectHandlers: {
           NavigateBack: (_) => navigateBack(),
         },
-        child: isMobile ? SearchContent() : WebSidebar(child: SearchContent()),
+        child: isMobile ? SearchContent() : WebSidebar(child: SearchContent(), onItemTapped: onSidebarClick,),
       ),
     );
   }
@@ -72,7 +73,10 @@ class SearchContent extends StatelessWidget {
     final theme = Theme.of(context);
 
     if (isMobile) {
-      return _buildSearchBar(context);
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: _buildSearchBar(context),
+      );
     } else {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,

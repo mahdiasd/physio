@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:physio/app/routing/main/main_route.dart';
+import 'package:ui/ui.dart';
 import 'package:utils/utils.dart';
 import 'package:video_detail/video_player.dart';
 
@@ -19,7 +21,7 @@ class VideoDetailRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     final bloc = getIt<VideoDetailBloc>();
     return BlocProvider(
-      create: (context)  {
+      create: (context) {
         bloc.passData(videoId ?? "");
         return bloc;
       },
@@ -27,6 +29,7 @@ class VideoDetailRoute extends GoRouteData {
         builder: (innerContext) {
           return VideoDetailPage(
             navigateBack: () => innerContext.pop(),
+            onSidebarClick: (NavigationItem value) => value.goTo(innerContext),
           );
         },
       ),

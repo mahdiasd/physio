@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:main/main.dart';
 import 'package:physio/app/routing/search/search_route.dart';
+import 'package:physio/app/routing/video_detail/video_detail_route.dart';
+import 'package:ui/ui.dart';
 import 'package:utils/utils.dart';
 import 'package:video_library/video_library.dart';
 
@@ -54,6 +56,9 @@ class LibraryRoute extends GoRouteData {
               navigateToSearch: (searchParams) {
                 innerContext.push(SearchRouteExtension.fromSearchParams(searchParams).location);
               },
+              navigateToVideoDetail: (videoId) {
+                innerContext.push(VideoDetailRoute(videoId).location);
+              },
             );
           },
         ),
@@ -73,4 +78,31 @@ class AppointmentsRoute extends GoRouteData {
 class HomeRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) => const Text("HomeRoute");
+}
+
+extension Navigate on NavigationItem {
+  void goTo(BuildContext context) {
+    switch (this) {
+      case HomeNavigationItem():
+        PrintHelper.info('Navigating to Home');
+        context.go(HomeRoute().location);
+        break;
+      case AppointmentsNavigationItem():
+        PrintHelper.info('Navigating to Appointments');
+        context.go(AppointmentsRoute().location);
+        break;
+      case ProgramsNavigationItem():
+        PrintHelper.info('Navigating to Programs');
+        context.go(ProgramsRoute().location);
+        break;
+      case LibraryNavigationItem():
+        PrintHelper.info('Navigating to Library');
+        context.go(LibraryRoute().location);
+        break;
+      case AccountNavigationItem():
+        PrintHelper.info('Navigating to Account');
+        context.go(AccountRoute().location);
+        break;
+    }
+  }
 }

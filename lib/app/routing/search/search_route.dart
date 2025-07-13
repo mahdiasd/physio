@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:physio/app/routing/main/main_route.dart';
 import 'package:search/search.dart';
 import 'package:ui/ui.dart';
 import 'package:utils/utils.dart';
@@ -42,6 +43,7 @@ class SearchRoute extends GoRouteData {
         builder: (innerContext) {
           return SearchPage(
             navigateBack: () => innerContext.pop(),
+            onSidebarClick: (NavigationItem value) => value.goTo(innerContext),
           );
         },
       ),
