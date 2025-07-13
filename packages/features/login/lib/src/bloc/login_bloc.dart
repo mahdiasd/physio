@@ -38,7 +38,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with SideEffectMixin<LoginS
       emitEffect(NavigateToRegister());
     });
 
-    on<LoginPressed>(_onLoginSubmitted);
+    on<LoginPressed>((event, emit) {
+      if (state.email.isEmpty || state.password.isEmpty) {
+        emitMessage(UiMessage.error("Please enter your email and password."));
+        return;
+      }
+      _onLoginSubmitted(event, emit);
+    });
   }
 
   Future<void> _onLoginSubmitted(

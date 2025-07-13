@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ui/src/theme/text_theme.dart';
 import 'package:ui/src/theme/theme_data.dart';
 
 import '../../theme/custom_colors.dart';
@@ -212,7 +213,6 @@ class _AppTextFieldState extends State<AppTextField> {
           ),
           SizedBox(height: widget.titleSpacing),
         ],
-
         TextField(
           controller: _controller,
           focusNode: _focusNode,
@@ -239,9 +239,7 @@ class _AppTextFieldState extends State<AppTextField> {
             contentPadding: layout.contentPadding,
             isDense: widget.isDense,
             // Add constraints to control height precisely
-            constraints: widget.contentPadding == EdgeInsets.zero
-                ? const BoxConstraints()
-                : null,
+            constraints: widget.contentPadding == EdgeInsets.zero ? const BoxConstraints() : null,
             enabledBorder: _buildBorder(colors.border, layout),
             focusedBorder: _buildBorder(colors.focusedBorder, layout),
             errorBorder: _buildBorder(colors.errorBorder, layout),
@@ -249,18 +247,15 @@ class _AppTextFieldState extends State<AppTextField> {
             disabledBorder: _buildBorder(colors.disabledBorder, layout),
             prefixIcon: widget.leadingIcon != null
                 ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: widget.leadingIcon,
-            )
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: widget.leadingIcon,
+                  )
                 : null,
-            prefixIconConstraints: widget.leadingIcon != null
-                ? const BoxConstraints(minWidth: 0, minHeight: 0)
-                : null,
+            prefixIconConstraints: widget.leadingIcon != null ? const BoxConstraints(minWidth: 0, minHeight: 0) : null,
             suffixIcon: _buildSuffixIcon(colors),
             suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
           ),
         ),
-
         if (widget.label != null) ...[
           const SizedBox(height: 4),
           Text(
@@ -278,8 +273,7 @@ class _AppTextFieldState extends State<AppTextField> {
     }
 
     // Auto-apply formatters for specific cases
-    if (widget.keyboardType == TextInputType.number &&
-        widget.textAlign == TextAlign.center) {
+    if (widget.keyboardType == TextInputType.number && widget.textAlign == TextAlign.center) {
       return [
         FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(1),
@@ -300,10 +294,7 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   Widget? _buildSuffixIcon(_AppTextFieldColors colors) {
-    final bool isClearVisible = widget.showClearIcon &&
-        widget.value.isNotEmpty &&
-        widget.enabled &&
-        !widget.readOnly;
+    final bool isClearVisible = widget.showClearIcon && widget.value.isNotEmpty && widget.enabled && !widget.readOnly;
 
     if (isClearVisible) {
       return Padding(
@@ -372,14 +363,12 @@ class _AppTextFieldColors {
     required AppTextField widget,
   }) {
     return _AppTextFieldColors(
-      text: widget.enabled
-          ? (widget.textColor ?? colorScheme.onSurface)
-          : (widget.disabledTextColor ?? customColors.disabled),
+      text: widget.enabled ? (widget.textColor ?? colorScheme.onPrimaryContainer) : (widget.disabledTextColor ?? customColors.disabled),
       hint: widget.hintColor ?? customColors.placeholder,
       background: widget.enabled
-          ? (widget.backgroundColor ?? colorScheme.surfaceContainerLow)
-          : (widget.disabledBackgroundColor ?? customColors.disabled.withValues(alpha: 0.1)),
-      border: widget.borderColor ?? Colors.transparent,
+         ? (widget.backgroundColor ?? colorScheme.primaryContainer)
+         : (widget.disabledBackgroundColor ?? customColors.disabled.withValues(alpha: 0.1)),
+      border: widget.borderColor ?? colorScheme.outline,
       focusedBorder: widget.focusedBorderColor ?? colorScheme.primary,
       errorBorder: widget.errorBorderColor ?? colorScheme.error,
       disabledBackground: widget.disabledBackgroundColor ?? customColors.disabled.withValues(alpha: 0.1),
@@ -412,18 +401,10 @@ class _AppTextFieldStyles {
     required AppTextField widget,
   }) {
     return _AppTextFieldStyles(
-      text: widget.textStyle ??
-          textTheme.bodyMedium?.copyWith(color: colors.text) ??
-          TextStyle(color: colors.text),
-      hint: widget.hintStyle ??
-          textTheme.bodyMedium?.copyWith(color: colors.hint) ??
-          TextStyle(color: colors.hint),
-      title: widget.titleStyle ??
-          textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600) ??
-          const TextStyle(fontWeight: FontWeight.w600),
-      label: widget.labelStyle ??
-          textTheme.labelSmall ??
-          const TextStyle(fontSize: 12),
+      text: widget.textStyle ?? textTheme.bodyMedium?.copyWith(color: colors.text) ?? TextStyle(color: colors.text),
+      hint: widget.hintStyle ?? textTheme.bodyMedium?.copyWith(color: colors.hint) ?? TextStyle(color: colors.hint),
+      title: widget.titleStyle ?? textTheme.inputFieldTitle,
+      label: widget.labelStyle ?? textTheme.labelSmall ?? const TextStyle(fontSize: 12),
       error: widget.errorStyle,
     );
   }
@@ -445,8 +426,7 @@ class _AppTextFieldLayout {
     required AppTextField widget,
   }) {
     return _AppTextFieldLayout(
-      borderRadius: widget.borderRadius ??
-          BorderRadius.circular(_AppTextFieldState._defaultBorderRadius),
+      borderRadius: widget.borderRadius ?? BorderRadius.circular(_AppTextFieldState._defaultBorderRadius),
       borderWidth: widget.borderWidth ?? _AppTextFieldState._defaultBorderWidth,
       contentPadding: widget.contentPadding ?? _AppTextFieldState._defaultContentPadding,
     );

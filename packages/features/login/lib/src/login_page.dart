@@ -82,9 +82,7 @@ class LoginContent extends StatelessWidget {
             child: Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
-                child: AdaptiveFormLayout(
-                  child: LoginForm(),
-                ),
+                child: LoginForm(),
               ),
             ),
           ),
@@ -103,7 +101,7 @@ class LoginForm extends StatelessWidget {
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
       child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
@@ -111,8 +109,7 @@ class LoginForm extends StatelessWidget {
   Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
     return OverflowDetectingColumn(
       spacing: 100,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      // This will work when content fits
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildHeader(context),
         _buildFormFields(context),
@@ -122,22 +119,25 @@ class LoginForm extends StatelessWidget {
   }
 
   Widget _buildWebLayout(BuildContext context, ThemeData theme) {
-    return OverflowDetectingColumn(
-      spacing: 120,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildHeader(context),
-        _buildFormFields(context),
-        _buildActions(context, theme),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        spacing: 120,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildHeader(context),
+          _buildFormFields(context),
+          _buildActions(context, theme),
+        ],
+      ),
     );
   }
 
   Widget _buildHeader(BuildContext context) {
+    final titleColor = ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
     return Column(
       spacing: 24,
       children: [
-        DisplayLargeText("Login", color: Theme.of(context).colorScheme.primary),
+        DisplayLargeText("Login", color: titleColor),
         if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
           HeadlineSmallText(
             textAlign: TextAlign.center,
@@ -151,9 +151,9 @@ class LoginForm extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 0),
           child: Column(
-            spacing: 24,
+            spacing: 10,
             children: [
               AppTextField(
                 value: state.email,
@@ -165,6 +165,7 @@ class LoginForm extends StatelessWidget {
                   context.read<LoginBloc>().add(EmailChanged(text));
                 },
               ),
+              const SizedBox(height: 10),
               AppTextField(
                 value: state.password,
                 keyboardType: TextInputType.text,
@@ -184,7 +185,7 @@ class LoginForm extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: BodyMediumText(
+                child: ButtonDownsideText(
                   "Forgot Password?",
                   color: Theme.of(context).colorScheme.secondary,
                   onTap: () {
@@ -203,7 +204,7 @@ class LoginForm extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
-        spacing: 12,
+        spacing: 35,
         children: [
           BlocBuilder<LoginBloc, LoginState>(
             buildWhen: (previous, current) => previous.isLoading != current.isLoading,
@@ -224,8 +225,8 @@ class LoginForm extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 4,
             children: [
-              LabelMediumText('No Account Yet?'),
-              BodyLargeText(
+              BodyMediumText('No Account Yet?'),
+              ButtonDownsideText(
                 'Sign Up',
                 color: theme.colorScheme.secondary,
                 onTap: () {
