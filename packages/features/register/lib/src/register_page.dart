@@ -26,8 +26,8 @@ class RegisterPage extends StatelessWidget {
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
-        NavigateBack:(_) => navigateBack(),
-        NavigateToVerify:(_) => navigateToVerify(),
+        NavigateBack: (_) => navigateBack(),
+        NavigateToVerify: (_) => navigateToVerify(),
       },
       child: RegisterContent(),
     );
@@ -51,11 +51,8 @@ class RegisterContent extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints:
-                BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
-                child: AdaptiveFormLayout(
-                  child: RegisterForm(),
-                ),
+                constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
+                child: RegisterForm(),
               ),
             ),
           ),
@@ -75,16 +72,14 @@ class RegisterForm extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      child: isMobile
-          ? _buildMobileLayout(context, theme)
-          : _buildWebLayout(context, theme),
+      child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
 
   Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
     return OverflowDetectingColumn(
-      spacing: 50,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      spacing: 100,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildHeader(context),
         _buildFormFields(context),
@@ -94,33 +89,34 @@ class RegisterForm extends StatelessWidget {
   }
 
   Widget _buildWebLayout(BuildContext context, ThemeData theme) {
-    return OverflowDetectingColumn(
-      spacing: 80,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildHeader(context),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 64),
-          child: _buildFormFields(context),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 64),
-          child: _buildActions(context, theme),
-        ),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        spacing: 80,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildHeader(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 64),
+            child: _buildFormFields(context),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 64),
+            child: _buildActions(context, theme),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildHeader(BuildContext context) {
+    final titleColor = ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
     return Column(
       spacing: 24,
       children: [
         DisplayLargeText(
-          ResponsiveBreakpoints.of(context).isMobile
-              ? "Sign Up"
-              : "Create Your Client Account",
+          ResponsiveBreakpoints.of(context).isMobile ? "Sign Up" : "Create Your Client Account",
           textAlign: TextAlign.center,
-          color: Theme.of(context).colorScheme.primary,
+          color: titleColor,
         ),
         if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
           HeadlineSmallText(
@@ -148,9 +144,7 @@ class RegisterForm extends StatelessWidget {
                     title: "First Name",
                     hint: "First Name",
                     onChanged: (text) {
-                      context
-                          .read<RegisterBloc>()
-                          .add(FirstNameChanged(text));
+                      context.read<RegisterBloc>().add(FirstNameChanged(text));
                     },
                   ),
                 ),
@@ -162,9 +156,7 @@ class RegisterForm extends StatelessWidget {
                     title: "Last Name",
                     hint: "Last Name",
                     onChanged: (text) {
-                      context
-                          .read<RegisterBloc>()
-                          .add(LastNameChanged(text));
+                      context.read<RegisterBloc>().add(LastNameChanged(text));
                     },
                   ),
                 ),
@@ -190,32 +182,20 @@ class RegisterForm extends StatelessWidget {
                   obscureText: state.isPasswordObscured,
                   trailingIcon: IconButton(
                     icon: Icon(
-                      state.isPasswordObscured
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                      state.isPasswordObscured ? Icons.visibility_off : Icons.visibility,
                     ),
-                    onPressed: () => context
-                        .read<RegisterBloc>()
-                        .add(TogglePasswordVisibility()),
+                    onPressed: () => context.read<RegisterBloc>().add(TogglePasswordVisibility()),
                   ),
                   title: "Password",
                   hint: "Enter your password",
+                  label: "It must be a combination of minimum 8 letters, numbers, and symbols.",
                   onChanged: (text) {
                     context.read<RegisterBloc>().add(PasswordChanged(text));
                   },
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: LabelSmallText(
-                      "It must be a combination of minimum 8 letters, numbers, and symbols.",
-                    ),
-                  ),
-                ),
               ],
             ),
-            const SizedBox(height: 8,),
+            const SizedBox(),
             PrivacyPolicyText(
               onPrivacyPolicyTap: () {},
               onTermsConditionsTap: () {},
@@ -228,11 +208,10 @@ class RegisterForm extends StatelessWidget {
 
   Widget _buildActions(BuildContext context, ThemeData theme) {
     return Column(
-      spacing: 12,
+      spacing: 23,
       children: [
         BlocBuilder<RegisterBloc, RegisterState>(
-          buildWhen: (previous, current) =>
-          previous.isLoading != current.isLoading,
+          buildWhen: (previous, current) => previous.isLoading != current.isLoading,
           builder: (context, state) {
             return SizedBox(
               width: double.infinity,
@@ -246,19 +225,12 @@ class RegisterForm extends StatelessWidget {
             );
           },
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 4,
-          children: [
-            LabelMediumText('Already have an account?'),
-            BodyLargeText(
-              "Login",
-              color: theme.colorScheme.secondary,
-              onTap: () {
-                context.read<RegisterBloc>().add(LoginPressed());
-              },
-            ),
-          ],
+        ButtonDownsideText(
+          'Already have an account?',
+          color: theme.colorScheme.secondary,
+          onTap: () {
+            context.read<RegisterBloc>().add(LoginPressed());
+          },
         ),
       ],
     );
