@@ -50,8 +50,7 @@ class ForgotContent extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
+                constraints: BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
                 child: AdaptiveFormLayout(
                   child: ForgotForm(),
                 ),
@@ -74,9 +73,7 @@ class ForgotForm extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      child: isMobile
-          ? _buildMobileLayout(context, theme)
-          : _buildWebLayout(context, theme),
+      child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
 
@@ -85,9 +82,9 @@ class ForgotForm extends StatelessWidget {
       spacing: 100,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildHeader(context),
-        _buildFormFields(context),
-        _buildActions(context, theme),
+        Expanded(child: _buildHeader(context)),
+        Expanded(child: _buildFormFields(context)),
+        Expanded(child: _buildActions(context, theme)),
       ],
     );
   }
@@ -97,9 +94,9 @@ class ForgotForm extends StatelessWidget {
       spacing: 120,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildHeader(context),
-        _buildFormFields(context),
-        _buildActions(context, theme),
+        Expanded(child: _buildHeader(context)),
+        Expanded(child: _buildFormFields(context)),
+        Expanded(child: _buildActions(context, theme)),
       ],
     );
   }
@@ -107,17 +104,17 @@ class ForgotForm extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     return Column(
       spacing: 24,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         DisplayLargeText(
           "Forgotten Your Password?",
           textAlign: TextAlign.center,
           color: Theme.of(context).colorScheme.primary,
         ),
-        if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-          HeadlineSmallText(
-            textAlign: TextAlign.center,
-            "We'll send a verification code to your email so you can reset your password.",
-          ),
+        BodyMediumText(
+          textAlign: TextAlign.center,
+          "We'll send a verification code to your email so you can reset your password.",
+        ),
       ],
     );
   }
@@ -126,6 +123,7 @@ class ForgotForm extends StatelessWidget {
     return BlocBuilder<ForgotBloc, ForgotState>(
       builder: (context, state) {
         return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           spacing: 24,
           children: [
             AppTextField(
@@ -147,10 +145,10 @@ class ForgotForm extends StatelessWidget {
   Widget _buildActions(BuildContext context, ThemeData theme) {
     return Column(
       spacing: 12,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         BlocBuilder<ForgotBloc, ForgotState>(
-          buildWhen: (previous, current) =>
-              previous.isLoading != current.isLoading,
+          buildWhen: (previous, current) => previous.isLoading != current.isLoading,
           builder: (context, state) {
             return SizedBox(
               width: double.infinity,

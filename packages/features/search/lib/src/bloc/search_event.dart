@@ -1,5 +1,4 @@
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
 import 'package:ui/ui.dart';
 
 sealed class SearchEvent {}

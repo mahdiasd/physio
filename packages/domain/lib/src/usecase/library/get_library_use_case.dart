@@ -1,7 +1,6 @@
 import 'package:domain/domain.dart';
-import 'package:domain/src/faker/fake_data_provider.dart';
-import 'package:utils/utils.dart';
 import 'package:injectable/injectable.dart';
+import 'package:utils/utils.dart';
 
 @injectable
 class GetLibraryUseCase {

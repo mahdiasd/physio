@@ -23,6 +23,7 @@ import 'package:search/src/di/search_di.module.dart' as _i1029;
 import 'package:splash/src/di/splash_di.module.dart' as _i49;
 import 'package:storage/src/di/storage_di.module.dart' as _i314;
 import 'package:verify/src/di/verify_di.module.dart' as _i262;
+import 'package:video_detail/src/di/video_detail_di.module.dart' as _i75;
 import 'package:video_library/src/di/video_library_di.module.dart' as _i255;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -48,6 +49,7 @@ extension GetItInjectableX on _i174.GetIt {
     await _i1029.SearchPackageModule().init(gh);
     await _i49.SplashPackageModule().init(gh);
     await _i262.VerifyPackageModule().init(gh);
+    await _i75.VideoDetailPackageModule().init(gh);
     await _i255.VideoLibraryPackageModule().init(gh);
     return this;
   }

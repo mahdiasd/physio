@@ -11,8 +11,9 @@ import 'bloc/video_library_state.dart';
 
 class VideoLibraryPage extends StatelessWidget {
   final void Function(SearchParams searchParams) navigateToSearch;
+  final ValueChanged<String> navigateToVideoDetail;
 
-  const VideoLibraryPage({super.key, required this.navigateToSearch});
+  const VideoLibraryPage({super.key, required this.navigateToSearch, required this.navigateToVideoDetail});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,11 @@ class VideoLibraryPage extends StatelessWidget {
         effectsStream: bloc.effectsStream,
         messageStream: bloc.messageStream,
         effectHandlers: {
+          NavigateToVideoDetail: (effect) {
+            if (effect is NavigateToVideoDetail) {
+              navigateToVideoDetail(effect.videoId);
+            }
+          },
           NavigateToSearch: (effect) {
             if (effect is NavigateToSearch) {
               navigateToSearch(effect.searchParams);
@@ -163,7 +169,7 @@ class LibraryContent extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               ResponsiveHorizontalList<VideoCategory>(
                 height: 50,
                 items: categories,

@@ -83,7 +83,7 @@ class RegisterForm extends StatelessWidget {
 
   Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
     return OverflowDetectingColumn(
-      spacing: 60,
+      spacing: 50,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildHeader(context),
