@@ -1,15 +1,18 @@
+// مسیر SDK فلاتر را از local.properties بخوانیم
 pluginManagement {
     def flutterSdkPath = {
-        def properties = new Properties()
-        file("local.properties").withInputStream { properties.load(it) }
-        def flutterSdkPath = properties.getProperty("flutter.sdk")
-        assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
-        return flutterSdkPath
+        def p = new Properties()
+        file("local.properties").withInputStream { p.load(it) }
+        def path = p.getProperty("flutter.sdk")
+        assert path != null: "flutter.sdk not set in local.properties"
+        return path
     }
     settings.ext.flutterSdkPath = flutterSdkPath()
 
+    // پلاگین Flutter Tools
     includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")
 
+    // مخازن پلاگین‌ها
     repositories {
         google()
         mavenCentral()
@@ -17,10 +20,21 @@ pluginManagement {
     }
 }
 
-plugins {
-    id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-    id "com.android.application" version "8.7.0" apply false
-    id "org.jetbrains.kotlin.android" version "2.1.21" apply false
+/*
+ * از Gradle 7.0 به بعد توصیه می‌شود مخازن کتابخانه‌ها
+ * در dependencyResolutionManagement تعریف شوند
+ */
+dependencyResolutionManagement {
+    // جلوگیری از تعریف مخزن تکراری در ماژول‌ها
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
+    repositories {
+        google()                       // مخزن اصلی AndroidX و Media3
+        mavenCentral()                 // مخزن عمومی
+        maven {                        // باینری‌های مخصوص Flutter
+            url "https://storage.googleapis.com/download.flutter.io"
+        }
+    }
 }
 
-include ":app"
+include(":app")

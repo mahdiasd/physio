@@ -1,18 +1,18 @@
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+// دایرکتوری خروجی بیلد در خارج از android/ ذخیره می‌شود
+rootProject.buildDir = "../build"
 
-rootProject.buildDir = '../build'
-subprojects {
+// هر ماژول زیرمجموعه در شاخهٔ مخصوص خود داخل build/ قرار می‌گیرد
+subprojects { project ->
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
-subprojects {
-    project.evaluationDependsOn(':app')
-}
 
+// ‌تسک پاک‌سازی سراسری
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+/*
+ * از آنجا که مخازن و نسخهٔ پلاگین‌ها را در settings.gradle
+ * مدیریت کردیم، این فایل عمداً ساده نگه داشته شده است؛
+ * نیازی به بلوک‌های allprojects یا buildscript نیست.
+ */

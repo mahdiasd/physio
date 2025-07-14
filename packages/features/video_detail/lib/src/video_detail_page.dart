@@ -1,15 +1,11 @@
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
-import 'package:utils/utils.dart';
-import 'package:video_player/video_player.dart';
 
-import '../video_player.dart';
+import '../video_detail.dart';
 import 'bloc/video_detail_effect.dart';
 import 'bloc/video_detail_state.dart';
-import 'custom_video_player.dart';
 
 class VideoDetailPage extends StatelessWidget {
   final VoidCallback navigateBack;
@@ -31,7 +27,12 @@ class VideoDetailPage extends StatelessWidget {
       effectHandlers: {
         NavigateBack: (_) => navigateBack(),
       },
-      child: isMobile ? VideoDetailContent() : WebSidebar(child: VideoDetailContent(), onItemTapped: onSidebarClick,),
+      child: isMobile
+          ? VideoDetailContent()
+          : WebSidebar(
+              child: VideoDetailContent(),
+              onItemTapped: onSidebarClick,
+            ),
     );
   }
 }
@@ -44,6 +45,7 @@ class VideoDetailContent extends StatefulWidget {
 }
 
 class _VideoDetailContentState extends State<VideoDetailContent> {
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -87,8 +89,6 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   }
 
   Widget _buildDesktopLayout(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -122,8 +122,6 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   }
 
   Widget _buildVideoDetail(BuildContext context) {
-    final theme = Theme.of(context);
-
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
@@ -131,10 +129,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
         return SizedBox(
           width: width,
           height: height,
-          child: CustomVideoPlayer(
-            videoUrl: FakeDataProvider.instance.getFakeVideos(count: 1).first.url,
-            // borderRadius: theme.radius.largeAll,
-          ),
+          child: SizedBox.shrink(),
         );
       },
     );
@@ -164,7 +159,6 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   }
 
   Widget _buildTags(BuildContext context) {
-    final theme = Theme.of(context);
     return Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -193,8 +187,6 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   }
 
   Widget _buildDescription(BuildContext context) {
-    final theme = Theme.of(context);
-
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
       builder: (context, state) {
         return BodyMediumText(

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:physio/app/routing/main/main_route.dart';
 import 'package:ui/ui.dart';
 import 'package:utils/utils.dart';
-import 'package:video_detail/video_player.dart';
+import 'package:video_detail/video_detail.dart';
 
 part 'video_detail_route.g.dart';
 
