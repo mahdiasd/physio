@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 import '../forgot.dart';
 import 'bloc/forgot_effect.dart';
@@ -50,10 +51,8 @@ class ForgotContent extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
-                child: AdaptiveFormLayout(
-                  child: ForgotForm(),
-                ),
+                constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
+                child: ForgotForm(),
               ),
             ),
           ),
@@ -72,59 +71,62 @@ class ForgotForm extends StatelessWidget {
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
       child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
 
   Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
-    return OverflowDetectingColumn(
-      spacing: 100,
+    return Column(
+      spacing: 0,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(child: _buildHeader(context)),
-        Expanded(child: _buildFormFields(context)),
-        Expanded(child: _buildActions(context, theme)),
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        SizedBox(height: 60),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.start)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.center)),
       ],
     );
   }
 
   Widget _buildWebLayout(BuildContext context, ThemeData theme) {
-    return OverflowDetectingColumn(
-      spacing: 120,
+    return Column(
+      spacing: 0,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(child: _buildHeader(context)),
-        Expanded(child: _buildFormFields(context)),
-        Expanded(child: _buildActions(context, theme)),
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
       ],
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final titleColor =
+        ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
+
     return Column(
       spacing: 24,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: columnMainAxisAlignment,
       children: [
         DisplayLargeText(
           "Forgotten Your Password?",
           textAlign: TextAlign.center,
-          color: Theme.of(context).colorScheme.primary,
+          color: titleColor,
         ),
         BodyMediumText(
           textAlign: TextAlign.center,
-          "We'll send a verification code to your email so you can reset your password.",
+          "We'll send a verification code to your email so you\ncan reset your password.",
         ),
       ],
     );
   }
 
-  Widget _buildFormFields(BuildContext context) {
+  Widget _buildFormFields(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
     return BlocBuilder<ForgotBloc, ForgotState>(
       builder: (context, state) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          spacing: 24,
+          mainAxisAlignment: columnMainAxisAlignment,
           children: [
             AppTextField(
               value: state.email,
@@ -142,10 +144,10 @@ class ForgotForm extends StatelessWidget {
     );
   }
 
-  Widget _buildActions(BuildContext context, ThemeData theme) {
+  Widget _buildActions(BuildContext context, ThemeData theme, {required MainAxisAlignment columnMainAxisAlignment}) {
     return Column(
-      spacing: 12,
-      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 35,
+      mainAxisAlignment: columnMainAxisAlignment,
       children: [
         BlocBuilder<ForgotBloc, ForgotState>(
           buildWhen: (previous, current) => previous.isLoading != current.isLoading,
@@ -162,6 +164,14 @@ class ForgotForm extends StatelessWidget {
             );
           },
         ),
+
+        /**
+         * Fake text for align button from another pages.*/
+        ButtonDownsideText(
+          '',
+          color: theme.colorScheme.secondary,
+          onTap: () {},
+        )
       ],
     );
   }

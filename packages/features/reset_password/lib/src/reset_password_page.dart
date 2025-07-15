@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 import 'bloc/reset_password_bloc.dart';
 import 'bloc/reset_password_effect.dart';
@@ -52,10 +53,8 @@ class ResetPasswordContent extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
-                child: const AdaptiveFormLayout(
-                  child: ResetPasswordForm(),
-                ),
+                constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
+                child: ResetPasswordForm(),
               ),
             ),
           ),
@@ -109,24 +108,45 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      child: OverflowDetectingColumn(
-        spacing: isMobile ? 80 : 80,
-        mainAxisAlignment: isMobile ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-        children: [
-          _buildHeader(context),
-          _buildFormFields(context),
-          _buildActions(context),
-        ],
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+      child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
+    return Column(
+      spacing: 0,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        SizedBox(height: 60),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.start)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.center)),
+      ],
+    );
+  }
+
+  Widget _buildWebLayout(BuildContext context, ThemeData theme) {
+    return Column(
+      spacing: 0,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
+        SizedBox(height: 60,),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
+      ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
     return Column(
       spacing: 24,
+      mainAxisAlignment: columnMainAxisAlignment,
       children: [
         DisplayLargeText(
           "Reset Password",
@@ -142,10 +162,11 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
     );
   }
 
-  Widget _buildFormFields(BuildContext context) {
+  Widget _buildFormFields(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
     return BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
       builder: (context, state) {
         return Column(
+          mainAxisAlignment: columnMainAxisAlignment,
           spacing: 24,
           children: [
             VerificationCodeInput(
@@ -196,12 +217,13 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
     );
   }
 
-  Widget _buildActions(BuildContext context) {
+  Widget _buildActions(BuildContext context, ThemeData theme, {required MainAxisAlignment columnMainAxisAlignment}) {
     return BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
       buildWhen: (previous, current) => previous.isLoading != current.isLoading || previous.isResendLoading != current.isResendLoading,
       builder: (context, state) {
         final canResend = _secondsLeft == 0 && !state.isResendLoading;
         return Column(
+          mainAxisAlignment: columnMainAxisAlignment,
           spacing: 12,
           children: [
             Row(

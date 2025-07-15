@@ -131,7 +131,7 @@ class _WebSidebarState extends State<WebSidebar> {
       borderRadius: BorderRadius.circular(8),
       onTap: widget.onItemTapped != null ? () => widget.onItemTapped!(item) : null,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(8),

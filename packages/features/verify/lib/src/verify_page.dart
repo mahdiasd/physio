@@ -54,9 +54,7 @@ class VerifyContent extends StatelessWidget {
             child: Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
-                child: AdaptiveFormLayout(
-                  child: VerifyForm(),
-                ),
+                child: VerifyForm(),
               ),
             ),
           ),
@@ -122,19 +120,13 @@ class _VerifyFormState extends State<VerifyForm> {
   Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
     return BlocBuilder<VerifyBloc, VerifyState>(
       builder: (context, state) {
-        return OverflowDetectingColumn(
-          spacing: 100,
+        return Column(
+          spacing: 0,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildHeader(context, state.isVerified, state.email),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64),
-              child: _buildFormFields(context, state.isVerified),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64),
-              child: _buildActions(context, theme, state),
-            ),
+            Expanded(flex: 1, child: _buildHeader(context, state.isVerified, columnMainAxisAlignment: MainAxisAlignment.center)),
+            Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.start)),
+            Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.center)),
           ],
         );
       },
@@ -144,28 +136,23 @@ class _VerifyFormState extends State<VerifyForm> {
   Widget _buildWebLayout(BuildContext context, ThemeData theme) {
     return BlocBuilder<VerifyBloc, VerifyState>(
       builder: (context, state) {
-        return OverflowDetectingColumn(
-          spacing: 120,
+        return Column(
+          spacing: 0,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildHeader(context, state.isVerified, state.email),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64),
-              child: _buildFormFields(context, state.isVerified),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64),
-              child: _buildActions(context, theme, state),
-            ),
+            Expanded(flex: 1, child: _buildHeader(context, state.isVerified, columnMainAxisAlignment: MainAxisAlignment.end)),
+            Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+            Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
           ],
         );
       },
     );
   }
 
-  Widget _buildHeader(BuildContext context, bool isVerified, String email) {
+  Widget _buildHeader(BuildContext context, bool isVerified, {required MainAxisAlignment columnMainAxisAlignment}) {
     return Column(
       spacing: 24,
+      mainAxisAlignment: columnMainAxisAlignment,
       children: [
         DisplayLargeText(
           isVerified ? "Email Verified" : "Verify Your Email",
@@ -189,7 +176,7 @@ class _VerifyFormState extends State<VerifyForm> {
     );
   }
 
-  Widget _buildFormFields(BuildContext context, bool isVerified) {
+  Widget _buildFormFields(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
     if (isVerified) {
       return const SizedBox.shrink();
     }
@@ -240,7 +227,7 @@ class _VerifyFormState extends State<VerifyForm> {
     );
   }
 
-  Widget _buildActions(BuildContext context, ThemeData theme, VerifyState state) {
+  Widget _buildActions(BuildContext context, ThemeData theme, {required MainAxisAlignment columnMainAxisAlignment}) {
     return Column(
       spacing: 12,
       children: [

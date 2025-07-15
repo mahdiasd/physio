@@ -46,7 +46,7 @@ class RegisterContent extends StatelessWidget {
         children: [
           if (!ResponsiveBreakpoints.of(context).isMobile)
             Expanded(
-              child: WebLeftSection(),
+              child: WebLeftSection(spacing: 60,),
             ),
           Expanded(
             child: Center(
@@ -71,47 +71,42 @@ class RegisterForm extends StatelessWidget {
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
       child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
 
   Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
-    return OverflowDetectingColumn(
-      spacing: 100,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Column(
+      spacing: 0,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildHeader(context),
-        _buildFormFields(context),
-        _buildActions(context, theme),
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.start)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.center)),
       ],
     );
   }
 
   Widget _buildWebLayout(BuildContext context, ThemeData theme) {
-    return SingleChildScrollView(
-      child: Column(
-        spacing: 80,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildHeader(context),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 64),
-            child: _buildFormFields(context),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 64),
-            child: _buildActions(context, theme),
-          ),
-        ],
-      ),
+    return Column(
+      spacing: 0,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
+        SizedBox(height: 60,),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
+      ],
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    final titleColor = ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
+  Widget _buildHeader(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final titleColor =
+        ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
     return Column(
       spacing: 24,
+      mainAxisAlignment: columnMainAxisAlignment,
       children: [
         DisplayLargeText(
           ResponsiveBreakpoints.of(context).isMobile ? "Sign Up" : "Create Your Client Account",
@@ -127,87 +122,91 @@ class RegisterForm extends StatelessWidget {
     );
   }
 
-  Widget _buildFormFields(BuildContext context) {
+  Widget _buildFormFields(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
     return BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
-        return Column(
-          spacing: 24,
-          children: [
-            Row(
-              spacing: 16,
-              children: [
-                Expanded(
-                  child: AppTextField(
-                    value: state.firstName,
-                    keyboardType: TextInputType.name,
-                    maxLines: 1,
-                    title: "First Name",
-                    hint: "First Name",
-                    onChanged: (text) {
-                      context.read<RegisterBloc>().add(FirstNameChanged(text));
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: AppTextField(
-                    value: state.lastName,
-                    keyboardType: TextInputType.name,
-                    maxLines: 1,
-                    title: "Last Name",
-                    hint: "Last Name",
-                    onChanged: (text) {
-                      context.read<RegisterBloc>().add(LastNameChanged(text));
-                    },
-                  ),
-                ),
-              ],
-            ),
-            AppTextField(
-              value: state.email,
-              keyboardType: TextInputType.emailAddress,
-              maxLines: 1,
-              title: "Email Address",
-              hint: "Enter your email",
-              onChanged: (text) {
-                context.read<RegisterBloc>().add(EmailChanged(text));
-              },
-            ),
-            Column(
-              spacing: 8,
-              children: [
-                AppTextField(
-                  value: state.password,
-                  keyboardType: TextInputType.text,
-                  maxLines: 1,
-                  obscureText: state.isPasswordObscured,
-                  trailingIcon: IconButton(
-                    icon: Icon(
-                      state.isPasswordObscured ? Icons.visibility_off : Icons.visibility,
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: columnMainAxisAlignment,
+            spacing: 28,
+            children: [
+              Row(
+                spacing: 16,
+                children: [
+                  Expanded(
+                    child: AppTextField(
+                      value: state.firstName,
+                      keyboardType: TextInputType.name,
+                      maxLines: 1,
+                      title: "First Name",
+                      hint: "First Name",
+                      onChanged: (text) {
+                        context.read<RegisterBloc>().add(FirstNameChanged(text));
+                      },
                     ),
-                    onPressed: () => context.read<RegisterBloc>().add(TogglePasswordVisibility()),
                   ),
-                  title: "Password",
-                  hint: "Enter your password",
-                  label: "It must be a combination of minimum 8 letters, numbers, and symbols.",
-                  onChanged: (text) {
-                    context.read<RegisterBloc>().add(PasswordChanged(text));
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(),
-            PrivacyPolicyText(
-              onPrivacyPolicyTap: () {},
-              onTermsConditionsTap: () {},
-            ),
-          ],
+                  Expanded(
+                    child: AppTextField(
+                      value: state.lastName,
+                      keyboardType: TextInputType.name,
+                      maxLines: 1,
+                      title: "Last Name",
+                      hint: "Last Name",
+                      onChanged: (text) {
+                        context.read<RegisterBloc>().add(LastNameChanged(text));
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              AppTextField(
+                value: state.email,
+                keyboardType: TextInputType.emailAddress,
+                maxLines: 1,
+                title: "Email Address",
+                hint: "Enter your email",
+                onChanged: (text) {
+                  context.read<RegisterBloc>().add(EmailChanged(text));
+                },
+              ),
+              Column(
+                spacing: 8,
+                children: [
+                  AppTextField(
+                    value: state.password,
+                    keyboardType: TextInputType.text,
+                    maxLines: 1,
+                    obscureText: state.isPasswordObscured,
+                    trailingIcon: IconButton(
+                      icon: Icon(
+                        state.isPasswordObscured ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      onPressed: () => context.read<RegisterBloc>().add(TogglePasswordVisibility()),
+                    ),
+                    title: "Password",
+                    hint: "Enter your password",
+                    label: "It must be a combination of minimum 8 letters, numbers, and symbols.",
+                    onChanged: (text) {
+                      context.read<RegisterBloc>().add(PasswordChanged(text));
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(),
+              PrivacyPolicyText(
+                onPrivacyPolicyTap: () {},
+                onTermsConditionsTap: () {},
+              ),
+            ],
+          ),
         );
       },
     );
   }
 
-  Widget _buildActions(BuildContext context, ThemeData theme) {
+  Widget _buildActions(BuildContext context, ThemeData theme, {required MainAxisAlignment columnMainAxisAlignment}) {
     return Column(
+      mainAxisAlignment: columnMainAxisAlignment,
       spacing: 23,
       children: [
         BlocBuilder<RegisterBloc, RegisterState>(
@@ -265,7 +264,7 @@ class PrivacyPolicyText extends StatelessWidget {
             'By continuing, you agree to our ',
             color: defaultTextColor,
           ),
-          BodyMediumText(
+          ButtonDownsideText(
             'Privacy Policy',
             color: defaultLinkColor,
             onTap: onPrivacyPolicyTap,
@@ -274,7 +273,7 @@ class PrivacyPolicyText extends StatelessWidget {
             ' and ',
             color: defaultTextColor,
           ),
-          BodyMediumText(
+          ButtonDownsideText(
             'Terms & Conditions',
             color: defaultLinkColor,
             onTap: onTermsConditionsTap,

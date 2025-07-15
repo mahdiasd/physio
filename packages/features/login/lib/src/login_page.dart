@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 import '../login.dart';
 import 'bloc/login_effect.dart';
@@ -81,7 +82,7 @@ class LoginContent extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
+                constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
                 child: LoginForm(),
               ),
             ),
@@ -107,34 +108,34 @@ class LoginForm extends StatelessWidget {
   }
 
   Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
-    return OverflowDetectingColumn(
-      spacing: 100,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Column(
+      spacing: 0,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildHeader(context),
-        _buildFormFields(context),
-        _buildActions(context, theme),
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.start)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.center)),
       ],
     );
   }
 
   Widget _buildWebLayout(BuildContext context, ThemeData theme) {
-    return SingleChildScrollView(
-      child: Column(
-        spacing: 120,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildHeader(context),
-          _buildFormFields(context),
-          _buildActions(context, theme),
-        ],
-      ),
+    return Column(
+      spacing: 0,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
+      ],
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    final titleColor = ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
+  Widget _buildHeader(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final titleColor =
+        ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
     return Column(
+      mainAxisAlignment: columnMainAxisAlignment,
       spacing: 24,
       children: [
         DisplayLargeText("Login", color: titleColor),
@@ -147,96 +148,92 @@ class LoginForm extends StatelessWidget {
     );
   }
 
-  Widget _buildFormFields(BuildContext context) {
+  Widget _buildFormFields(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: Column(
-            spacing: 10,
-            children: [
-              AppTextField(
-                value: state.email,
-                keyboardType: TextInputType.emailAddress,
-                maxLines: 1,
-                hint: "Enter your email",
-                title: "Email Address",
-                onChanged: (text) {
-                  context.read<LoginBloc>().add(EmailChanged(text));
+        return Column(
+          mainAxisAlignment: columnMainAxisAlignment,
+          spacing: 10,
+          children: [
+            AppTextField(
+              value: state.email,
+              keyboardType: TextInputType.emailAddress,
+              maxLines: 1,
+              hint: "Enter your email",
+              title: "Email Address",
+              onChanged: (text) {
+                context.read<LoginBloc>().add(EmailChanged(text));
+              },
+            ),
+            const SizedBox(height: 10),
+            AppTextField(
+              value: state.password,
+              keyboardType: TextInputType.text,
+              maxLines: 1,
+              obscureText: state.isPasswordObscured,
+              trailingIcon: IconButton(
+                icon: Icon(
+                  state.isPasswordObscured ? Icons.visibility_off : Icons.visibility,
+                ),
+                onPressed: () => context.read<LoginBloc>().add(TogglePasswordVisibility()),
+              ),
+              hint: "Enter your password",
+              title: "Password",
+              onChanged: (text) {
+                context.read<LoginBloc>().add(PasswordChanged(text));
+              },
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ButtonDownsideText(
+                "Forgot Password?",
+                color: Theme.of(context).colorScheme.secondary,
+                onTap: () {
+                  context.read<LoginBloc>().add(ForgotPasswordPressed());
                 },
               ),
-              const SizedBox(height: 10),
-              AppTextField(
-                value: state.password,
-                keyboardType: TextInputType.text,
-                maxLines: 1,
-                obscureText: state.isPasswordObscured,
-                trailingIcon: IconButton(
-                  icon: Icon(
-                    state.isPasswordObscured ? Icons.visibility_off : Icons.visibility,
-                  ),
-                  onPressed: () => context.read<LoginBloc>().add(TogglePasswordVisibility()),
-                ),
-                hint: "Enter your password",
-                title: "Password",
-                onChanged: (text) {
-                  context.read<LoginBloc>().add(PasswordChanged(text));
-                },
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ButtonDownsideText(
-                  "Forgot Password?",
-                  color: Theme.of(context).colorScheme.secondary,
-                  onTap: () {
-                    context.read<LoginBloc>().add(ForgotPasswordPressed());
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
   }
 
-  Widget _buildActions(BuildContext context, ThemeData theme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        spacing: 35,
-        children: [
-          BlocBuilder<LoginBloc, LoginState>(
-            buildWhen: (previous, current) => previous.isLoading != current.isLoading,
-            builder: (context, state) {
-              return SizedBox(
-                width: double.infinity,
-                child: AppPrimaryButton(
-                  text: "Login",
-                  onPressed: () {
-                    context.read<LoginBloc>().add(LoginPressed());
-                  },
-                  isLoading: state.isLoading,
-                ),
-              );
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 4,
-            children: [
-              BodyMediumText('No Account Yet?'),
-              ButtonDownsideText(
-                'Sign Up',
-                color: theme.colorScheme.secondary,
-                onTap: () {
-                  context.read<LoginBloc>().add(RegisterPressed());
+  Widget _buildActions(BuildContext context, ThemeData theme, {required MainAxisAlignment columnMainAxisAlignment}) {
+    return Column(
+      spacing: 35,
+      mainAxisAlignment: columnMainAxisAlignment,
+      children: [
+        BlocBuilder<LoginBloc, LoginState>(
+          buildWhen: (previous, current) => previous.isLoading != current.isLoading,
+          builder: (context, state) {
+            return SizedBox(
+              width: double.infinity,
+              child: AppPrimaryButton(
+                text: "Login",
+                onPressed: () {
+                  context.read<LoginBloc>().add(LoginPressed());
                 },
+                isLoading: state.isLoading,
               ),
-            ],
-          ),
-        ],
-      ),
+            );
+          },
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 4,
+          children: [
+            BodyMediumText('No Account Yet?'),
+            ButtonDownsideText(
+              'Sign Up',
+              color: theme.colorScheme.secondary,
+              onTap: () {
+                context.read<LoginBloc>().add(RegisterPressed());
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ui/src/theme/text_theme.dart';
 import 'package:ui/src/theme/theme_data.dart';
+import 'package:ui/src/widgets/text/label_text.dart';
+import 'package:ui/src/widgets/text/other_texts.dart';
 
 import '../../theme/custom_colors.dart';
 
@@ -207,10 +209,7 @@ class _AppTextFieldState extends State<AppTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.title != null) ...[
-          Text(
-            widget.title!,
-            style: styles.title,
-          ),
+          InputFieldTitleText(widget.title!,),
           SizedBox(height: widget.titleSpacing),
         ],
         TextField(
@@ -258,10 +257,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
         if (widget.label != null) ...[
           const SizedBox(height: 4),
-          Text(
-            widget.label!,
-            style: styles.label,
-          ),
+          LabelSmallText(widget.label!),
         ],
       ],
     );

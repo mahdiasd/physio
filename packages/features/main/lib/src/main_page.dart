@@ -84,7 +84,10 @@ class MainContent extends StatelessWidget {
             onItemTapped: (item) {
               context.read<MainBloc>().add(PageChanged(item));
             },
-            child: child,
+            child: Padding(
+              padding: const EdgeInsets.all(50.0),
+              child: child,
+            ),
           );
         }
       },
