@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../ui.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 class VerificationCodeInput extends StatefulWidget {
-  final String labelText;
+  final String title;
   final bool isError;
   final String? errorText;
   final ValueChanged<String>? onChange;
 
   const VerificationCodeInput({
     super.key,
-    required this.labelText,
+    required this.title,
     this.isError = false,
     this.errorText,
     this.onChange,
@@ -20,27 +25,18 @@ class VerificationCodeInput extends StatefulWidget {
 }
 
 class _VerificationCodeInputState extends State<VerificationCodeInput> {
-  late List<TextEditingController> _controllers;
+  late List<String> _values;
   late List<FocusNode> _focusNodes;
 
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(4, (_) => TextEditingController());
+    _values = List.generate(4, (_) => '');
     _focusNodes = List.generate(4, (_) => FocusNode());
-
-    for (int i = 0; i < 4; i++) {
-      _focusNodes[i].addListener(() {
-        setState(() {}); // Rebuild when focus changes for border update
-      });
-    }
   }
 
   @override
   void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
     for (var focusNode in _focusNodes) {
       focusNode.dispose();
     }
@@ -48,90 +44,67 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
   }
 
   void _onCodeChanged() {
-    final code = _controllers.map((c) => c.text).join();
+    final code = _values.join();
     widget.onChange?.call(code);
   }
 
-  Widget _buildCodeBox(int index) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final bool isFocused = _focusNodes[index].hasFocus;
+  void _handleValueChange(int index, String value) {
+    setState(() {
+      _values[index] = value;
+    });
 
+    if (value.length == 1 && index < 3) {
+      // Move to next field
+      FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
+    } else if (value.isEmpty && index > 0) {
+      // Move to previous field on delete
+      FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
+    } else if (value.length == 1 && index == 3) {
+      // Unfocus on last field
+      FocusScope.of(context).unfocus();
+    }
+
+    _onCodeChanged();
+  }
+
+  Widget _buildCodeBox(int index) {
     return Expanded(
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerLow, // Background #EFF6F5
-          border: Border.all(
-            color: isFocused
-                ? colorScheme.primary // Focused border
-                : const Color(0xFFE1E1E1), // Default border #E1E1E1
-            width: 0.5,
-          ),
-          borderRadius: BorderRadius.circular(10), // 10px radius
+      child: AppTextField(
+        value: _values[index],
+        onChanged: (value) => _handleValueChange(index, value),
+        focusNode: _focusNodes[index],
+        keyboardType: TextInputType.number,
+        textAlign: TextAlign.center,
+        maxLines: 1,
+        hint: '',
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(1),
+        ],
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 0,
         ),
-        child: TextField(
-          controller: _controllers[index],
-          focusNode: _focusNodes[index],
-          keyboardType: TextInputType.number,
-          textInputAction:
-          index < 3 ? TextInputAction.next : TextInputAction.done,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: const Color(0xFF3D3D3D), // Input text color #3D3D3D
-          ),
-          maxLength: 1,
-          decoration: InputDecoration(
-            counterText: "",
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            hintText: "", // Optional: single char placeholder
-            hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: const Color(0xFF9A9A9A), // Placeholder color #9A9A9A
-            ),
-          ),
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          onChanged: (value) {
-            if (value.length == 1 && index < 3) {
-              FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
-            } else if (value.isEmpty && index > 0) {
-              FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
-            } else if (value.length == 1 && index == 3) {
-              FocusScope.of(context).unfocus();
-            }
-            _onCodeChanged();
-          },
-        ),
+        showClearIcon: false,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Column(
+      spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Label text above the input fields
-        Text(widget.labelText, style: theme.textTheme.bodyMedium),
-        const SizedBox(height: 8),
+        InputFieldTitleText(widget.title),
         Row(
+          spacing: 17,
           children: [
             for (int i = 0; i < 4; i++) ...[
-              if (i > 0) const SizedBox(width: 12), // Spacing between boxes
               _buildCodeBox(i),
             ],
           ],
         ),
-        if (widget.isError && widget.errorText != null) ...[
-          const SizedBox(height: 4),
-          Text(
-            widget.errorText!,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: theme.colorScheme.error,
-            ),
-          ),
-        ],
       ],
     );
   }

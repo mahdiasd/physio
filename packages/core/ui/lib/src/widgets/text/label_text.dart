@@ -98,7 +98,7 @@ class LabelSmallText extends StatelessWidget {
   final TextStyle? customStyle;
   final VoidCallback? onTap;
 
-  /// Button Downside Clickable - 14px / 600
+  /// Cation - 11px / 400
   const LabelSmallText(
       this.text, {
         super.key,

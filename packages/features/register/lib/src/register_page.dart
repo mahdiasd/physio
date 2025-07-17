@@ -46,14 +46,14 @@ class RegisterContent extends StatelessWidget {
         children: [
           if (!ResponsiveBreakpoints.of(context).isMobile)
             Expanded(
-              child: WebLeftSection(spacing: 60,),
+              child: WebLeftSection(
+                spacing: 60,
+              ),
             ),
           Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
-                child: RegisterForm(),
-              ),
+            child: MaxWidthBox(
+              maxWidth: AppConstant.webRightSectionMaxWidth,
+              child: RegisterForm(),
             ),
           ),
         ],
@@ -94,9 +94,19 @@ class RegisterForm extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
-        SizedBox(height: 60,),
-        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
-        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
+        SizedBox(
+          height: 60,
+        ),
+        Expanded(
+            flex: 2,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth + 25,
+                child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center))),
+        Expanded(
+            flex: 1,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth + 25,
+                child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start))),
       ],
     );
   }
@@ -108,13 +118,13 @@ class RegisterForm extends StatelessWidget {
       spacing: 24,
       mainAxisAlignment: columnMainAxisAlignment,
       children: [
-        DisplayLargeText(
+        PageHeaderText(
           ResponsiveBreakpoints.of(context).isMobile ? "Sign Up" : "Create Your Client Account",
           textAlign: TextAlign.center,
           color: titleColor,
         ),
         if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-          HeadlineSmallText(
+          PageSubTitleText(
             textAlign: TextAlign.center,
             "Join Rose Physio HUB to access your personalised care plan, track progress, and stay connected with your practitioner.",
           ),
@@ -123,12 +133,13 @@ class RegisterForm extends StatelessWidget {
   }
 
   Widget _buildFormFields(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     return BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
         return SingleChildScrollView(
           child: Column(
             mainAxisAlignment: columnMainAxisAlignment,
-            spacing: 28,
+            spacing: 34,
             children: [
               Row(
                 spacing: 16,
@@ -192,7 +203,7 @@ class RegisterForm extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(),
+              if (isMobile) const SizedBox(),
               PrivacyPolicyText(
                 onPrivacyPolicyTap: () {},
                 onTermsConditionsTap: () {},
@@ -260,7 +271,7 @@ class PrivacyPolicyText extends StatelessWidget {
       width: double.infinity,
       child: Wrap(
         children: [
-          BodyMediumText(
+          BodyText(
             'By continuing, you agree to our ',
             color: defaultTextColor,
           ),
@@ -269,7 +280,7 @@ class PrivacyPolicyText extends StatelessWidget {
             color: defaultLinkColor,
             onTap: onPrivacyPolicyTap,
           ),
-          BodyMediumText(
+          BodyText(
             ' and ',
             color: defaultTextColor,
           ),
@@ -278,7 +289,7 @@ class PrivacyPolicyText extends StatelessWidget {
             color: defaultLinkColor,
             onTap: onTermsConditionsTap,
           ),
-          BodyMediumText(
+          BodyText(
             '.',
             color: defaultTextColor,
           ),

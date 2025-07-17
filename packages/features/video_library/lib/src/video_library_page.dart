@@ -115,7 +115,7 @@ class LibraryContent extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: BodyMediumText(
+              child: BodyText(
                 'Search videos, pains, or body parts',
                 color: Colors.grey[600],
               ),

@@ -49,11 +49,9 @@ class ForgotContent extends StatelessWidget {
               child: WebLeftSection(),
             ),
           Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
-                child: ForgotForm(),
-              ),
+            child: MaxWidthBox(
+              maxWidth: AppConstant.webRightSectionMaxWidth,
+              child: ForgotForm(),
             ),
           ),
         ],
@@ -78,12 +76,12 @@ class ForgotForm extends StatelessWidget {
 
   Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
     return Column(
-      spacing: 0,
+      spacing: 40,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.center)),
-        SizedBox(height: 60),
-        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.start)),
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
+        SizedBox(),
+        Expanded(flex: 1, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.start)),
         Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.center)),
       ],
     );
@@ -95,29 +93,44 @@ class ForgotForm extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
-        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
-        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
+        Expanded(
+            flex: 2,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth,
+                child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center))),
+        Expanded(
+            flex: 1,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth,
+                child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start))),
       ],
     );
   }
 
   Widget _buildHeader(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     final titleColor =
         ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
 
     return Column(
-      spacing: 24,
+      spacing:isMobile ? 53 : 25 ,
       mainAxisAlignment: columnMainAxisAlignment,
       children: [
-        DisplayLargeText(
+        PageHeaderText(
           "Forgotten Your Password?",
           textAlign: TextAlign.center,
           color: titleColor,
         ),
-        BodyMediumText(
-          textAlign: TextAlign.center,
-          "We'll send a verification code to your email so you\ncan reset your password.",
-        ),
+        if (!isMobile)
+          PageSubTitleText(
+            textAlign: TextAlign.center,
+            "We'll send a verification code to your email so you\ncan reset your password.",
+          )
+        else
+          BodyText(
+            textAlign: TextAlign.center,
+            "We'll send a verification code to your email so you\ncan reset your password.",
+          )
       ],
     );
   }

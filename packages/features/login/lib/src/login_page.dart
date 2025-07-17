@@ -80,11 +80,9 @@ class LoginContent extends StatelessWidget {
               child: WebLeftSection(),
             ),
           Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
-                child: LoginForm(),
-              ),
+            child: MaxWidthBox(
+              maxWidth: AppConstant.webRightSectionMaxWidth,
+              child: LoginForm(),
             ),
           ),
         ],
@@ -125,24 +123,33 @@ class LoginForm extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
-        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
-        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
+        Expanded(
+            flex: 2,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth,
+                child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center))),
+        Expanded(
+            flex: 1,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth,
+                child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start))),
       ],
     );
   }
 
   Widget _buildHeader(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
-    final titleColor =
-        ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final titleColor = !isMobile ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
+
     return Column(
       mainAxisAlignment: columnMainAxisAlignment,
       spacing: 24,
       children: [
-        DisplayLargeText("Login", color: titleColor),
+        PageHeaderText( isMobile ? "Login" : "Client Login" , color: titleColor),
         if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-          HeadlineSmallText(
+          PageSubTitleText(
             textAlign: TextAlign.center,
-            "Login to check your programmes, book appointments, and chat with your practitioner.",
+            "Login to check your programmes, book\nappointments, and chat with your practitioner.",
           ),
       ],
     );
@@ -200,8 +207,9 @@ class LoginForm extends StatelessWidget {
   }
 
   Widget _buildActions(BuildContext context, ThemeData theme, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     return Column(
-      spacing: 35,
+      spacing: isMobile ? 35 : 22,
       mainAxisAlignment: columnMainAxisAlignment,
       children: [
         BlocBuilder<LoginBloc, LoginState>(
@@ -223,7 +231,7 @@ class LoginForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 4,
           children: [
-            BodyMediumText('No Account Yet?'),
+            BodyText('No Account Yet?'),
             ButtonDownsideText(
               'Sign Up',
               color: theme.colorScheme.secondary,

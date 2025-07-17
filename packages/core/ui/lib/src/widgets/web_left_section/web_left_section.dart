@@ -35,12 +35,12 @@ class WebLeftSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   spacing: 16,
                   children: [
-                    DisplayLargeText(
+                    PageHeaderText(
                       title,
                       textAlign: TextAlign.center,
                       color: theme.colorScheme.primary,
                     ),
-                    HeadlineSmallText(
+                    PageSubTitleText(
                       subtitle,
                       textAlign: TextAlign.center,
                       color: AppColors.onLeftSectionSurface,

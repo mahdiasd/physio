@@ -257,7 +257,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
         if (widget.label != null) ...[
           const SizedBox(height: 4),
-          LabelSmallText(widget.label!),
+          LabelSmallText(widget.label!, color: Theme.of(context).customColors.placeholder,),
         ],
       ],
     );

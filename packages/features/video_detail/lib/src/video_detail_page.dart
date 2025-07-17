@@ -143,7 +143,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeadlineSmallText(
+            PageSubTitleText(
               state.video?.title ?? "Video Name",
               color: theme.colorScheme.onSurface,
             ),
@@ -189,7 +189,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   Widget _buildDescription(BuildContext context) {
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
       builder: (context, state) {
-        return BodyMediumText(
+        return BodyText(
           state.video?.description ??
               "This gentle pelvic tilt exercise is designed to relieve lower back tension and improve spinal mobility. Ideal for beginners, it helps activate the deep core muscles that support your spine, making it perfect for those experiencing stiffness from prolonged sitting or mild back discomfort.",
         );

@@ -18,7 +18,7 @@ void successToast({
     type: ToastificationType.success,
     style: ToastificationStyle.flat,
     title: HeadlineMediumText(title),
-    description: BodyMediumText(description),
+    description: BodyText(description),
     alignment: alignment,
     autoCloseDuration: autoCloseDuration,
     animationBuilder: (context, animation, alignment, child) {
@@ -47,7 +47,7 @@ void errorToast({
     type: ToastificationType.error,
     style: ToastificationStyle.flat,
     title: HeadlineMediumText(title),
-    description: BodyMediumText(description),
+    description: BodyText(description),
     alignment: alignment,
     autoCloseDuration: autoCloseDuration,
     animationBuilder: (context, animation, alignment, child) {
@@ -76,7 +76,7 @@ void warningToast({
     type: ToastificationType.warning,
     style: ToastificationStyle.flat,
     title: HeadlineMediumText(title),
-    description: BodyMediumText(description),
+    description: BodyText(description),
     alignment: alignment,
     autoCloseDuration: autoCloseDuration,
     animationBuilder: (context, animation, alignment, child) {

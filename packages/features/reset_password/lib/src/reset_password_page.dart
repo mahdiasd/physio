@@ -28,8 +28,8 @@ class ResetPasswordPage extends StatelessWidget {
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
-        NavigateBack:(_) => navigateBack(),
-        NavigateToMain:(_) => navigateToMain(),
+        NavigateBack: (_) => navigateBack(),
+        NavigateToMain: (_) => navigateToMain(),
       },
       child: const ResetPasswordContent(),
     );
@@ -51,11 +51,9 @@ class ResetPasswordContent extends StatelessWidget {
               child: WebLeftSection(),
             ),
           Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
-                child: ResetPasswordForm(),
-              ),
+            child: MaxWidthBox(
+              maxWidth: AppConstant.webRightSectionMaxWidth,
+              child: ResetPasswordForm(),
             ),
           ),
         ],
@@ -122,10 +120,9 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
       spacing: 0,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.center)),
-        SizedBox(height: 60),
-        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.start)),
-        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.center)),
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
       ],
     );
   }
@@ -136,28 +133,45 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
-        SizedBox(height: 60,),
-        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
-        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
+        SizedBox(
+          height: 60,
+        ),
+        Expanded(
+            flex: 2,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth,
+                child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center))),
+        Expanded(
+            flex: 1,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth,
+                child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start))),
       ],
     );
   }
 
   Widget _buildHeader(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final titleColor = !isMobile ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
     return Column(
-      spacing: 24,
+      spacing: isMobile ? 73 : 24,
       mainAxisAlignment: columnMainAxisAlignment,
       children: [
-        DisplayLargeText(
+        PageHeaderText(
           "Reset Password",
-          color: Theme.of(context).colorScheme.primary,
+          color: titleColor,
           textAlign: TextAlign.center,
         ),
-        if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-          HeadlineSmallText(
+        if (!isMobile)
+          PageSubTitleText(
             "Check your email and enter the code to reset your password.",
             textAlign: TextAlign.center,
-          ),
+          )
+        else
+          BodyText(
+            "Check your email and enter the code to reset your\npassword.",
+            textAlign: TextAlign.center,
+          )
       ],
     );
   }
@@ -173,7 +187,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
               onChange: (code) {
                 context.read<ResetPasswordBloc>().add(CodeChanged(code));
               },
-              labelText: "Enter Code",
+              title: "Enter Code",
             ),
             AppTextField(
               value: state.password,
@@ -224,7 +238,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
         final canResend = _secondsLeft == 0 && !state.isResendLoading;
         return Column(
           mainAxisAlignment: columnMainAxisAlignment,
-          spacing: 12,
+          spacing: 25,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

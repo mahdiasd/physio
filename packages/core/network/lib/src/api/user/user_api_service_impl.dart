@@ -51,7 +51,7 @@ class UserApiServiceImpl extends UserApiService {
   }) {
     return ApiWrapper.postRequest<String>(
       dio,
-      'v1/auth/forgot',
+      'v1/auth/forgot-password',
       data: {
         'email': email,
       },
