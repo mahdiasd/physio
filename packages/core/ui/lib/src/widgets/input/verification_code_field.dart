@@ -3,9 +3,6 @@ import 'package:flutter/services.dart';
 
 import '../../../ui.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 class VerificationCodeInput extends StatefulWidget {
   final String title;
   final bool isError;

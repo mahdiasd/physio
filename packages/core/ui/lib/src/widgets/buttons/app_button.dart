@@ -75,7 +75,7 @@ class AppPrimaryButton extends StatelessWidget {
                 textColor ?? theme.colorScheme.onPrimary),
           ),
         )
-            : LabelLargeText(
+            : MainButtonText(
           text,
           color: textColor ?? theme.colorScheme.onPrimary,
         ),

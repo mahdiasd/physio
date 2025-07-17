@@ -21,6 +21,7 @@ class CustomColors {
   final Color onSuccess;
   final Color disabled;
   final Color placeholder;
+  final Color helper;
   final Color subtext;
   final Color leftSectionSurface;
   final Color onLeftSectionSurface;
@@ -31,6 +32,7 @@ class CustomColors {
     required this.disabled,
     required this.placeholder,
     required this.subtext,
+    required this.helper,
     required this.leftSectionSurface,
     required this.onLeftSectionSurface,
   });
@@ -42,6 +44,7 @@ class CustomColors {
       onSuccess: AppColors.onSuccess,
       disabled: AppColors.disabled,
       placeholder: AppColors.placeholder,
+      helper: AppColors.helper,
       subtext: AppColors.subtext,
       leftSectionSurface: AppColors.leftSectionSurface,
       onLeftSectionSurface: AppColors.onLeftSectionSurface,
@@ -55,6 +58,7 @@ class CustomColors {
       onSuccess: AppColors.darkOnSuccess,
       disabled: AppColors.darkDisabled,
       placeholder: AppColors.darkPlaceholder,
+      helper: AppColors.helper,
       subtext: AppColors.darkSubtext,
       leftSectionSurface: AppColors.leftSectionSurface,
       onLeftSectionSurface: AppColors.onLeftSectionSurface,

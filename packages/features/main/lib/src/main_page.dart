@@ -26,7 +26,6 @@ class MainPage extends StatelessWidget {
     required this.onAccountPressed,
   });
 
-
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<MainBloc>();
@@ -84,10 +83,7 @@ class MainContent extends StatelessWidget {
             onItemTapped: (item) {
               context.read<MainBloc>().add(PageChanged(item));
             },
-            child: Padding(
-              padding: const EdgeInsets.all(50.0),
-              child: child,
-            ),
+            child: child,
           );
         }
       },

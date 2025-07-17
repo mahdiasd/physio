@@ -32,25 +32,25 @@ class _WebSidebarState extends State<WebSidebar> {
 
   @override
   Widget build(BuildContext context) {
-    final sidebarWidth = isSidebarCollapsed ? 57.0 : 250.0;
+    final sidebarWidth = isSidebarCollapsed ? 57.0 : 256.0;
 
     return Scaffold(
       body: Row(
         children: [
           // Sidebar
           AnimatedContainer(
-            duration: const Duration(milliseconds: 400),
+            duration: const Duration(milliseconds: 600),
             width: sidebarWidth,
             color: Theme.of(context).colorScheme.surfaceContainerLow,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 55),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Logo/Title
                   if (!isSidebarCollapsed)
-                    HeadlineMediumText(
+                    PageTitleText(
                       "Rose Physio HUB",
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -61,14 +61,19 @@ class _WebSidebarState extends State<WebSidebar> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if (!isSidebarCollapsed)
-                        const LabelLargeText(
-                          "Menu",
-                          color: Color(0xFF6A6A6A),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: MainButtonText(
+                            "Menu",
+                            color: Theme.of(context).customColors.helper,
+                          ),
                         ),
                       AppImage(
+                        width: 22,
+                        height: 22,
                         source: "assets/images/ic_arrow.svg",
                         rotationAngle: isSidebarCollapsed ? 180 : 0,
-                        tintColor: const Color(0xFF6A6A6A),
+                        tintColor: Theme.of(context).customColors.helper,
                         onTap: () {
                           setState(() {
                             isSidebarCollapsed = !isSidebarCollapsed;
@@ -77,7 +82,7 @@ class _WebSidebarState extends State<WebSidebar> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 31),
 
                   // Navigation items
                   ...() {
@@ -85,7 +90,7 @@ class _WebSidebarState extends State<WebSidebar> {
 
                     return sortedItems.map((item) {
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 24),
+                        padding: const EdgeInsets.only(bottom: 8),
                         child: _buildSidebarButton(
                           context,
                           item,
@@ -102,7 +107,7 @@ class _WebSidebarState extends State<WebSidebar> {
           // Main content area
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
+              padding: const EdgeInsets.all(55),
               child: widget.child,
             ),
           ),
@@ -124,27 +129,29 @@ class _WebSidebarState extends State<WebSidebar> {
       contentColor = Theme.of(context).colorScheme.onPrimary;
     } else {
       backgroundColor = Colors.transparent;
-      contentColor = const Color(0xFF6A6A6A);
+      contentColor = Theme.of(context).customColors.helper;
     }
 
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: widget.onItemTapped != null ? () => widget.onItemTapped!(item) : null,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
+          spacing: 10,
           children: [
             AppImage(
+              width: 20,
+              height: 20,
               source: item.icon,
               tintColor: contentColor,
             ),
             if (!isSidebarCollapsed) ...[
-              const SizedBox(width: 8),
-              LabelLargeText(
+              MainButtonText(
                 item.label,
                 color: contentColor,
               ),

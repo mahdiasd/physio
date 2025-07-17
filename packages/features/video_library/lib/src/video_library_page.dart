@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 import 'package:video_library/src/bloc/video_library_bloc.dart';
 import 'package:video_library/src/bloc/video_library_effect.dart';
 
@@ -35,7 +36,10 @@ class VideoLibraryPage extends StatelessWidget {
             }
           },
         },
-        child: LibraryContent(),
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: LibraryContent(),
+        ),
       ),
     );
   }
@@ -55,7 +59,7 @@ class LibraryContent extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: isMobile ? 16 : 0, horizontal: isMobile ? 16 : 0),
         child: SingleChildScrollView(
           child: Column(
-            spacing: 24,
+            spacing: isMobile ? 16 : 30,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(context),
@@ -79,20 +83,18 @@ class LibraryContent extends StatelessWidget {
     final theme = Theme.of(context);
 
     if (isMobile) {
-      // Mobile: Full width search bar
       return _buildSearchBar(context);
     } else {
-      // Web: Row with Library title and search bar
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          HeadlineMediumText(
+          PageTitleText(
             "Library",
             color: theme.colorScheme.primary,
           ),
           const Spacer(),
           SizedBox(
-            width: 400, // Limited width for web search bar
+            width: 400,
             child: _buildSearchBar(context),
           ),
         ],
@@ -102,9 +104,10 @@ class LibraryContent extends StatelessWidget {
 
   Widget _buildSearchBar(BuildContext context) {
     final bloc = context.read<VideoLibraryBloc>();
-
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+      height: isMobile ? 48 : 38,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(28),
@@ -117,14 +120,16 @@ class LibraryContent extends StatelessWidget {
             Expanded(
               child: BodyText(
                 'Search videos, pains, or body parts',
-                color: Colors.grey[600],
+                color: Theme.of(context).customColors.placeholder,
               ),
             ),
-            Icon(
-              Icons.search,
-              color: Colors.grey[600],
-              size: 20,
+            Container(
+              height: 38,
+              width: 1,
+              color: Theme.of(context).colorScheme.outline,
+              margin: const EdgeInsets.symmetric(horizontal: 12),
             ),
+            AppImage(width: 24, height: 24, tintColor: Theme.of(context).colorScheme.primary, source: "assets/images/ic_search.svg")
           ],
         ),
       ),
@@ -154,25 +159,27 @@ class LibraryContent extends StatelessWidget {
       builder: (context, state) {
         final categories = state.library?.categories ?? [];
         final bloc = context.read<VideoLibraryBloc>();
+        final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
         return SizedBox(
           width: double.infinity,
           child: Column(
+            spacing: isMobile ? 10 : 22,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ClickableWidget(
-                    child: TitleSmallText('Categories'),
+                    child: ListTitleText('Categories'),
                     onTap: () => bloc.add(OnMoreCategoriesClick()),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
               ResponsiveHorizontalList<VideoCategory>(
                 height: 50,
                 items: categories,
+                itemSpacing: 13,
                 emptyStateWidget: const SizedBox.shrink(),
                 itemBuilder: (context, category, _) {
                   return CategoryItem(
@@ -199,30 +206,25 @@ class LibraryContent extends StatelessWidget {
         return SizedBox(
           width: double.infinity,
           child: Column(
+            spacing: 16,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ClickableWidget(
-                    child: TitleSmallText('Recent Videos:'),
+                    child: ListTitleText('Recent Videos:'),
                     onTap: () => bloc.add(OnMoreRecentVideosClick()),
                   ),
-                  SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: ClickableWidget(
-                        onTap: () => bloc.add(OnMoreRecentVideosClick()),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Theme.of(context).colorScheme.outlineVariant,
-                        ),
-                      ))
+                  ClickableWidget(
+                      borderRadius: Theme.of(context).radius.fullAll,
+                      onTap: () => bloc.add(OnMoreRecentVideosClick()),
+                      child: AppImage(width: 20, height: 20, rotationAngle: 180, source: "assets/images/ic_arrow.svg"))
                 ],
               ),
-              const SizedBox(height: 8),
               ResponsiveHorizontalList<Video>(
                 items: videos,
+                itemSpacing: 36,
                 emptyStateWidget: const SizedBox.shrink(),
                 itemBuilder: (context, video, _) {
                   return VideoItem(
@@ -252,28 +254,22 @@ class LibraryContent extends StatelessWidget {
         return SizedBox(
           width: double.infinity,
           child: Column(
+            spacing: 16,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ClickableWidget(
-                    child: TitleSmallText('Most Viewed Videos:'),
+                    child: ListTitleText('Most Viewed Videos:'),
                     onTap: () => bloc.add(OnMoreRecentVideosClick()),
                   ),
-                  SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: ClickableWidget(
-                        onTap: () => bloc.add(OnMoreMostViewedVideosClick()),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Theme.of(context).colorScheme.outlineVariant,
-                        ),
-                      ))
+                  ClickableWidget(
+                      borderRadius: Theme.of(context).radius.fullAll,
+                      onTap: () => bloc.add(OnMoreRecentVideosClick()),
+                      child: AppImage(width: 20, height: 20, rotationAngle: 180, source: "assets/images/ic_arrow.svg"))
                 ],
               ),
-              const SizedBox(height: 8),
               ResponsiveHorizontalList<Video>(
                 items: videos,
                 emptyStateWidget: const SizedBox.shrink(),
@@ -281,7 +277,7 @@ class LibraryContent extends StatelessWidget {
                   return VideoItem(
                     video: video,
                     aspectRatio: 1.7,
-                    maxWidth: getVideoItemWidth(context) - (isMobile ? 50 : 0),
+                    maxWidth: getVideoItemWidth(context) - (isMobile ? 70 : 0),
                     onTap: () => bloc.add(OnVideoClick(video)),
                   );
                 },
@@ -304,28 +300,22 @@ class LibraryContent extends StatelessWidget {
         return SizedBox(
           width: double.infinity,
           child: Column(
+            spacing: 16,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ClickableWidget(
-                    child: TitleSmallText('Shoulders'),
+                    child: ListTitleText('Shoulders'),
                     onTap: () => bloc.add(OnMoreRecentVideosClick()),
                   ),
-                  SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: ClickableWidget(
-                        onTap: () => bloc.add(OnMoreShouldersVideosClick()),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Theme.of(context).colorScheme.outlineVariant,
-                        ),
-                      ))
+                  ClickableWidget(
+                      borderRadius: Theme.of(context).radius.fullAll,
+                      onTap: () => bloc.add(OnMoreRecentVideosClick()),
+                      child: AppImage(width: 20, height: 20, rotationAngle: 180, source: "assets/images/ic_arrow.svg"))
                 ],
               ),
-              const SizedBox(height: 8),
               ResponsiveHorizontalList<Video>(
                 items: videos,
                 emptyStateWidget: const SizedBox.shrink(),
@@ -333,7 +323,7 @@ class LibraryContent extends StatelessWidget {
                   return VideoItem(
                     video: video,
                     aspectRatio: 1.7,
-                    maxWidth: getVideoItemWidth(context) - (isMobile ? 50 : 0),
+                    maxWidth: getVideoItemWidth(context) - (isMobile ? 70 : 0),
                     onTap: () => bloc.add(OnVideoClick(video)),
                   );
                 },
@@ -356,28 +346,22 @@ class LibraryContent extends StatelessWidget {
         return SizedBox(
           width: double.infinity,
           child: Column(
+            spacing: 16,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ClickableWidget(
-                    child: TitleSmallText('Blog Posts:'),
+                    child: ListTitleText('Blog Posts:'),
                     onTap: () => bloc.add(OnMoreRecentVideosClick()),
                   ),
-                  SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: ClickableWidget(
-                        onTap: () => bloc.add(OnMoreBlogPostClick()),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Theme.of(context).colorScheme.outlineVariant,
-                        ),
-                      ))
+                  ClickableWidget(
+                      borderRadius: Theme.of(context).radius.fullAll,
+                      onTap: () => bloc.add(OnMoreBlogPostClick()),
+                      child: AppImage(width: 20, height: 20, rotationAngle: 180, source: "assets/images/ic_arrow.svg"))
                 ],
               ),
-              const SizedBox(height: 8),
               ResponsiveHorizontalList<BlogPost>(
                 items: posts,
                 emptyStateWidget: const SizedBox.shrink(),
@@ -398,6 +382,6 @@ class LibraryContent extends StatelessWidget {
   }
 
   double getVideoItemWidth(BuildContext context) {
-    return ResponsiveBreakpoints.of(context).isMobile ? 150 : 250;
+    return ResponsiveBreakpoints.of(context).isMobile ? 170 : 170;
   }
 }

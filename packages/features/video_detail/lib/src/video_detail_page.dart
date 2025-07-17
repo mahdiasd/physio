@@ -208,7 +208,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 24),
-              const TitleSmallText("Related Videos"),
+              const ListTitleText("Related Videos"),
               const SizedBox(height: 24),
               if (isMobile)
                 ...state.relatedVideos

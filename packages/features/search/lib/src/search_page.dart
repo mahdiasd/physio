@@ -82,7 +82,7 @@ class SearchContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          HeadlineMediumText(
+          PageTitleText(
             "Search Result",
             color: theme.colorScheme.primary,
           ),

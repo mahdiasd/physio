@@ -27,7 +27,20 @@ class NetworkPackageModule extends _i526.MicroPackageModule {
   @override
   _i687.FutureOr<void> init(_i526.GetItHelper gh) {
     final networkModule = _$NetworkModule();
-    gh.lazySingleton<_i361.Dio>(() => networkModule.dio());
+    gh.lazySingleton<String>(
+      () => networkModule.baseUrl,
+      instanceName: 'baseUrl',
+    );
+    gh.lazySingleton<_i361.Dio>(
+      () => networkModule
+          .dioWithoutInterceptors(gh<String>(instanceName: 'baseUrl')),
+      instanceName: 'dioWithoutInterceptors',
+    );
+    gh.lazySingleton<_i361.Dio>(() => networkModule.dio(
+          gh<String>(instanceName: 'baseUrl'),
+          gh<_i361.Dio>(instanceName: 'dioWithoutInterceptors'),
+          gh<_i431.StorageService>(),
+        ));
     gh.lazySingleton<_i414.VideoLibraryApiService>(
         () => _i475.VideoLibraryApiServiceImpl(gh<_i361.Dio>()));
     gh.lazySingleton<_i414.AuthApiService>(

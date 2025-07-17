@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'base_text.dart';
 
 
-class LabelLargeText extends StatelessWidget {
+class MainButtonText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final Color? color;
@@ -15,7 +15,7 @@ class LabelLargeText extends StatelessWidget {
   final VoidCallback? onTap;
 
 
-  const LabelLargeText(
+  const MainButtonText(
       this.text, {
         super.key,
         this.textAlign = TextAlign.start,

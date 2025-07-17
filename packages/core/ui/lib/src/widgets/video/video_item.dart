@@ -25,7 +25,7 @@ class VideoItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ClipRRect(
-          borderRadius: theme.radius.largeAll,
+          borderRadius: theme.radius.smallAll,
           child: AspectRatio(
             aspectRatio: aspectRatio,
             child: AppImage(
@@ -38,17 +38,19 @@ class VideoItem extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Column(
+            spacing: 4,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListItemTitleText(
                 video.title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
-              const SizedBox(height: 4),
               ListItemSubtitleText(
                 video.category.name,
                 maxLines: 1,
+                color: Theme.of(context).customColors.helper,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -94,6 +96,7 @@ class VideoItemHorizontal extends StatelessWidget {
     final theme = Theme.of(context);
 
     Widget content = Row(
+      spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Image on the left
@@ -110,8 +113,6 @@ class VideoItemHorizontal extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(width: 12),
-
         Column(
           spacing: 6,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,13 +120,14 @@ class VideoItemHorizontal extends StatelessWidget {
           children: [
             ListItemTitleText(
               video.title,
-              maxLines: 2,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
-            const SizedBox(height: 4),
             ListItemSubtitleText(
               video.category.name,
               maxLines: 1,
+              color: Theme.of(context).customColors.helper,
               overflow: TextOverflow.ellipsis,
             ),
           ],

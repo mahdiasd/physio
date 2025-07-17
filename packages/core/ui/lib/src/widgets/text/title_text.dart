@@ -85,7 +85,7 @@ class TitleMediumText extends StatelessWidget {
   }
 }
 
-class TitleSmallText extends StatelessWidget {
+class ListTitleText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final Color? color;
@@ -97,7 +97,7 @@ class TitleSmallText extends StatelessWidget {
   final VoidCallback? onTap;
 
   /// List Title - 15px / 500
-  const TitleSmallText(
+  const ListTitleText(
       this.text, {
         super.key,
         this.textAlign = TextAlign.start,

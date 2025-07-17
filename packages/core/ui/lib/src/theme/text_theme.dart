@@ -115,16 +115,16 @@ extension CustomClashGroteskTextStyles on TextTheme {
     fontFamily: 'ClashGrotesk-Regular',
   );
 
-  // List Item Title - Regular (400) - 10px
+  // List Item Title - Regular (400) - 13px
   TextStyle get listItemTitle => const TextStyle(
-    fontSize: 10,
+    fontSize: 13,
     fontWeight: FontWeight.w400,
     fontFamily: 'ClashGrotesk-Regular',
   );
 
-  // List Item Subtitle - Regular (400) - 9px
+  // List Item Subtitle - Regular (400) - 12px
   TextStyle get listItemSubtitle => const TextStyle(
-    fontSize: 9,
+    fontSize: 12,
     fontWeight: FontWeight.w400,
     fontFamily: 'ClashGrotesk-Regular',
   );
