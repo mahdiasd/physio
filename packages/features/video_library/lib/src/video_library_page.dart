@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
-import 'package:utils/utils.dart';
 import 'package:video_library/src/bloc/video_library_bloc.dart';
 import 'package:video_library/src/bloc/video_library_effect.dart';
 
@@ -53,25 +52,27 @@ class LibraryContent extends StatelessWidget {
     final theme = Theme.of(context);
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
-    return Scaffold(
-      backgroundColor: theme.colorScheme.surface,
-      body: Padding(
-        padding: EdgeInsets.symmetric(vertical: isMobile ? 16 : 0, horizontal: isMobile ? 16 : 0),
-        child: SingleChildScrollView(
-          child: Column(
-            spacing: isMobile ? 16 : 30,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              if (isMobile) ...[
-                _buildMainVideoSection(),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: theme.colorScheme.surface,
+        body: Padding(
+          padding: EdgeInsets.only(left: isMobile ? 16 : 0, right: isMobile ? 16 : 0, top: isMobile ? 16 : 0),
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: isMobile ? 16 : 30,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(context),
+                if (isMobile) ...[
+                  _buildMainVideoSection(),
+                ],
+                _buildCategoriesLayout(),
+                _buildRecentVideosLayout(),
+                _buildMostViewedVideosLayout(),
+                _buildShouldersVideosLayout(),
+                _buildBlogPostsLayout(),
               ],
-              _buildCategoriesLayout(),
-              _buildRecentVideosLayout(),
-              _buildMostViewedVideosLayout(),
-              _buildShouldersVideosLayout(),
-              _buildBlogPostsLayout(),
-            ],
+            ),
           ),
         ),
       ),
