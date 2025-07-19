@@ -154,7 +154,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     final titleColor = !isMobile ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
     return Column(
-      spacing: isMobile ? 73 : 24,
+      spacing: isMobile ? 50 : 24,
       mainAxisAlignment: columnMainAxisAlignment,
       children: [
         PageHeaderText(
@@ -244,7 +244,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 4,
               children: [
-                const LabelMediumText("Didn't get the code?"),
+                const BottomNavigationText("Didn't get the code?"),
                 state.isResendLoading
                     ? const SizedBox(
                         width: 16,

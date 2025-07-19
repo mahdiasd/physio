@@ -157,7 +157,7 @@ class _VerifyFormState extends State<VerifyForm> {
     final titleColor =
         ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
     return Column(
-      spacing: isMobile ? 75 : 25,
+      spacing: isMobile ? 60 : 25,
       mainAxisAlignment: columnMainAxisAlignment,
       children: [
         PageHeaderText(

@@ -99,9 +99,8 @@ class VideoItemHorizontal extends StatelessWidget {
       spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Image on the left
         ClipRRect(
-          borderRadius: theme.radius.largeAll,
+          borderRadius: theme.radius.smallAll,
           child: SizedBox(
             width: imageWidth,
             height: imageWidth / aspectRatio, // 1.5 aspect ratio for image height

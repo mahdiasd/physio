@@ -45,7 +45,6 @@ class VideoDetailContent extends StatefulWidget {
 }
 
 class _VideoDetailContentState extends State<VideoDetailContent> {
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -53,37 +52,27 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SafeArea(
-          child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
-        ),
+      body: SafeArea(
+        child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
       ),
     );
   }
 
   Widget _buildMobileLayout(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildVideoDetail(context),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildVideoInfo(context),
-                const SizedBox(height: 16),
-                _buildTags(context),
-                const SizedBox(height: 24),
-                _buildDescription(context),
-                const SizedBox(height: 24),
-                _buildRelatedVideosSection(context),
-              ],
-            ),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 8),
+      child: SingleChildScrollView(
+        child: Column(
+          spacing: 16,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildVideoDetail(context),
+            _buildVideoInfo(context),
+            _buildTags(context),
+            _buildDescription(context),
+            _buildRelatedVideosSection(context),
+          ],
+        ),
       ),
     );
   }
@@ -91,12 +80,11 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   Widget _buildDesktopLayout(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 58,
       children: [
-        // Main content area
         Expanded(
           flex: 3,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -114,7 +102,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
         // Related videos sidebar
         Container(
-          width: 300,
+          width: 170,
           child: _buildRelatedVideosSection(context),
         ),
       ],
@@ -129,7 +117,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
         return SizedBox(
           width: width,
           height: height,
-          child: SizedBox.shrink(),
+          child: Container(decoration: BoxDecoration(color: Theme.of(context).colorScheme.outline)),
         );
       },
     );
@@ -137,17 +125,23 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
   Widget _buildVideoInfo(BuildContext context) {
     final theme = Theme.of(context);
-
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
       builder: (context, state) {
         return Column(
+          spacing: 8,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PageSubTitleText(
-              state.video?.title ?? "Video Name",
-              color: theme.colorScheme.onSurface,
-            ),
-            const SizedBox(height: 8),
+            if (isMobile)
+              ListItemTitleText(
+                state.video?.title ?? "Video Name",
+                color: theme.colorScheme.onSurface,
+              )
+            else
+              PageSubTitleText(
+                state.video?.title ?? "Video Name",
+                color: theme.colorScheme.onSurface,
+              ),
             BodyLargeText(
               state.video?.category.name ?? "Category",
               color: theme.colorScheme.onSurfaceVariant,
@@ -179,7 +173,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
         color: theme.colorScheme.secondary,
         borderRadius: theme.radius.largeAll,
       ),
-      child: LabelMediumText(
+      child: BottomNavigationText(
         text,
         color: theme.colorScheme.onSecondary,
       ),
@@ -205,16 +199,22 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
         return SingleChildScrollView(
           child: Column(
+            spacing: isMobile ? 16 : 28,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 24),
-              const ListTitleText("Related Videos"),
-              const SizedBox(height: 24),
+              const ListTitleText("Related Videos:"),
               if (isMobile)
                 ...state.relatedVideos
-                    .map((video) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: VideoItemHorizontal(video: video),
+                    .map((video) => Column(
+                          spacing: 16,
+                          children: [
+                            VideoItemHorizontal(video: video),
+                            Divider(
+                              height: 1,
+                              thickness: 0.5,
+                              color: Theme.of(context).colorScheme.outline,
+                            )
+                          ],
                         ))
                     .toList()
               else

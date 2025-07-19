@@ -45,7 +45,7 @@ class MainButtonText extends StatelessWidget {
   }
 }
 
-class LabelMediumText extends StatelessWidget {
+class BottomNavigationText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final Color? color;
@@ -57,7 +57,7 @@ class LabelMediumText extends StatelessWidget {
   final VoidCallback? onTap;
 
   /// Body Text - 14px / 400
-  const LabelMediumText(
+  const BottomNavigationText(
       this.text, {
         super.key,
         this.textAlign = TextAlign.start,
