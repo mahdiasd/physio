@@ -21,7 +21,7 @@ class Video {
   final String url;
   final String thumbnail;
   final int durationSeconds;
-  final VideoCategory category;
+  final String category;
   final VideoVisibility visibility;
   final VideoStatus status;
   final int viewCount;

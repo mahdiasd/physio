@@ -1,0 +1,76 @@
+import 'package:auto_mappr_annotation/auto_mappr_annotation.dart';
+import 'package:domain/domain.dart';
+import 'package:network/network.dart';
+
+import 'mapper.auto_mappr.dart';
+
+@AutoMappr([
+  MapType<UserResponse, User>(
+    fields: [
+      Field('role', custom: Mappr.convertUserRole),
+    ],
+  ),
+  MapType<LoginResponse, User>(
+    fields: [
+      Field('id', custom: Mappr.convertNullableString),
+      Field('email', custom: Mappr.convertNullableString),
+      Field('firstName', custom: Mappr.convertNullableString),
+      Field('lastName', custom: Mappr.convertNullableString),
+      Field('role', custom: Mappr.convertUserRole),
+    ],
+  ),
+  MapType<RegisterResponse, User>(
+    fields: [
+      Field('id', custom: Mappr.convertNullableString),
+      Field('email', custom: Mappr.convertNullableString),
+      Field('firstName', custom: Mappr.convertNullableString),
+      Field('lastName', custom: Mappr.convertNullableString),
+      Field('role', custom: Mappr.convertUserRole),
+    ],
+  ),
+  MapType<BlogPostResponse, BlogPost>(
+    fields: [
+      Field('status', custom: Mappr.convertPostStatus),
+    ],
+  ),
+  MapType<UploaderUserResponse, UploaderUser>(),
+  MapType<VideoSummaryResponse, VideoSummary>(),
+  MapType<VideoLibraryResponse, VideoLibrary>(),
+  MapType<ConfigResponse, Config>(),
+  MapType<UpdateResponse, Update>(),
+])
+class Mappr extends $Mappr {
+  static UserRole convertUserRole(dynamic role) {
+    switch (role.toLowerCase()) {
+      case 'client':
+        return UserRole.CLIENT;
+      case 'practitioner':
+        return UserRole.PRACTITIONER;
+      case 'manager':
+        return UserRole.MANAGER;
+      case 'staff':
+        return UserRole.STAFF;
+      case 'admin':
+        return UserRole.ADMIN;
+      default:
+        throw Exception('unknown user role → ${role}');
+    }
+  }
+
+  static String convertNullableString(dynamic response) {
+    return response == null ? '' : response as String;
+  }
+
+  static BlogPostStatus convertPostStatus(BlogPostResponse response) {
+    switch (response.status.toLowerCase()) {
+      case "archived":
+        return BlogPostStatus.archived;
+      case 'draft':
+        return BlogPostStatus.draft;
+      case 'published':
+        return BlogPostStatus.published;
+      default:
+        throw Exception('unknown blog status → ${response.status}');
+    }
+  }
+}

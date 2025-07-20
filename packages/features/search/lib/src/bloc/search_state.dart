@@ -5,15 +5,15 @@ class SearchState {
   final bool isRefreshing;
   final bool isLoadMore;
   final bool showCategoryDialog;
-  final SearchParams? searchParam;
+  final SearchParams? searchParams;
   final String searchText;
-  final Paging<Video> paging;
-  final List<VideoCategory> categories;
+  final Paging<VideoSummary> paging;
+  final List<String> categories;
 
   const SearchState({
     this.isRefreshing = false,
     this.isLoadMore = false,
-    this.searchParam = null,
+    this.searchParams = null,
     this.showCategoryDialog = false,
     this.searchText = "",
     this.categories = const [],
@@ -26,14 +26,14 @@ class SearchState {
     String? searchText,
     bool? showCategoryDialog,
     SearchParams? searchParams,
-    Paging<Video>? paging,
-    List<VideoCategory>? categories,
+    Paging<VideoSummary>? paging,
+    List<String>? categories,
   }) {
     return SearchState(
       isRefreshing: isRefreshing ?? this.isRefreshing,
       isLoadMore: isLoadMore ?? this.isLoadMore,
       searchText: searchText ?? this.searchText,
-      searchParam: searchParams ?? this.searchParam,
+      searchParams: searchParams ?? this.searchParams,
       showCategoryDialog: showCategoryDialog ?? this.showCategoryDialog,
       paging: paging ?? this.paging,
       categories: categories ?? this.categories,

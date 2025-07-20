@@ -159,7 +159,7 @@ class SearchContent extends StatelessWidget {
       },
       builder: (context, state) {
         if (!isMobile) {
-          return PaginatedGridView<Video>(
+          return PaginatedGridView<VideoSummary>(
             paging: state.paging,
             itemBuilder: (context, item, index) {
               return VideoItem(
@@ -203,8 +203,8 @@ class SearchContent extends StatelessWidget {
 }
 
 class CategoryDialog extends StatelessWidget {
-  final List<VideoCategory> categories;
-  final ValueChanged<VideoCategory> onCategorySelected;
+  final List<String> categories;
+  final ValueChanged<String> onCategorySelected;
 
   const CategoryDialog({
     super.key,
@@ -223,7 +223,7 @@ class CategoryDialog extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: CategoryItem(
-                title: category.name,
+                title: category,
                 onTap: () => onCategorySelected(category),
               ),
             );

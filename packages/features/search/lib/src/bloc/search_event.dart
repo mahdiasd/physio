@@ -1,4 +1,3 @@
-import 'package:domain/domain.dart';
 import 'package:ui/ui.dart';
 
 sealed class SearchEvent {}
@@ -14,6 +13,7 @@ class SearchTextChanged extends SearchEvent {
 
   SearchTextChanged(this.password);
 }
+
 class ShowCategoryDialog extends SearchEvent {
   final bool show;
 
@@ -21,7 +21,7 @@ class ShowCategoryDialog extends SearchEvent {
 }
 
 class CategorySelected extends SearchEvent {
-  final VideoCategory category;
+  final String category;
 
   CategorySelected(this.category);
 }

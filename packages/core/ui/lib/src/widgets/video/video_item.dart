@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../ui.dart';
 
 class VideoItem extends StatelessWidget {
-  final Video video;
+  final VideoSummary video;
   final VoidCallback? onTap;
   final double aspectRatio;
   final double? maxWidth;
@@ -29,7 +29,7 @@ class VideoItem extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: aspectRatio,
             child: AppImage(
-              source: video.thumbnail,
+              source: video.coverPhoto,
               fit: BoxFit.cover,
               width: double.infinity,
             ),
@@ -48,7 +48,7 @@ class VideoItem extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onSurface,
               ),
               ListItemSubtitleText(
-                video.category.name,
+                video.category,
                 maxLines: 1,
                 color: Theme.of(context).customColors.helper,
                 overflow: TextOverflow.ellipsis,
@@ -76,7 +76,7 @@ class VideoItem extends StatelessWidget {
 }
 
 class VideoItemHorizontal extends StatelessWidget {
-  final Video video;
+  final VideoSummary video;
   final VoidCallback? onTap;
   final double imageWidth;
   final double aspectRatio;
@@ -106,12 +106,11 @@ class VideoItemHorizontal extends StatelessWidget {
             height: imageWidth / aspectRatio, // 1.5 aspect ratio for image height
             child: AppImage(
               radius: theme.radius.large,
-              source: video.thumbnail,
+              source: video.coverPhoto,
               fit: BoxFit.cover,
             ),
           ),
         ),
-
         Column(
           spacing: 6,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +123,7 @@ class VideoItemHorizontal extends StatelessWidget {
               color: Theme.of(context).colorScheme.onSurface,
             ),
             ListItemSubtitleText(
-              video.category.name,
+              video.category,
               maxLines: 1,
               color: Theme.of(context).customColors.helper,
               overflow: TextOverflow.ellipsis,

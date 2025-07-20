@@ -73,49 +73,29 @@ class FakeDataProvider {
     });
   }
 
-  List<VideoCategory> getFakeVideoCategories() {
-    final categories = <VideoCategory>[];
+  List<String> getFakeVideoCategories() {
     final baseCategories = [
-      {'name': 'Fitness', 'description': 'Workouts and exercises', 'color': '#FF6B6B'},
-      {'name': 'Nutrition', 'description': 'Healthy eating tips', 'color': '#4ECDC4'},
-      {'name': 'Mindfulness', 'description': 'Meditation and relaxation', 'color': '#FFD93D'},
+      "Fitness",
+      "Nutrition",
+      "Mindfulness",
     ];
-    final random = Random();
-
-    for (int i = 0; i < 20; i++) {
-      final baseCategory = baseCategories[random.nextInt(baseCategories.length)];
-      categories.add(
-        VideoCategory(
-          id: 'cat-$i',
-          name: '${baseCategory['name']} $i',
-          description: '${baseCategory['description']} $i',
-          colorCode: baseCategory['color']!,
-          isActive: true,
-        ),
-      );
-    }
-    return categories;
+    return baseCategories;
   }
 
-  List<Video> getFakeVideos({int count = 5}) {
+  List<VideoSummary> getFakeVideos({int count = 5}) {
     final random = Random();
 
     final categories = getFakeVideoCategories();
 
     return List.generate(count, (index) {
-
-      return Video(
+      return VideoSummary(
         id: 'video-$index',
         title: 'Sample Video $index',
         description: 'This is a description for video $index.',
-        url: "https://persian18.asset.aparat.com/aparat-video/8dd62307c56c0666dfb0039f4087e6e864484193-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJkYWJiZjJmNWY4ZjI4MTc3NjE4ZGY1MjdkYzk3NmY3IiwiZXhwIjoxNzUyNDExMTI1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.JQIaSi4qRszgZ5V-fNpX2NaRVxBP1fb-tBsG2v_3Zys",
-        thumbnail: getFakeFeaturedImage(index).storagePath,
-        durationSeconds: 120 + index * 10,
-        category: categories[random.nextInt(categories.length)],
-        visibility: VideoVisibility.public,
-        status: VideoStatus.ready,
+        coverPhoto:
+            "https://persian18.asset.aparat.com/aparat-video/8dd62307c56c0666dfb0039f4087e6e864484193-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJkYWJiZjJmNWY4ZjI4MTc3NjE4ZGY1MjdkYzk3NmY3IiwiZXhwIjoxNzUyNDExMTI1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.JQIaSi4qRszgZ5V-fNpX2NaRVxBP1fb-tBsG2v_3Zys",
         viewCount: random.nextInt(1000),
-        createdAt: DateTime.now().subtract(Duration(days: index)),
+        uploader: UploaderUser(firstName: "firstName", lastName: "lastName"), category: categories[random.nextInt(categories.length)],
       );
     });
   }

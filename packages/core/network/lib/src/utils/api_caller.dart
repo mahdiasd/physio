@@ -104,7 +104,9 @@ abstract class ApiCaller {
   static ErrorResponse? _parseErrorResponse(Response<dynamic> response) {
     try {
       final data = response.data;
-
+      if (response.statusCode == 500) {
+        return ErrorResponse(message: 'Server error occurred', error: 'Error from server', statusCode: 500);
+      }
       if (data is Map<String, dynamic>) {
         final errorResponse = ErrorResponse.fromJson(data);
         _printError(

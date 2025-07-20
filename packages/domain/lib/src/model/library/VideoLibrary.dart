@@ -10,10 +10,10 @@ class VideoLibrary {
     this.blogPosts = null,
   });
 
-  final List<VideoCategory>? categories;
-  final Video? mainVideo;
-  final List<Video>? recentVideos;
-  final List<Video>? mostVideos;
-  final List<Video>? shouldersVideos;
+  final List<String>? categories;
+  final VideoSummary? mainVideo;
+  final List<VideoSummary>? recentVideos;
+  final List<VideoSummary>? mostVideos;
+  final List<VideoSummary>? shouldersVideos;
   final List<BlogPost>? blogPosts;
 }

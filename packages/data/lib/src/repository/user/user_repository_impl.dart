@@ -1,17 +1,18 @@
-import 'package:data/src/mapper/user/register_mapper.dart';
-import 'package:data/src/mapper/user/user_role_mapper.dart';
 import 'package:domain/domain.dart';
 import 'package:injectable/injectable.dart';
 import 'package:network/network.dart';
 import 'package:storage/storage.dart';
 import 'package:utils/utils.dart';
 
+import '../../mapper/mapper.dart';
+
 @LazySingleton(as: UserRepository)
 class UserRepositoryImpl extends UserRepository {
   final UserApiService _userApiService;
   final StorageService _storageService;
+  final Mappr _mappr;
 
-  UserRepositoryImpl(this._userApiService, this._storageService);
+  UserRepositoryImpl(this._userApiService, this._storageService, this._mappr);
 
   @override
   Future<Result<Map<String, dynamic>>> login({
@@ -19,7 +20,7 @@ class UserRepositoryImpl extends UserRepository {
     required String password,
   }) async {
     final result = await ApiCaller.safeApiCall<LoginResponse>(
-          () => _userApiService.login(email: email, password: password),
+      () => _userApiService.login(email: email, password: password),
     );
 
     switch (result) {
@@ -28,7 +29,7 @@ class UserRepositoryImpl extends UserRepository {
         await _storageService.write(key: StorageKeys.refreshToken, value: result.value.refreshToken);
 
         return Result.ok({
-          "user": _mapToUser(result.value),
+          "user": _mappr.convert<LoginResponse, User>(result.value),
           "isFirstLogin": result.value.isFirstLogin,
         });
 
@@ -55,7 +56,7 @@ class UserRepositoryImpl extends UserRepository {
 
     switch (result) {
       case Ok<RegisterResponse>():
-        return Result.ok(result.value.toDomain());
+        return Result.ok(_mappr.convert<RegisterResponse, User>(result.value));
       case Error<RegisterResponse>():
         PrintHelper.error(result.error.message, location: "UserRepo");
         return Result.error(result.error);
@@ -137,14 +138,4 @@ class UserRepositoryImpl extends UserRepository {
     }
   }
 
-  User _mapToUser(LoginResponse loginResponse) {
-    return User(
-      id: loginResponse.user.id,
-      email: loginResponse.user.email,
-      firstName: loginResponse.user.firstName,
-      lastName: loginResponse.user.lastName,
-      role: loginResponse.user.role.toUserRole(),
-      status: loginResponse.user.status,
-    );
-  }
 }

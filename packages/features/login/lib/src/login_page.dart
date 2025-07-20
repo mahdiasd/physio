@@ -118,7 +118,6 @@ class LoginForm extends StatelessWidget {
       ),
     );
   }
-
   Widget _buildWebLayout(BuildContext context, ThemeData theme) {
     return Column(
       spacing: 0,

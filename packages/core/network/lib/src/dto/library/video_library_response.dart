@@ -19,10 +19,10 @@ class VideoLibraryResponse {
 
   Map<String, dynamic> toJson() => _$VideoLibraryResponseToJson(this);
 
-  final List<VideoCategoryResponse>? categories;
-  final VideoResponse? mainVideo;
-  final List<VideoResponse>? recentVideos;
-  final List<VideoResponse>? mostVideos;
-  final List<VideoResponse>? shouldersVideos;
+  final List<String>? categories;
+  final VideoSummaryResponse? mainVideo;
+  final List<VideoSummaryResponse>? recentVideos;
+  final List<VideoSummaryResponse>? mostVideos;
+  final List<VideoSummaryResponse>? shouldersVideos;
   final List<BlogPostResponse>? blogPosts;
 }

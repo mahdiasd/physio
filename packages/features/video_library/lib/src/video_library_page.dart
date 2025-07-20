@@ -177,14 +177,14 @@ class LibraryContent extends StatelessWidget {
                   ),
                 ],
               ),
-              ResponsiveHorizontalList<VideoCategory>(
+              ResponsiveHorizontalList<String>(
                 height: 50,
                 items: categories,
                 itemSpacing: 13,
                 emptyStateWidget: const SizedBox.shrink(),
                 itemBuilder: (context, category, _) {
                   return CategoryItem(
-                    title: category.name,
+                    title: category,
                     onTap: () => context.read<VideoLibraryBloc>().add(OnSelectCategory(category)),
                   );
                 },
@@ -223,7 +223,7 @@ class LibraryContent extends StatelessWidget {
                       child: AppImage(width: 20, height: 20, rotationAngle: 180, source: "assets/images/ic_arrow.svg"))
                 ],
               ),
-              ResponsiveHorizontalList<Video>(
+              ResponsiveHorizontalList<VideoSummary>(
                 items: videos,
                 itemSpacing: 36,
                 emptyStateWidget: const SizedBox.shrink(),
@@ -271,7 +271,7 @@ class LibraryContent extends StatelessWidget {
                       child: AppImage(width: 20, height: 20, rotationAngle: 180, source: "assets/images/ic_arrow.svg"))
                 ],
               ),
-              ResponsiveHorizontalList<Video>(
+              ResponsiveHorizontalList<VideoSummary>(
                 items: videos,
                 emptyStateWidget: const SizedBox.shrink(),
                 itemBuilder: (context, video, _) {
@@ -317,7 +317,7 @@ class LibraryContent extends StatelessWidget {
                       child: AppImage(width: 20, height: 20, rotationAngle: 180, source: "assets/images/ic_arrow.svg"))
                 ],
               ),
-              ResponsiveHorizontalList<Video>(
+              ResponsiveHorizontalList<VideoSummary>(
                 items: videos,
                 emptyStateWidget: const SizedBox.shrink(),
                 itemBuilder: (context, video, _) {

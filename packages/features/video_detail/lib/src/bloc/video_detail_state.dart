@@ -3,12 +3,12 @@ import 'package:domain/domain.dart';
 class VideoDetailState {
   final bool isLoading;
   final String videoId;
-  final Video? video;
-  final List<Video> relatedVideos;
+  final VideoSummary? video;
+  final List<VideoSummary> relatedVideos;
 
   VideoDetailState({
     this.isLoading = false,
-    List<Video>? relatedVideos,
+    List<VideoSummary>? relatedVideos,
     this.video = null,
     this.videoId = "",
   }) : this.relatedVideos = relatedVideos ?? [];
@@ -16,8 +16,8 @@ class VideoDetailState {
   VideoDetailState copyWith({
     bool? isLoading,
     String? videoId,
-    Video? video,
-    List<Video>? relatedVideos,
+    VideoSummary? video,
+    List<VideoSummary>? relatedVideos,
   }) {
     return VideoDetailState(
       video: video ?? this.video,

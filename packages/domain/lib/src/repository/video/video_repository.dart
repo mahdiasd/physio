@@ -1,0 +1,18 @@
+import 'package:utils/utils.dart';
+
+import '../../../domain.dart';
+
+abstract class VideoRepository {
+  Future<Result<Paging<VideoSummary>>> search({
+    required int page,
+    String? tag = null,
+    String? category = null,
+    String? search = null,
+    bool? isPublic = null,
+  });
+
+  Future<Result<Map<Video, List<Video>>>> get({
+    required String id,
+  });
+
+}

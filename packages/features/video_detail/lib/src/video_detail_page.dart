@@ -143,7 +143,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
                 color: theme.colorScheme.onSurface,
               ),
             BodyLargeText(
-              state.video?.category.name ?? "Category",
+              state.video?.category ?? "Category",
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ],
