@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'base_text.dart';
 
 /// Page Title - SemiBold (600) - 20px
-class HeadlineMediumText extends StatelessWidget {
+class PageTitleText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final Color? color;
@@ -14,7 +14,7 @@ class HeadlineMediumText extends StatelessWidget {
   final VoidCallback? onTap;
 
   /// Page Title - SemiBold (600) - 20px
-  const HeadlineMediumText(
+  const PageTitleText(
       this.text, {
         super.key,
         this.textAlign = TextAlign.start,
@@ -45,7 +45,7 @@ class HeadlineMediumText extends StatelessWidget {
 }
 
 /// Page Subtitle - Regular (400) - 20px
-class HeadlineSmallText extends StatelessWidget {
+class PageSubTitleText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final Color? color;
@@ -57,7 +57,7 @@ class HeadlineSmallText extends StatelessWidget {
   final VoidCallback? onTap;
 
   /// Page Subtitle - Regular (400) - 20px
-  const HeadlineSmallText(
+  const PageSubTitleText(
       this.text, {
         super.key,
         this.textAlign = TextAlign.start,

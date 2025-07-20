@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'base_text.dart';
 
 
-class LabelLargeText extends StatelessWidget {
+class MainButtonText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final Color? color;
@@ -15,7 +15,7 @@ class LabelLargeText extends StatelessWidget {
   final VoidCallback? onTap;
 
 
-  const LabelLargeText(
+  const MainButtonText(
       this.text, {
         super.key,
         this.textAlign = TextAlign.start,
@@ -45,7 +45,7 @@ class LabelLargeText extends StatelessWidget {
   }
 }
 
-class LabelMediumText extends StatelessWidget {
+class BottomNavigationText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final Color? color;
@@ -57,7 +57,7 @@ class LabelMediumText extends StatelessWidget {
   final VoidCallback? onTap;
 
   /// Body Text - 14px / 400
-  const LabelMediumText(
+  const BottomNavigationText(
       this.text, {
         super.key,
         this.textAlign = TextAlign.start,
@@ -98,7 +98,7 @@ class LabelSmallText extends StatelessWidget {
   final TextStyle? customStyle;
   final VoidCallback? onTap;
 
-  /// Button Downside Clickable - 14px / 600
+  /// Cation - 11px / 400
   const LabelSmallText(
       this.text, {
         super.key,

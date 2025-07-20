@@ -36,6 +36,7 @@ class AppColors {
   static const Color disabled = Color(0xFFCCCCCC);
   static const Color placeholder = Color(0xFFB0B0B0);
   static const Color subtext = Color(0xFF6A6A6A);
+  static const Color helper = Color(0xFF6A6A6A);
 
   // ✅ Dark Colors
   static const Color darkPrimary = Color(0xFF78C2B4);

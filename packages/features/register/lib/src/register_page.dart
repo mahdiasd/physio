@@ -26,8 +26,8 @@ class RegisterPage extends StatelessWidget {
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
-        NavigateBack:(_) => navigateBack(),
-        NavigateToVerify:(_) => navigateToVerify(),
+        NavigateBack: (_) => navigateBack(),
+        NavigateToVerify: (_) => navigateToVerify(),
       },
       child: RegisterContent(),
     );
@@ -46,17 +46,14 @@ class RegisterContent extends StatelessWidget {
         children: [
           if (!ResponsiveBreakpoints.of(context).isMobile)
             Expanded(
-              child: WebLeftSection(),
+              child: WebLeftSection(
+                spacing: 60,
+              ),
             ),
           Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints:
-                BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
-                child: AdaptiveFormLayout(
-                  child: RegisterForm(),
-                ),
-              ),
+            child: MaxWidthBox(
+              maxWidth: AppConstant.webRightSectionMaxWidth,
+              child: RegisterForm(),
             ),
           ),
         ],
@@ -74,56 +71,60 @@ class RegisterForm extends StatelessWidget {
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      child: isMobile
-          ? _buildMobileLayout(context, theme)
-          : _buildWebLayout(context, theme),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+      child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
 
   Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
-    return OverflowDetectingColumn(
-      spacing: 50,
+    return Column(
+      spacing: 0,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildHeader(context),
-        _buildFormFields(context),
-        _buildActions(context, theme),
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.start)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.center)),
       ],
     );
   }
 
   Widget _buildWebLayout(BuildContext context, ThemeData theme) {
-    return OverflowDetectingColumn(
-      spacing: 80,
+    return Column(
+      spacing: 0,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildHeader(context),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 64),
-          child: _buildFormFields(context),
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
+        SizedBox(
+          height: 60,
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 64),
-          child: _buildActions(context, theme),
-        ),
+        Expanded(
+            flex: 2,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth + 25,
+                child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center))),
+        Expanded(
+            flex: 1,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth + 25,
+                child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start))),
       ],
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final titleColor =
+        ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
     return Column(
       spacing: 24,
+      mainAxisAlignment: columnMainAxisAlignment,
       children: [
-        DisplayLargeText(
-          ResponsiveBreakpoints.of(context).isMobile
-              ? "Sign Up"
-              : "Create Your Client Account",
+        PageHeaderText(
+          ResponsiveBreakpoints.of(context).isMobile ? "Sign Up" : "Create Your Client Account",
           textAlign: TextAlign.center,
-          color: Theme.of(context).colorScheme.primary,
+          color: titleColor,
         ),
         if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-          HeadlineSmallText(
+          PageSubTitleText(
             textAlign: TextAlign.center,
             "Join Rose Physio HUB to access your personalised care plan, track progress, and stay connected with your practitioner.",
           ),
@@ -131,108 +132,96 @@ class RegisterForm extends StatelessWidget {
     );
   }
 
-  Widget _buildFormFields(BuildContext context) {
+  Widget _buildFormFields(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     return BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
-        return Column(
-          spacing: 24,
-          children: [
-            Row(
-              spacing: 16,
-              children: [
-                Expanded(
-                  child: AppTextField(
-                    value: state.firstName,
-                    keyboardType: TextInputType.name,
-                    maxLines: 1,
-                    title: "First Name",
-                    hint: "First Name",
-                    onChanged: (text) {
-                      context
-                          .read<RegisterBloc>()
-                          .add(FirstNameChanged(text));
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: AppTextField(
-                    value: state.lastName,
-                    keyboardType: TextInputType.name,
-                    maxLines: 1,
-                    title: "Last Name",
-                    hint: "Last Name",
-                    onChanged: (text) {
-                      context
-                          .read<RegisterBloc>()
-                          .add(LastNameChanged(text));
-                    },
-                  ),
-                ),
-              ],
-            ),
-            AppTextField(
-              value: state.email,
-              keyboardType: TextInputType.emailAddress,
-              maxLines: 1,
-              title: "Email Address",
-              hint: "Enter your email",
-              onChanged: (text) {
-                context.read<RegisterBloc>().add(EmailChanged(text));
-              },
-            ),
-            Column(
-              spacing: 8,
-              children: [
-                AppTextField(
-                  value: state.password,
-                  keyboardType: TextInputType.text,
-                  maxLines: 1,
-                  obscureText: state.isPasswordObscured,
-                  trailingIcon: IconButton(
-                    icon: Icon(
-                      state.isPasswordObscured
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () => context
-                        .read<RegisterBloc>()
-                        .add(TogglePasswordVisibility()),
-                  ),
-                  title: "Password",
-                  hint: "Enter your password",
-                  onChanged: (text) {
-                    context.read<RegisterBloc>().add(PasswordChanged(text));
-                  },
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: LabelSmallText(
-                      "It must be a combination of minimum 8 letters, numbers, and symbols.",
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: columnMainAxisAlignment,
+            spacing: 34,
+            children: [
+              Row(
+                spacing: 16,
+                children: [
+                  Expanded(
+                    child: AppTextField(
+                      value: state.firstName,
+                      keyboardType: TextInputType.name,
+                      maxLines: 1,
+                      title: "First Name",
+                      hint: "First Name",
+                      onChanged: (text) {
+                        context.read<RegisterBloc>().add(FirstNameChanged(text));
+                      },
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8,),
-            PrivacyPolicyText(
-              onPrivacyPolicyTap: () {},
-              onTermsConditionsTap: () {},
-            ),
-          ],
+                  Expanded(
+                    child: AppTextField(
+                      value: state.lastName,
+                      keyboardType: TextInputType.name,
+                      maxLines: 1,
+                      title: "Last Name",
+                      hint: "Last Name",
+                      onChanged: (text) {
+                        context.read<RegisterBloc>().add(LastNameChanged(text));
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              AppTextField(
+                value: state.email,
+                keyboardType: TextInputType.emailAddress,
+                maxLines: 1,
+                title: "Email Address",
+                hint: "Enter your email",
+                onChanged: (text) {
+                  context.read<RegisterBloc>().add(EmailChanged(text));
+                },
+              ),
+              Column(
+                spacing: 8,
+                children: [
+                  AppTextField(
+                    value: state.password,
+                    keyboardType: TextInputType.text,
+                    maxLines: 1,
+                    obscureText: state.isPasswordObscured,
+                    trailingIcon: IconButton(
+                      icon: Icon(
+                        state.isPasswordObscured ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      onPressed: () => context.read<RegisterBloc>().add(TogglePasswordVisibility()),
+                    ),
+                    title: "Password",
+                    hint: "Enter your password",
+                    label: "It must be a combination of minimum 8 letters, numbers, and symbols.",
+                    onChanged: (text) {
+                      context.read<RegisterBloc>().add(PasswordChanged(text));
+                    },
+                  ),
+                ],
+              ),
+              if (isMobile) const SizedBox(),
+              PrivacyPolicyText(
+                onPrivacyPolicyTap: () {},
+                onTermsConditionsTap: () {},
+              ),
+            ],
+          ),
         );
       },
     );
   }
 
-  Widget _buildActions(BuildContext context, ThemeData theme) {
+  Widget _buildActions(BuildContext context, ThemeData theme, {required MainAxisAlignment columnMainAxisAlignment}) {
     return Column(
-      spacing: 12,
+      mainAxisAlignment: columnMainAxisAlignment,
+      spacing: 23,
       children: [
         BlocBuilder<RegisterBloc, RegisterState>(
-          buildWhen: (previous, current) =>
-          previous.isLoading != current.isLoading,
+          buildWhen: (previous, current) => previous.isLoading != current.isLoading,
           builder: (context, state) {
             return SizedBox(
               width: double.infinity,
@@ -246,19 +235,12 @@ class RegisterForm extends StatelessWidget {
             );
           },
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 4,
-          children: [
-            LabelMediumText('Already have an account?'),
-            BodyLargeText(
-              "Login",
-              color: theme.colorScheme.secondary,
-              onTap: () {
-                context.read<RegisterBloc>().add(LoginPressed());
-              },
-            ),
-          ],
+        ButtonDownsideText(
+          'Already have an account?',
+          color: theme.colorScheme.secondary,
+          onTap: () {
+            context.read<RegisterBloc>().add(LoginPressed());
+          },
         ),
       ],
     );
@@ -289,25 +271,25 @@ class PrivacyPolicyText extends StatelessWidget {
       width: double.infinity,
       child: Wrap(
         children: [
-          BodyMediumText(
+          BodyText(
             'By continuing, you agree to our ',
             color: defaultTextColor,
           ),
-          BodyMediumText(
+          ButtonDownsideText(
             'Privacy Policy',
             color: defaultLinkColor,
             onTap: onPrivacyPolicyTap,
           ),
-          BodyMediumText(
+          BodyText(
             ' and ',
             color: defaultTextColor,
           ),
-          BodyMediumText(
+          ButtonDownsideText(
             'Terms & Conditions',
             color: defaultLinkColor,
             onTap: onTermsConditionsTap,
           ),
-          BodyMediumText(
+          BodyText(
             '.',
             color: defaultTextColor,
           ),

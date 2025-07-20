@@ -18,7 +18,7 @@ class ResponsiveHorizontalList<T> extends StatelessWidget {
     super.key,
     required this.items,
     required this.itemBuilder,
-    this.itemSpacing = 12.0,
+    this.itemSpacing = 24.0,
     this.height,
     this.padding,
     this.physics,

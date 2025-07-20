@@ -38,13 +38,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with SideEffectMixin<LoginS
       emitEffect(NavigateToRegister());
     });
 
-    on<LoginPressed>(_onLoginSubmitted);
+    on<LoginPressed>((event, emit) async {
+      if (state.email.isEmpty || state.password.isEmpty) {
+        emitMessage(UiMessage.error("Please enter your email and password."));
+        return;
+      }
+      await _onLoginSubmitted(event, emit);
+    });
   }
 
-  Future<void> _onLoginSubmitted(
-    LoginPressed event,
-    Emitter<LoginState> emit,
-  ) async {
+  Future<void> _onLoginSubmitted(LoginPressed event, Emitter<LoginState> emit) async {
     emit(state.copyWith(isLoading: true));
     final result = await _loginUseCase.invoke(state.email, state.password);
     emit(state.copyWith(isLoading: false));

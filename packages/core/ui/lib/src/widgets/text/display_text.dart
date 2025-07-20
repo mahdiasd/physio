@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'base_text.dart';
 
 /// Page Header - SemiBold (600) - 36px
-class DisplayLargeText extends StatelessWidget {
+class PageHeaderText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final Color? color;
@@ -15,7 +15,7 @@ class DisplayLargeText extends StatelessWidget {
   final VoidCallback? onTap;
 
   /// Page Header - SemiBold (600) - 36px
-  const DisplayLargeText(
+  const PageHeaderText(
     this.text, {
     super.key,
     this.textAlign = TextAlign.start,

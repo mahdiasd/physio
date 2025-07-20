@@ -22,18 +22,22 @@ class CategoryItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         constraints: const BoxConstraints(
-          minHeight: 42,
+          maxHeight: 40,
           minWidth: 100,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
           color: theme.colorScheme.secondary,
           borderRadius: Theme.of(context).radius.smallAll,
         ),
-        child: ButtonDownsideText(
-          title,
-          textAlign: TextAlign.center,
-          color: theme.colorScheme.onSecondary,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ButtonDownsideText(
+              title,
+              textAlign: TextAlign.center,
+              color: theme.colorScheme.onSecondary,
+            ),
+          ),
         ),
       ),
     );

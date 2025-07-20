@@ -1,15 +1,11 @@
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
-import 'package:utils/utils.dart';
-import 'package:video_player/video_player.dart';
 
-import '../video_player.dart';
+import '../video_detail.dart';
 import 'bloc/video_detail_effect.dart';
 import 'bloc/video_detail_state.dart';
-import 'custom_video_player.dart';
 
 class VideoDetailPage extends StatelessWidget {
   final VoidCallback navigateBack;
@@ -31,7 +27,12 @@ class VideoDetailPage extends StatelessWidget {
       effectHandlers: {
         NavigateBack: (_) => navigateBack(),
       },
-      child: isMobile ? VideoDetailContent() : WebSidebar(child: VideoDetailContent(), onItemTapped: onSidebarClick,),
+      child: isMobile
+          ? VideoDetailContent()
+          : WebSidebar(
+              child: VideoDetailContent(),
+              onItemTapped: onSidebarClick,
+            ),
     );
   }
 }
@@ -51,52 +52,39 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SafeArea(
-          child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
-        ),
+      body: SafeArea(
+        child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
       ),
     );
   }
 
   Widget _buildMobileLayout(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildVideoDetail(context),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildVideoInfo(context),
-                const SizedBox(height: 16),
-                _buildTags(context),
-                const SizedBox(height: 24),
-                _buildDescription(context),
-                const SizedBox(height: 24),
-                _buildRelatedVideosSection(context),
-              ],
-            ),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 8),
+      child: SingleChildScrollView(
+        child: Column(
+          spacing: 16,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildVideoDetail(context),
+            _buildVideoInfo(context),
+            _buildTags(context),
+            _buildDescription(context),
+            _buildRelatedVideosSection(context),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildDesktopLayout(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 58,
       children: [
-        // Main content area
         Expanded(
           flex: 3,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -114,7 +102,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
         // Related videos sidebar
         Container(
-          width: 300,
+          width: 170,
           child: _buildRelatedVideosSection(context),
         ),
       ],
@@ -122,8 +110,6 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   }
 
   Widget _buildVideoDetail(BuildContext context) {
-    final theme = Theme.of(context);
-
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
@@ -131,10 +117,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
         return SizedBox(
           width: width,
           height: height,
-          child: CustomVideoPlayer(
-            videoUrl: FakeDataProvider.instance.getFakeVideos(count: 1).first.url,
-            // borderRadius: theme.radius.largeAll,
-          ),
+          child: Container(decoration: BoxDecoration(color: Theme.of(context).colorScheme.outline)),
         );
       },
     );
@@ -142,17 +125,23 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
   Widget _buildVideoInfo(BuildContext context) {
     final theme = Theme.of(context);
-
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
       builder: (context, state) {
         return Column(
+          spacing: 8,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeadlineSmallText(
-              state.video?.title ?? "Video Name",
-              color: theme.colorScheme.onSurface,
-            ),
-            const SizedBox(height: 8),
+            if (isMobile)
+              ListItemTitleText(
+                state.video?.title ?? "Video Name",
+                color: theme.colorScheme.onSurface,
+              )
+            else
+              PageSubTitleText(
+                state.video?.title ?? "Video Name",
+                color: theme.colorScheme.onSurface,
+              ),
             BodyLargeText(
               state.video?.category.name ?? "Category",
               color: theme.colorScheme.onSurfaceVariant,
@@ -164,7 +153,6 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   }
 
   Widget _buildTags(BuildContext context) {
-    final theme = Theme.of(context);
     return Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -185,7 +173,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
         color: theme.colorScheme.secondary,
         borderRadius: theme.radius.largeAll,
       ),
-      child: LabelMediumText(
+      child: BottomNavigationText(
         text,
         color: theme.colorScheme.onSecondary,
       ),
@@ -193,11 +181,9 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   }
 
   Widget _buildDescription(BuildContext context) {
-    final theme = Theme.of(context);
-
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
       builder: (context, state) {
-        return BodyMediumText(
+        return BodyText(
           state.video?.description ??
               "This gentle pelvic tilt exercise is designed to relieve lower back tension and improve spinal mobility. Ideal for beginners, it helps activate the deep core muscles that support your spine, making it perfect for those experiencing stiffness from prolonged sitting or mild back discomfort.",
         );
@@ -213,16 +199,22 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
         return SingleChildScrollView(
           child: Column(
+            spacing: isMobile ? 16 : 28,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 24),
-              const TitleSmallText("Related Videos"),
-              const SizedBox(height: 24),
+              const ListTitleText("Related Videos:"),
               if (isMobile)
                 ...state.relatedVideos
-                    .map((video) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: VideoItemHorizontal(video: video),
+                    .map((video) => Column(
+                          spacing: 16,
+                          children: [
+                            VideoItemHorizontal(video: video),
+                            Divider(
+                              height: 1,
+                              thickness: 0.5,
+                              color: Theme.of(context).colorScheme.outline,
+                            )
+                          ],
                         ))
                     .toList()
               else

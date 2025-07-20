@@ -68,7 +68,7 @@ class BodyLargeText extends StatelessWidget {
   }
 }
 
-class BodyMediumText extends StatelessWidget {
+class BodyText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final Color? color;
@@ -80,7 +80,7 @@ class BodyMediumText extends StatelessWidget {
   final VoidCallback? onTap;
 
   /// Input Field Title - 15px / 400
-  const BodyMediumText(
+  const BodyText(
       this.text, {
         super.key,
         this.textAlign = TextAlign.start,

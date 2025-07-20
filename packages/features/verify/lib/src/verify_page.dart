@@ -51,14 +51,7 @@ class VerifyContent extends StatelessWidget {
               child: WebLeftSection(),
             ),
           Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: AppConstant.webRightSectionMaxWidth, maxHeight: double.infinity),
-                child: AdaptiveFormLayout(
-                  child: VerifyForm(),
-                ),
-              ),
-            ),
+            child: MaxWidthBox(maxWidth: AppConstant.webRightSectionMaxWidth, child: VerifyForm()),
           ),
         ],
       ),
@@ -114,7 +107,7 @@ class _VerifyFormState extends State<VerifyForm> {
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
       child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
@@ -122,19 +115,13 @@ class _VerifyFormState extends State<VerifyForm> {
   Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
     return BlocBuilder<VerifyBloc, VerifyState>(
       builder: (context, state) {
-        return OverflowDetectingColumn(
-          spacing: 100,
+        return Column(
+          spacing: 0,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildHeader(context, state.isVerified, state.email),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64),
-              child: _buildFormFields(context, state.isVerified),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64),
-              child: _buildActions(context, theme, state),
-            ),
+            Expanded(flex: 2, child: _buildHeader(context, state.email, state.isVerified, columnMainAxisAlignment: MainAxisAlignment.center)),
+            Expanded(flex: 1, child: _buildFormFields(context, state.isVerified, columnMainAxisAlignment: MainAxisAlignment.start)),
+            Expanded(flex: 1, child: _buildActions(context, state, theme, columnMainAxisAlignment: MainAxisAlignment.center)),
           ],
         );
       },
@@ -144,66 +131,82 @@ class _VerifyFormState extends State<VerifyForm> {
   Widget _buildWebLayout(BuildContext context, ThemeData theme) {
     return BlocBuilder<VerifyBloc, VerifyState>(
       builder: (context, state) {
-        return OverflowDetectingColumn(
-          spacing: 120,
+        return Column(
+          spacing: 0,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildHeader(context, state.isVerified, state.email),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64),
-              child: _buildFormFields(context, state.isVerified),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64),
-              child: _buildActions(context, theme, state),
-            ),
+            Expanded(flex: 1, child: _buildHeader(context, state.email, state.isVerified, columnMainAxisAlignment: MainAxisAlignment.end)),
+            Expanded(
+                flex: 2,
+                child: MaxWidthBox(
+                    maxWidth: AppConstant.webRightSectionChildWidth,
+                    child: _buildFormFields(context, state.isVerified, columnMainAxisAlignment: MainAxisAlignment.center))),
+            Expanded(
+                flex: 1,
+                child: MaxWidthBox(
+                    maxWidth: AppConstant.webRightSectionChildWidth,
+                    child: _buildActions(context, state, theme, columnMainAxisAlignment: MainAxisAlignment.start))),
           ],
         );
       },
     );
   }
 
-  Widget _buildHeader(BuildContext context, bool isVerified, String email) {
+  Widget _buildHeader(BuildContext context, String email, bool isVerified, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final titleColor =
+        ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
     return Column(
-      spacing: 24,
+      spacing: isMobile ? 60 : 25,
+      mainAxisAlignment: columnMainAxisAlignment,
       children: [
-        DisplayLargeText(
+        PageHeaderText(
           isVerified ? "Email Verified" : "Verify Your Email",
           textAlign: TextAlign.center,
-          color: Theme.of(context).colorScheme.primary,
+          color: titleColor,
         ),
         Column(
-          spacing: 8,
+          spacing: 23,
           children: [
-            HeadlineMediumText(
-              textAlign: TextAlign.center,
-              !isVerified ? "We've sent a 4-digit verification code to $email" : "Your email has been successfully verified.",
-            ),
-            HeadlineSmallText(
-              textAlign: TextAlign.center,
-              !isVerified ? "Please enter the code below to confirm your email address." : "You're all set to get started!",
-            ),
+            if (isMobile) ...[
+              BodyText(
+                textAlign: TextAlign.center,
+                !isVerified ? "We've sent a 4-digit verification code to $email" : "Your email has been successfully verified.",
+              ),
+              BodyText(
+                textAlign: TextAlign.center,
+                !isVerified ? "Please enter the code below to confirm your email address." : "You're all set to get started!",
+              ),
+            ] else ...[
+              PageSubTitleText(
+                textAlign: TextAlign.center,
+                !isVerified ? "We've sent a 4-digit verification code to $email" : "Your email has been successfully verified.",
+              ),
+              PageSubTitleText(
+                textAlign: TextAlign.center,
+                !isVerified ? "Please enter the code below to confirm your email address." : "You're all set to get started!",
+              ),
+            ],
           ],
         ),
       ],
     );
   }
 
-  Widget _buildFormFields(BuildContext context, bool isVerified) {
+  Widget _buildFormFields(BuildContext context, bool isVerified, {required MainAxisAlignment columnMainAxisAlignment}) {
     if (isVerified) {
       return const SizedBox.shrink();
     }
-
     return Column(
       spacing: 24,
+      mainAxisAlignment: columnMainAxisAlignment,
       children: [
         VerificationCodeInput(
-          labelText: 'Enter Verification Code',
+          title: 'Enter Code',
           onChange: (text) {
             context.read<VerifyBloc>().add(CodeChange(text));
           },
         ),
-        _buildResendSection(context),
       ],
     );
   }
@@ -216,7 +219,7 @@ class _VerifyFormState extends State<VerifyForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 4,
           children: [
-            LabelMediumText("Didn't get the code?"),
+            BodyText("Didn't get the code?"),
             if (state.isResendLoading)
               const SizedBox(
                 width: 16,
@@ -224,8 +227,8 @@ class _VerifyFormState extends State<VerifyForm> {
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
             else if (_secondsLeft > 0)
-              LabelMediumText(
-                "${_secondsLeft}s",
+              BodyText(
+                "Resend in ${_secondsLeft}s",
                 color: Theme.of(context).colorScheme.secondary,
               )
             else
@@ -240,10 +243,11 @@ class _VerifyFormState extends State<VerifyForm> {
     );
   }
 
-  Widget _buildActions(BuildContext context, ThemeData theme, VerifyState state) {
+  Widget _buildActions(BuildContext context, VerifyState state, ThemeData theme, {required MainAxisAlignment columnMainAxisAlignment}) {
     return Column(
-      spacing: 12,
+      spacing: 35,
       children: [
+        if (!state.isVerified) _buildResendSection(context),
         SizedBox(
           width: double.infinity,
           child: AppPrimaryButton(

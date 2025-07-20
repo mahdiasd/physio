@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 import 'bloc/reset_password_bloc.dart';
 import 'bloc/reset_password_effect.dart';
@@ -27,8 +28,8 @@ class ResetPasswordPage extends StatelessWidget {
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
-        NavigateBack:(_) => navigateBack(),
-        NavigateToMain:(_) => navigateToMain(),
+        NavigateBack: (_) => navigateBack(),
+        NavigateToMain: (_) => navigateToMain(),
       },
       child: const ResetPasswordContent(),
     );
@@ -50,13 +51,9 @@ class ResetPasswordContent extends StatelessWidget {
               child: WebLeftSection(),
             ),
           Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 500, maxHeight: double.infinity),
-                child: const AdaptiveFormLayout(
-                  child: ResetPasswordForm(),
-                ),
-              ),
+            child: MaxWidthBox(
+              maxWidth: AppConstant.webRightSectionMaxWidth,
+              child: ResetPasswordForm(),
             ),
           ),
         ],
@@ -109,50 +106,88 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      child: OverflowDetectingColumn(
-        spacing: isMobile ? 80 : 80,
-        mainAxisAlignment: isMobile ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-        children: [
-          _buildHeader(context),
-          _buildFormFields(context),
-          _buildActions(context),
-        ],
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+      child: isMobile ? _buildMobileLayout(context, theme) : _buildWebLayout(context, theme),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildMobileLayout(BuildContext context, ThemeData theme) {
     return Column(
-      spacing: 24,
+      spacing: 0,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        DisplayLargeText(
-          "Reset Password",
-          color: Theme.of(context).colorScheme.primary,
-          textAlign: TextAlign.center,
-        ),
-        if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-          HeadlineSmallText(
-            "Check your email and enter the code to reset your password.",
-            textAlign: TextAlign.center,
-          ),
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
+        Expanded(flex: 2, child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center)),
+        Expanded(flex: 1, child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start)),
       ],
     );
   }
 
-  Widget _buildFormFields(BuildContext context) {
+  Widget _buildWebLayout(BuildContext context, ThemeData theme) {
+    return Column(
+      spacing: 0,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(flex: 1, child: _buildHeader(context, columnMainAxisAlignment: MainAxisAlignment.end)),
+        SizedBox(
+          height: 60,
+        ),
+        Expanded(
+            flex: 2,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth,
+                child: _buildFormFields(context, columnMainAxisAlignment: MainAxisAlignment.center))),
+        Expanded(
+            flex: 1,
+            child: MaxWidthBox(
+                maxWidth: AppConstant.webRightSectionChildWidth,
+                child: _buildActions(context, theme, columnMainAxisAlignment: MainAxisAlignment.start))),
+      ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final titleColor = !isMobile ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface;
+    return Column(
+      spacing: isMobile ? 50 : 24,
+      mainAxisAlignment: columnMainAxisAlignment,
+      children: [
+        PageHeaderText(
+          "Reset Password",
+          color: titleColor,
+          textAlign: TextAlign.center,
+        ),
+        if (!isMobile)
+          PageSubTitleText(
+            "Check your email and enter the code to reset your password.",
+            textAlign: TextAlign.center,
+          )
+        else
+          BodyText(
+            "Check your email and enter the code to reset your\npassword.",
+            textAlign: TextAlign.center,
+          )
+      ],
+    );
+  }
+
+  Widget _buildFormFields(BuildContext context, {required MainAxisAlignment columnMainAxisAlignment}) {
     return BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
       builder: (context, state) {
         return Column(
+          mainAxisAlignment: columnMainAxisAlignment,
           spacing: 24,
           children: [
             VerificationCodeInput(
               onChange: (code) {
                 context.read<ResetPasswordBloc>().add(CodeChanged(code));
               },
-              labelText: "Enter Code",
+              title: "Enter Code",
             ),
             AppTextField(
               value: state.password,
@@ -196,19 +231,20 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
     );
   }
 
-  Widget _buildActions(BuildContext context) {
+  Widget _buildActions(BuildContext context, ThemeData theme, {required MainAxisAlignment columnMainAxisAlignment}) {
     return BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
       buildWhen: (previous, current) => previous.isLoading != current.isLoading || previous.isResendLoading != current.isResendLoading,
       builder: (context, state) {
         final canResend = _secondsLeft == 0 && !state.isResendLoading;
         return Column(
-          spacing: 12,
+          mainAxisAlignment: columnMainAxisAlignment,
+          spacing: 25,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 4,
               children: [
-                const LabelMediumText("Didn't get the code?"),
+                const BottomNavigationText("Didn't get the code?"),
                 state.isResendLoading
                     ? const SizedBox(
                         width: 16,

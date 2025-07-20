@@ -43,7 +43,7 @@ class SearchPage extends StatelessWidget {
         effectHandlers: {
           NavigateBack: (_) => navigateBack(),
         },
-        child: isMobile ? SearchContent() : WebSidebar(child: SearchContent(), onItemTapped: onSidebarClick,),
+        child: isMobile ? SafeArea(child: SearchContent()) : WebSidebar(child: SearchContent(), onItemTapped: onSidebarClick,),
       ),
     );
   }
@@ -82,7 +82,7 @@ class SearchContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          HeadlineMediumText(
+          PageTitleText(
             "Search Result",
             color: theme.colorScheme.primary,
           ),
@@ -113,18 +113,31 @@ class SearchContent extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Expanded(
-              child: AppTextField(
-                value: state.searchText,
-                contentPadding: const EdgeInsetsGeometry.all(12),
-                borderRadius: theme.radius.xxLargeAll,
-                hint: "Search videos, pains, or body parts",
-                trailingIcon: Icon(
-                  Icons.search,
-                  color: theme.customColors.disabled,
+              child: Container(
+                child: AppTextField(
+                  value: state.searchText,
+                  contentPadding: const EdgeInsetsGeometry.all(12),
+                  borderRadius: theme.radius.xxLargeAll,
+                  hint: "Search videos, pains, or body parts",
+                  maxLines: 1,
+                  trailingIcon: SizedBox(
+                    width: 50,
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 38,
+                          width: 1,
+                          color: Theme.of(context).colorScheme.outline,
+                          margin: const EdgeInsets.symmetric(horizontal: 12),
+                        ),
+                        AppImage(width: 24, height: 24, tintColor: Theme.of(context).colorScheme.primary, source: "assets/images/ic_search.svg")
+                      ],
+                    ),
+                  ),
+                  onChanged: (text) {
+                    bloc.add(SearchTextChanged(text));
+                  },
                 ),
-                onChanged: (text) {
-                  bloc.add(SearchTextChanged(text));
-                },
               ),
             ),
           ],

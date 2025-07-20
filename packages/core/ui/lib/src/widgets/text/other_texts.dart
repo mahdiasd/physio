@@ -155,7 +155,7 @@ class ListItemTitleText extends StatelessWidget {
   final TextStyle? customStyle;
   final VoidCallback? onTap;
 
-  /// List Item Title - Regular (400) - 10px
+  /// List Item Title - Regular (400) - 13px
   const ListItemTitleText(this.text, {
     super.key,
     this.textAlign = TextAlign.start,
@@ -200,7 +200,7 @@ class ListItemSubtitleText extends StatelessWidget {
   final TextStyle? customStyle;
   final VoidCallback? onTap;
 
-  /// List Item Subtitle - Regular (400) - 9px
+  /// List Item Subtitle - Regular (400) - 12
   const ListItemSubtitleText(this.text, {
     super.key,
     this.textAlign = TextAlign.start,
