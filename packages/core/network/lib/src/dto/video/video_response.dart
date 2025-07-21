@@ -1,21 +1,26 @@
-import '../../../domain.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Video {
+import '../../../network.dart';
+
+part 'video_response.g.dart';
+
+@JsonSerializable()
+class VideoResponse {
   String category;
   String coverPhoto;
   DateTime createdAt;
   String description;
   String id;
   bool isPublic;
-  List<VideoSummary> relatedVideos;
+  List<VideoSummaryResponse> relatedVideos;
   String status;
   List<String> tags;
   String title;
   DateTime updatedAt;
-  UploaderUser uploader;
-  PhysioFile videoFile;
+  UploaderUserResponse uploader;
+  FileResponse videoFile;
 
-  Video({
+  VideoResponse({
     required this.category,
     required this.coverPhoto,
     required this.createdAt,
@@ -30,4 +35,10 @@ class Video {
     required this.uploader,
     required this.videoFile,
   });
+
+  factory VideoResponse.fromJson(Map<String, dynamic> json) => _$VideoResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VideoResponseToJson(this);
+
 }
+

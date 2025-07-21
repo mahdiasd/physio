@@ -12,29 +12,36 @@ class VideoRepositoryImpl extends VideoRepository {
 
   VideoRepositoryImpl(this._apiService, this._mappr);
 
-  Future<Result<Paging<VideoSummary>>> search({required int page, String? tag = null, String? category = null, String? search = null, bool? isPublic = null}) async {
-    final result = await ApiCaller.safeApiCall<List<VideoSummaryResponse>>(
-          () => _apiService.getVideos(),
+  Future<Result<Paging<VideoSummary>>> search(
+      {required int page, String? tag = null, String? category = null, String? search = null, bool? isPublic = null}) async {
+    final result = await ApiCaller.safeApiCallWithMeta<List<VideoSummaryResponse>>(
+      () => _apiService.search(
+        page: page,
+        tag: tag,
+        category: category,
+        search: search,
+        isPublic: isPublic,
+      ),
     );
 
     switch (result) {
-      case Ok<List<VideoSummaryResponse>>():
-        return Result.ok(Paging(content: _mappr.convert<List<VideoSummaryResponse>, List<VideoSummary>>(result.value)));
-      case Error<List<VideoSummaryResponse>>():
+      case Ok<DataWithMeta<List<VideoSummaryResponse>>>():
+        final content = _mappr.convert<List<VideoSummaryResponse>, List<VideoSummary>>(result.value.data);
+        return Result.ok(Paging(content: content));
+      case Error<DataWithMeta<List<VideoSummaryResponse>>>():
         return Result.error(result.error);
     }
   }
 
   @override
-  Future<Result<Map<Video, List<Video>>>> get({required String id}) async {
-    final result = await ApiCaller.safeApiCall<List<VideoSummaryResponse>>(
-          () => _apiService.getVideos(),
-    );
+  Future<Result<Video>> get({required String id}) async {
+    final result = await ApiCaller.safeApiCall<VideoResponse>(() => _apiService.getSingle(id: id));
 
     switch (result) {
-      case Ok<List<VideoSummaryResponse>>():
-        return Result.ok(Paging(content: _mappr.convert<List<VideoSummaryResponse>, List<VideoSummary>>(result.value)));
-      case Error<List<VideoSummaryResponse>>():
+      case Ok<VideoResponse>():
+        final content = _mappr.convert<VideoResponse, Video>(result.value);
+        return Result.ok(content);
+      case Error<VideoResponse>():
         return Result.error(result.error);
     }
   }

@@ -9,9 +9,9 @@ class OnRefresh extends SearchEvent {}
 class OnLoadMore extends SearchEvent {}
 
 class SearchTextChanged extends SearchEvent {
-  final String password;
+  final String text;
 
-  SearchTextChanged(this.password);
+  SearchTextChanged(this.text);
 }
 
 class ShowCategoryDialog extends SearchEvent {

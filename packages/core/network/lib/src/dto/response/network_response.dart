@@ -26,5 +26,5 @@ class NetworkResponse<T> {
   final String status;
   final T? data;
   String? message = '';
-  PagingMetaResponse? meta;
+  PagingMetaResponse? meta = null;
 }

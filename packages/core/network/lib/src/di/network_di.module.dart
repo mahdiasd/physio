@@ -18,6 +18,7 @@ import 'package:network/src/api/library/video_library_api_service.dart'
 import 'package:network/src/api/library/video_library_api_service_impl.dart'
     as _i475;
 import 'package:network/src/api/user/user_api_service_impl.dart' as _i208;
+import 'package:network/src/api/video/video_api_service_impl.dart' as _i786;
 import 'package:network/src/di/network_module.dart' as _i1026;
 import 'package:network/src/utils/token_interceptor.dart' as _i1068;
 import 'package:storage/storage.dart' as _i431;
@@ -49,6 +50,8 @@ class NetworkPackageModule extends _i526.MicroPackageModule {
         () => _i208.UserApiServiceImpl(gh<_i361.Dio>()));
     gh.lazySingleton<_i329.ConfigApiService>(
         () => _i77.ConfigApiServiceImpl(gh<_i361.Dio>()));
+    gh.lazySingleton<_i372.VideoApiService>(
+        () => _i786.VideoApiServiceImpl(gh<_i361.Dio>()));
     gh.lazySingleton<_i1068.TokenInterceptor>(() => _i1068.TokenInterceptor(
           gh<_i431.StorageService>(),
           gh<_i361.Dio>(),

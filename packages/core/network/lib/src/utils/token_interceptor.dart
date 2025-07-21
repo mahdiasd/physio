@@ -83,14 +83,18 @@ class TokenInterceptor extends QueuedInterceptor {
     if (refreshToken == null) return null;
 
     try {
-      final result = await ApiCaller.safeApiCall<RefreshTokenResponse>(() => _authApiService.refreshToken(refreshToken: refreshToken));
+      final result = await ApiCaller.safeApiCallWithMeta<RefreshTokenResponse>(() => _authApiService.refreshToken(refreshToken: refreshToken));
 
       switch (result) {
         case Ok<RefreshTokenResponse>():
-          await _storageService.write(key: StorageKeys.accessToken, value: result.value.accessToken);
-          await _storageService.write(key: StorageKeys.refreshToken, value: result.value.refreshToken);
+
           break;
         case Error<RefreshTokenResponse>():
+
+        case Ok<DataWithMeta<RefreshTokenResponse>>():
+          // await _storageService.write(key: StorageKeys.accessToken, value: result.value.accessToken);
+          // await _storageService.write(key: StorageKeys.refreshToken, value: result.value.refreshToken);
+        case Error<DataWithMeta<RefreshTokenResponse>>():
           await _logout();
           break;
       }

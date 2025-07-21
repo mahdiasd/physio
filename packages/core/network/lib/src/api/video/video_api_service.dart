@@ -1,9 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:network/network.dart';
-import 'package:network/src/dto/library/video_library_response.dart';
-import 'package:network/src/dto/response/network_response.dart';
 
 abstract class VideoApiService {
-  Future<Response<NetworkResponse<List<VideoSummaryResponse>>>> getVideos();
-  Future<Response<NetworkResponse<List<VideoResponse>>>> getVideos();
+  Future<Response<NetworkResponse<List<VideoSummaryResponse>>>> search({
+    required int page,
+    String? tag = null,
+    String? category = null,
+    String? search = null,
+    bool? isPublic = null,
+  });
+
+  Future<Response<NetworkResponse<VideoResponse>>> getSingle({required String id});
 }

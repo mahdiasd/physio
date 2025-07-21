@@ -17,8 +17,11 @@ class FakeDataProvider {
         storagePath: '/storage/files/$index',
         contentType: isVideo ? 'video/mp4' : 'image/jpeg',
         fileCategory: isVideo ? 'video' : 'image',
-        status: 'ready',
-        isPublic: true,
+        fileSize: '',
+        s3Url: '',
+        storageType: '',
+        uploadedBy: '',
+        url: '',
       );
     });
   }
@@ -42,8 +45,11 @@ class FakeDataProvider {
       storagePath: 'https://picsum.photos/seed/blog$index/600/400',
       contentType: 'image/jpeg',
       fileCategory: 'image',
-      status: 'ready',
-      isPublic: true,
+      fileSize: '',
+      s3Url: '',
+      storageType: '',
+      uploadedBy: '',
+      url: '',
     );
   }
 
@@ -95,7 +101,8 @@ class FakeDataProvider {
         coverPhoto:
             "https://persian18.asset.aparat.com/aparat-video/8dd62307c56c0666dfb0039f4087e6e864484193-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJkYWJiZjJmNWY4ZjI4MTc3NjE4ZGY1MjdkYzk3NmY3IiwiZXhwIjoxNzUyNDExMTI1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.JQIaSi4qRszgZ5V-fNpX2NaRVxBP1fb-tBsG2v_3Zys",
         viewCount: random.nextInt(1000),
-        uploader: UploaderUser(firstName: "firstName", lastName: "lastName"), category: categories[random.nextInt(categories.length)],
+        uploader: UploaderUser(firstName: "firstName", lastName: "lastName"),
+        category: categories[random.nextInt(categories.length)],
       );
     });
   }

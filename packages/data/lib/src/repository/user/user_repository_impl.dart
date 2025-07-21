@@ -19,22 +19,28 @@ class UserRepositoryImpl extends UserRepository {
     required String email,
     required String password,
   }) async {
-    final result = await ApiCaller.safeApiCall<LoginResponse>(
-      () => _userApiService.login(email: email, password: password),
-    );
+    try {
+      final result = await ApiCaller.safeApiCall<LoginResponse>(
+        () => _userApiService.login(email: email, password: password),
+      );
 
-    switch (result) {
-      case Ok<LoginResponse>():
-        await _storageService.write(key: StorageKeys.accessToken, value: result.value.accessToken);
-        await _storageService.write(key: StorageKeys.refreshToken, value: result.value.refreshToken);
+      switch (result) {
+        case Ok<LoginResponse>():
+          await _storageService.write(key: StorageKeys.accessToken, value: result.value.accessToken);
+          await _storageService.write(key: StorageKeys.refreshToken, value: result.value.refreshToken);
+          final res = Result.ok({
+            "user": _mappr.convert<UserResponse, User>(result.value.user),
+            "isFirstLogin": result.value.isFirstLogin,
+          });
+          PrintHelper.info(res.toString(), location: "UserRepositoryImpl");
+          return res;
 
-        return Result.ok({
-          "user": _mappr.convert<LoginResponse, User>(result.value),
-          "isFirstLogin": result.value.isFirstLogin,
-        });
-
-      case Error<LoginResponse>():
-        return Result.error(result.error);
+        case Error<LoginResponse>():
+          return Result.error(result.error);
+      }
+    } catch (e, stackTrace) {
+      PrintHelper.error("Login failed: $e", location: "UserRepositoryImpl");
+      return Result.error(NetworkException(message: "An unexpected error occurred during login."));
     }
   }
 
@@ -137,5 +143,4 @@ class UserRepositoryImpl extends UserRepository {
         return Result.error(result.error);
     }
   }
-
 }

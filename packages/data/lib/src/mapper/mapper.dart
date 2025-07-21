@@ -10,15 +10,6 @@ import 'mapper.auto_mappr.dart';
       Field('role', custom: Mappr.convertUserRole),
     ],
   ),
-  MapType<LoginResponse, User>(
-    fields: [
-      Field('id', custom: Mappr.convertNullableString),
-      Field('email', custom: Mappr.convertNullableString),
-      Field('firstName', custom: Mappr.convertNullableString),
-      Field('lastName', custom: Mappr.convertNullableString),
-      Field('role', custom: Mappr.convertUserRole),
-    ],
-  ),
   MapType<RegisterResponse, User>(
     fields: [
       Field('id', custom: Mappr.convertNullableString),
@@ -36,11 +27,24 @@ import 'mapper.auto_mappr.dart';
   MapType<UploaderUserResponse, UploaderUser>(),
   MapType<VideoSummaryResponse, VideoSummary>(),
   MapType<VideoLibraryResponse, VideoLibrary>(),
+  MapType<VideoResponse, Video>(),
+  MapType<FileResponse, PhysioFile>(),
   MapType<ConfigResponse, Config>(),
   MapType<UpdateResponse, Update>(),
 ])
 class Mappr extends $Mappr {
-  static UserRole convertUserRole(dynamic role) {
+  static UserRole convertUserRole(dynamic source) {
+    final String role;
+    if (source is UserResponse) {
+      role = source.role;
+    } else if (source is RegisterResponse) {
+      role = source.role ?? '';
+    } else if (source is LoginResponse) {
+      role = source.user.role;
+    } else {
+      throw Exception('Unknown source type for role conversion');
+    }
+
     switch (role.toLowerCase()) {
       case 'client':
         return UserRole.CLIENT;

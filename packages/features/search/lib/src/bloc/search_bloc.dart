@@ -30,10 +30,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SideEffectMixin<Sea
 
     on<CategorySelected>((event, emit) {
       emit(state.copyWith(showCategoryDialog: false, searchParams: state.searchParams?.copyWith(videoCategoryId: event.category)));
+      add(OnRefresh());
     });
 
     on<OnRefresh>((event, emit) async {
       emit(state.copyWith(paging: state.paging.firstPage()));
+      await _getVideos(event, emit);
+    });
+
+    on<OnLoadMore>((event, emit) async {
+      emit(state.copyWith(paging: state.paging.nextPage()));
+      await _getVideos(event, emit);
+    });
+
+    on<SearchTextChanged>((event, emit) async {
+      emit(state.copyWith(searchText: event.text));
       await _getVideos(event, emit);
     });
   }

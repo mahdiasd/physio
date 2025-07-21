@@ -11,7 +11,7 @@ abstract class VideoRepository {
     bool? isPublic = null,
   });
 
-  Future<Result<Map<Video, List<Video>>>> get({
+  Future<Result<Video>> get({
     required String id,
   });
 

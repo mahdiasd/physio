@@ -114,10 +114,11 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         final height = width / 1.7;
-        return SizedBox(
+        return CustomVideoPlayer(
+          videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
           width: width,
           height: height,
-          child: Container(decoration: BoxDecoration(color: Theme.of(context).colorScheme.outline)),
+          radius: Theme.of(context).radius.small,
         );
       },
     );
@@ -142,9 +143,10 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
                 state.video?.title ?? "Video Name",
                 color: theme.colorScheme.onSurface,
               ),
+
             BodyLargeText(
               state.video?.category ?? "Category",
-              color: theme.colorScheme.onSurfaceVariant,
+              color: theme.customColors.helper,
             ),
           ],
         );

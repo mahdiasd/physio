@@ -4,15 +4,30 @@ part 'file_response.g.dart';
 
 @JsonSerializable()
 class FileResponse {
+  String contentType;
+  String fileCategory;
+  String fileSize;
+  String id;
+  String originalFilename;
+  String s3Url;
+  String storagePath;
+  String storageType;
+  String storedFilename;
+  String uploadedBy;
+  String url;
+
   FileResponse({
-    required this.id,
-    required this.originalFilename,
-    required this.storedFilename,
-    required this.storagePath,
     required this.contentType,
     required this.fileCategory,
-    required this.status,
-    required this.isPublic,
+    required this.fileSize,
+    required this.id,
+    required this.originalFilename,
+    required this.s3Url,
+    required this.storagePath,
+    required this.storageType,
+    required this.storedFilename,
+    required this.uploadedBy,
+    required this.url,
   });
 
   factory FileResponse.fromJson(Map<String, dynamic> json) =>
@@ -20,12 +35,6 @@ class FileResponse {
 
   Map<String, dynamic> toJson() => _$FileResponseToJson(this);
 
-  final String id;
-  final String originalFilename;
-  final String storedFilename;
-  final String storagePath;
-  final String contentType;
-  final String fileCategory;
-  final String status;
-  final bool isPublic;
 }
+
+

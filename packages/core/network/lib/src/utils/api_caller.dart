@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:network/src/dto/response/network_response.dart';
 import 'package:utils/utils.dart';
 
-import '../dto/response/error_response.dart';
+import '../../network.dart';
 
 abstract class ApiCaller {
-  /// Safely executes an API call and returns a [Result] wrapping the data or error.
-  static Future<Result<T>> safeApiCall<T>(
-    Future<Response<NetworkResponse<T>>> Function() apiCall,
-  ) async {
+  /// Safely executes an API call and returns a [Result] wrapping the data with optional meta.
+  /// This method handles all API errors and transforms them into appropriate [AppException] types.
+  /// Returns [DataWithMeta] which contains both the response data and optional pagination metadata.
+  static Future<Result<DataWithMeta<T>>> safeApiCallWithMeta<T>(
+      Future<Response<NetworkResponse<T>>> Function() apiCall,
+      ) async {
     try {
       final response = await apiCall();
 
@@ -35,7 +36,13 @@ abstract class ApiCaller {
         );
       }
 
-      return Result.ok(networkResponse.data as T);
+      // Return data wrapped with meta
+      return Result.ok(
+        DataWithMeta(
+          data: networkResponse.data as T,
+          meta: networkResponse.meta,
+        ),
+      );
     } on DioException catch (e) {
       return Result.error(_handleDioError(e));
     } catch (e) {
@@ -46,7 +53,16 @@ abstract class ApiCaller {
     }
   }
 
-  /// Checks if the HTTP status code is within the success range.
+  /// Simplified version of safeApiCall that only returns the data without meta.
+  /// Useful for endpoints that don't return pagination metadata.
+  static Future<Result<T>> safeApiCall<T>(
+      Future<Response<NetworkResponse<T>>> Function() apiCall,
+      ) async {
+    final result = await safeApiCallWithMeta<T>(apiCall);
+    return result.map((dataWithMeta) => dataWithMeta.data);
+  }
+
+  /// Checks if the HTTP status code is within the success range (200-299).
   static bool _isSuccessStatus(int? statusCode) {
     return statusCode != null && statusCode >= 200 && statusCode < 300;
   }
@@ -105,7 +121,11 @@ abstract class ApiCaller {
     try {
       final data = response.data;
       if (response.statusCode == 500) {
-        return ErrorResponse(message: 'Server error occurred', error: 'Error from server', statusCode: 500);
+        return ErrorResponse(
+          message: 'Server error occurred',
+          error: 'Error from server',
+          statusCode: 500,
+        );
       }
       if (data is Map<String, dynamic>) {
         final errorResponse = ErrorResponse.fromJson(data);
@@ -131,5 +151,26 @@ abstract class ApiCaller {
     print(header);
     print(body);
     print(separator);
+  }
+}
+
+// result_extensions.dart
+extension ResultExtensions<T> on Result<T> {
+  Result<R> map<R>(R Function(T value) mapper) {
+    switch (this) {
+      case Ok<T>(:final value):
+        return Result.ok(mapper(value));
+      case Error<T>(:final error):
+        return Result.error(error);
+    }
+  }
+
+  Future<Result<R>> flatMap<R>(Future<Result<R>> Function(T value) mapper) async {
+    switch (this) {
+      case Ok<T>(:final value):
+        return await mapper(value);
+      case Error<T>(:final error):
+        return Result.error(error);
+    }
   }
 }

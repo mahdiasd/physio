@@ -110,7 +110,7 @@ class LibraryContent extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
       height: isMobile ? 48 : 38,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: Theme.of(context).colorScheme.outline),
       ),
@@ -172,7 +172,7 @@ class LibraryContent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ClickableWidget(
-                    child: ListTitleText('Categories'),
+                    child: ListTitleText('Categories:'),
                     onTap: () => bloc.add(OnMoreCategoriesClick()),
                   ),
                 ],

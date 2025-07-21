@@ -6,8 +6,8 @@ class LoginState {
   final bool isPasswordObscured;
 
   LoginState({
-    this.email = '',
-    this.password = '',
+    this.email = 'mahdiasd76@gmail.com',
+    this.password = 'M12345678m@',
     this.isLoading = false,
     this.isShowResetPassDialog = false,
     this.isPasswordObscured = true,

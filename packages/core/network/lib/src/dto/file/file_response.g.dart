@@ -7,24 +7,30 @@ part of 'file_response.dart';
 // **************************************************************************
 
 FileResponse _$FileResponseFromJson(Map<String, dynamic> json) => FileResponse(
-      id: json['id'] as String,
-      originalFilename: json['originalFilename'] as String,
-      storedFilename: json['storedFilename'] as String,
-      storagePath: json['storagePath'] as String,
       contentType: json['contentType'] as String,
       fileCategory: json['fileCategory'] as String,
-      status: json['status'] as String,
-      isPublic: json['isPublic'] as bool,
+      fileSize: json['fileSize'] as String,
+      id: json['id'] as String,
+      originalFilename: json['originalFilename'] as String,
+      s3Url: json['s3Url'] as String,
+      storagePath: json['storagePath'] as String,
+      storageType: json['storageType'] as String,
+      storedFilename: json['storedFilename'] as String,
+      uploadedBy: json['uploadedBy'] as String,
+      url: json['url'] as String,
     );
 
 Map<String, dynamic> _$FileResponseToJson(FileResponse instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'originalFilename': instance.originalFilename,
-      'storedFilename': instance.storedFilename,
-      'storagePath': instance.storagePath,
       'contentType': instance.contentType,
       'fileCategory': instance.fileCategory,
-      'status': instance.status,
-      'isPublic': instance.isPublic,
+      'fileSize': instance.fileSize,
+      'id': instance.id,
+      'originalFilename': instance.originalFilename,
+      's3Url': instance.s3Url,
+      'storagePath': instance.storagePath,
+      'storageType': instance.storageType,
+      'storedFilename': instance.storedFilename,
+      'uploadedBy': instance.uploadedBy,
+      'url': instance.url,
     };

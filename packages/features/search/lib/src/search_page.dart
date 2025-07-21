@@ -15,7 +15,8 @@ class SearchPage extends StatelessWidget {
 
   const SearchPage({
     super.key,
-    required this.navigateBack, required this.onSidebarClick,
+    required this.navigateBack,
+    required this.onSidebarClick,
   });
 
   @override
@@ -43,7 +44,12 @@ class SearchPage extends StatelessWidget {
         effectHandlers: {
           NavigateBack: (_) => navigateBack(),
         },
-        child: isMobile ? SafeArea(child: SearchContent()) : WebSidebar(child: SearchContent(), onItemTapped: onSidebarClick,),
+        child: isMobile
+            ? SafeArea(child: SearchContent())
+            : WebSidebar(
+                child: SearchContent(),
+                onItemTapped: onSidebarClick,
+              ),
       ),
     );
   }
@@ -130,7 +136,15 @@ class SearchContent extends StatelessWidget {
                           color: Theme.of(context).colorScheme.outline,
                           margin: const EdgeInsets.symmetric(horizontal: 12),
                         ),
-                        AppImage(width: 24, height: 24, tintColor: Theme.of(context).colorScheme.primary, source: "assets/images/ic_search.svg")
+                        AppImage(
+                          width: 24,
+                          height: 24,
+                          tintColor: Theme.of(context).colorScheme.primary,
+                          source: "assets/images/ic_search.svg",
+                          onTap: () {
+                            bloc.add(OnRefresh());
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -233,4 +247,3 @@ class CategoryDialog extends StatelessWidget {
     );
   }
 }
-
