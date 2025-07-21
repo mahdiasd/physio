@@ -8,7 +8,7 @@ build_app:
   image: cirrusci/flutter:latest
   script:
     - echo "Building Flutter web app..."
-    - flutter build web --release --target=lib/main.dart
+    - flutter build web --target=lib/main.dart
   artifacts:
     paths:
       - build/web/
