@@ -5,7 +5,7 @@ stages:
 
 build_app:
   stage: build
-  image: cirrusci/flutter:3.32.1
+  image: ghcr.io/cirruslabs/docker-images-flutter/flutter:3.32.1
   script:
     - echo "Building Flutter web app..."
     - flutter build web
