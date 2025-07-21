@@ -4,20 +4,17 @@ stages:
 
 build_app:
   stage: build
-  # Use a standard Ubuntu image
-  image: ubuntu:24.04
+  image: ubuntu:22.04
   before_script:
-    # Install necessary tools
     - apt-get update -y && apt-get install -y curl git unzip
-    # Download the specific Flutter version you need (e.g., 3.22.2)
-    - git clone https://github.com/flutter/flutter.git --depth 1 --branch 3.22.2 /flutter
-    # Add the Flutter tool to the command path for this job
+    # Use a newer version of Flutter
+    - git clone https://github.com/flutter/flutter.git --depth 1 --branch 3.24.0 /flutter
     - export PATH="$PATH:/flutter/bin"
   script:
     - echo "Manually installed Flutter version:"
     - flutter --version
     - echo "Building Flutter web app..."
-    - flutter build web 
+    - flutter build web --release --target=lib/main_production.dart
   artifacts:
     paths:
       - build/web/
