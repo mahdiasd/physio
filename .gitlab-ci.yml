@@ -14,7 +14,7 @@ build_app:
     - echo "Manually installed Flutter version:"
     - flutter --version
     - echo "Building Flutter web app..."
-    - flutter build web --release --target=lib/main_production.dart
+    - flutter build web
   artifacts:
     paths:
       - build/web/
