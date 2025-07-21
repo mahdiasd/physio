@@ -2,13 +2,22 @@ stages:
   - build
   - deploy
 
-
 build_app:
   stage: build
-  image: ghcr.io/cirruslabs/docker-images-flutter/flutter:3.32.1
+  # Use a standard Ubuntu image
+  image: ubuntu:24.04
+  before_script:
+    # Install necessary tools
+    - apt-get update -y && apt-get install -y curl git unzip
+    # Download the specific Flutter version you need (e.g., 3.22.2)
+    - git clone https://github.com/flutter/flutter.git --depth 1 --branch 3.22.2 /flutter
+    # Add the Flutter tool to the command path for this job
+    - export PATH="$PATH:/flutter/bin"
   script:
+    - echo "Manually installed Flutter version:"
+    - flutter --version
     - echo "Building Flutter web app..."
-    - flutter build web
+    - flutter build web 
   artifacts:
     paths:
       - build/web/
