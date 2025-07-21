@@ -5,7 +5,7 @@ stages:
 
 build_app:
   stage: build
-  image: cirrusci/flutter:3.22.2
+  image: cirrusci/flutter:3.32.1
   script:
     - echo "Building Flutter web app..."
     - flutter build web
