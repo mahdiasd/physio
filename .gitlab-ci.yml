@@ -5,10 +5,10 @@ stages:
 
 build_app:
   stage: build
-  image: cirrusci/flutter:latest
+  image: cirrusci/flutter:3.22.2
   script:
     - echo "Building Flutter web app..."
-    - flutter build web --target=lib/main.dart
+    - flutter build web
   artifacts:
     paths:
       - build/web/
