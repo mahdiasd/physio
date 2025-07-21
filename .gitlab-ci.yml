@@ -1,16 +1,33 @@
-image: cirrusci/flutter:stable
+stages:
+  - build
+  - deploy
 
-before_script:
-  - flutter pub global activate melos
-  - melos bootstrap
 
-pages:
-  stage: deploy
+build_app:
+  stage: build
+  image: cirrusci/flutter:latest
   script:
-    - melos exec --scope="web_app" -- flutter build web --release
-    - cp -r packages/web_app/build/web public
+    - echo "Building Flutter web app..."
+    - flutter build web --release --target=lib/main.dart
   artifacts:
     paths:
-      - public
+      - build/web/
   only:
-    - main
+    - master
+
+deploy_app:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client rsync
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | base64 -d | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "StrictHostKeyChecking no" >> ~/.ssh/config
+  script:
+    - echo "Deploying files to server..."
+    - rsync -avz --delete build/web/ "$SERVER_USER@$SERVER_IP:$DEPLOY_PATH/"
+    - echo "Deployment complete! ✅"
+  only:
+    - master
