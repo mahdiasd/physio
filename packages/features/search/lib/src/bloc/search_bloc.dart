@@ -9,27 +9,39 @@ import 'search_event.dart';
 import 'search_state.dart';
 
 @injectable
-class SearchBloc extends Bloc<SearchEvent, SearchState> with SideEffectMixin<SearchState, SearchEffect> {
+class SearchBloc extends Bloc<SearchEvent, SearchState>
+    with SideEffectMixin<SearchState, SearchEffect> {
   final GetVideosUseCase _getVideosUseCase;
 
   void passData(SearchParams? searchParams) {
     add(InitData(searchParams ?? SearchParams()));
-    PrintHelper.info(searchParams?.toJson().toString() ?? "Search Params is null");
+    PrintHelper.info(
+        searchParams?.toJson().toString() ?? "Search Params is null");
   }
 
   SearchBloc(this._getVideosUseCase) : super(SearchState()) {
     on<InitData>((event, emit) {
       emit(state.copyWith(searchParams: event.searchParams));
-      emit(state.copyWith(categories: FakeDataProvider.instance.getFakeVideoCategories()));
-      emit(state.copyWith(paging: Paging(content: FakeDataProvider.instance.getFakeVideos(count: 25))));
+      emit(state.copyWith(
+          categories: FakeDataProvider.instance.getFakeVideoCategories()));
+      emit(state.copyWith(
+          paging: Paging(
+              content: FakeDataProvider.instance.getFakeVideos(count: 25))));
     });
 
     on<ShowCategoryDialog>((event, emit) {
       emit(state.copyWith(showCategoryDialog: event.show));
     });
 
+    on<OnVideoClick>((event, emit) {
+      emitEffect(NavigateToVideoDetail(event.video.id));
+    });
+
     on<CategorySelected>((event, emit) {
-      emit(state.copyWith(showCategoryDialog: false, searchParams: state.searchParams?.copyWith(videoCategoryId: event.category)));
+      emit(state.copyWith(
+          showCategoryDialog: false,
+          searchParams:
+              state.searchParams?.copyWith(videoCategoryId: event.category)));
       add(OnRefresh());
     });
 

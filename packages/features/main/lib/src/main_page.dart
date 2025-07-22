@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
 
@@ -8,7 +9,7 @@ import 'bloc/main_effect.dart';
 import 'bloc/main_event.dart';
 import 'bloc/main_state.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   final Widget child;
   final VoidCallback onHomePressed;
   final VoidCallback onLibraryPressed;
@@ -27,29 +28,102 @@ class MainPage extends StatelessWidget {
   });
 
   @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> with RouteAware {
+  late final RouteObserver<PageRoute<void>> _routeObserver;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateNavigationItem();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _routeObserver = RouteObserver<PageRoute<dynamic>>();
+    final route = ModalRoute.of(context);
+    if (route is PageRoute) {
+      _routeObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void didUpdateWidget(MainPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.child != widget.child) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateNavigationItem();
+      });
+    }
+  }
+
+  @override
+  void didPopNext() {
+    _updateNavigationItem();
+  }
+
+  void _updateNavigationItem() {
+    final router = GoRouter.of(context);
+    final location = router.routerDelegate.currentConfiguration.uri.path;
+    final navItem = _getNavigationItemFromLocation(location);
+
+    final currentItem = context.read<MainBloc>().state.currentNavItem;
+    if (currentItem.runtimeType != navItem.runtimeType) {
+      context.read<MainBloc>().add(PageChanged(navItem));
+    }
+  }
+
+  NavigationItem _getNavigationItemFromLocation(String location) {
+    if (location.startsWith('/home')) {
+      return const HomeNavigationItem();
+    } else if (location.startsWith('/library')) {
+      return const LibraryNavigationItem();
+    } else if (location.startsWith('/programs')) {
+      return const ProgramsNavigationItem();
+    } else if (location.startsWith('/appointment')) {
+      return const AppointmentsNavigationItem();
+    } else if (location.startsWith('/account')) {
+      return const AccountNavigationItem();
+    }
+    return const LibraryNavigationItem();
+  }
+
+  @override
+  void dispose() {
+    _routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final bloc = context.read<MainBloc>();
     return BlocListenerWidget(
       effectsStream: bloc.effectsStream,
       messageStream: bloc.messageStream,
       effectHandlers: {
-        NavigateToHome: (_) => onHomePressed(),
-        NavigateToAppointment: (_) => onAppointmentsPressed(),
-        NavigateToProgram: (_) => onProgramsPressed(),
-        NavigateToLibrary: (_) => onLibraryPressed(),
-        NavigateToAccount: (_) => onAccountPressed(),
+        NavigateToHome: (_) => widget.onHomePressed(),
+        NavigateToAppointment: (_) => widget.onAppointmentsPressed(),
+        NavigateToProgram: (_) => widget.onProgramsPressed(),
+        NavigateToLibrary: (_) => widget.onLibraryPressed(),
+        NavigateToAccount: (_) => widget.onAccountPressed(),
       },
       child: MainContent(
-        child: child,
-        onHomePressed: onHomePressed,
-        onLibraryPressed: onLibraryPressed,
-        onProgramsPressed: onProgramsPressed,
-        onAppointmentsPressed: onAppointmentsPressed,
-        onAccountPressed: onAccountPressed,
+        child: widget.child,
+        onHomePressed: widget.onHomePressed,
+        onLibraryPressed: widget.onLibraryPressed,
+        onProgramsPressed: widget.onProgramsPressed,
+        onAppointmentsPressed: widget.onAppointmentsPressed,
+        onAccountPressed: widget.onAccountPressed,
       ),
     );
   }
 }
+
 
 class MainContent extends StatelessWidget {
   final Widget child;

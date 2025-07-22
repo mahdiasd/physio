@@ -12,11 +12,13 @@ import 'bloc/search_state.dart';
 class SearchPage extends StatelessWidget {
   final VoidCallback navigateBack;
   final ValueChanged<NavigationItem> onSidebarClick;
+  final ValueChanged<String> navigateToVideoDetail;
 
   const SearchPage({
     super.key,
     required this.navigateBack,
     required this.onSidebarClick,
+    required this.navigateToVideoDetail,
   });
 
   @override
@@ -32,7 +34,8 @@ class SearchPage extends StatelessWidget {
             builder: (context) {
               return CategoryDialog(
                 categories: state.categories,
-                onCategorySelected: (category) => bloc.add(CategorySelected(category)),
+                onCategorySelected: (category) =>
+                    bloc.add(CategorySelected(category)),
               );
             },
           );
@@ -43,6 +46,8 @@ class SearchPage extends StatelessWidget {
         messageStream: bloc.messageStream,
         effectHandlers: {
           NavigateBack: (_) => navigateBack(),
+          NavigateToVideoDetail: (effect) =>
+              navigateToVideoDetail((effect as NavigateToVideoDetail).videoId),
         },
         child: isMobile
             ? SafeArea(child: SearchContent())
@@ -165,7 +170,7 @@ class SearchContent extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     final bloc = context.read<SearchBloc>();
-    final gridCount = isMobile ? 1 : (width / 170).toInt();
+    final gridCount = isMobile ? 1 : (width / 190).toInt();
 
     return BlocBuilder<SearchBloc, SearchState>(
       buildWhen: (previous, current) {
@@ -180,6 +185,7 @@ class SearchContent extends StatelessWidget {
                 maxWidth: 170,
                 aspectRatio: 1.7,
                 video: item,
+                onTap: () => bloc.add(OnVideoClick(item)),
               );
             },
             onRefresh: () async {
@@ -197,9 +203,10 @@ class SearchContent extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: VideoItemHorizontal(
-                  imageWidth: 120,
+                  maxHeight: 120,
                   aspectRatio: 1.7,
                   video: item,
+                  onTap: () => bloc.add(OnVideoClick(item)),
                 ),
               );
             },

@@ -23,8 +23,14 @@ class MainRoute extends ShellRouteData {
 
   @override
   Widget builder(BuildContext context, GoRouterState state, Widget child) {
+    final currentNavItem = _getNavigationItemFromPath(state.uri.path);
+    final bloc = getIt<MainBloc>();
     return BlocProvider(
-      create: (context) => getIt<MainBloc>(),
+      create: (context) {
+        bloc.add(PageChanged(currentNavItem));
+        PrintHelper.info("${currentNavItem.label}", location: "MainRoute");
+        return bloc;
+      },
       child: Builder(
         builder: (innerContext) {
           return MainPage(
@@ -39,11 +45,28 @@ class MainRoute extends ShellRouteData {
       ),
     );
   }
+
+  NavigationItem _getNavigationItemFromPath(String path) {
+    if (path.startsWith('/home')) {
+      return const HomeNavigationItem();
+    } else if (path.startsWith('/library')) {
+      return const LibraryNavigationItem();
+    } else if (path.startsWith('/programs')) {
+      return const ProgramsNavigationItem();
+    } else if (path.startsWith('/appointment')) {
+      return const AppointmentsNavigationItem();
+    } else if (path.startsWith('/account')) {
+      return const AccountNavigationItem();
+    }
+    // مسیر پیش‌فرض
+    return const LibraryNavigationItem();
+  }
 }
 
 class AccountRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) => const Text("AccountRoute");
+  Widget build(BuildContext context, GoRouterState state) =>
+      const Text("AccountRoute");
 }
 
 class LibraryRoute extends GoRouteData {
@@ -54,7 +77,9 @@ class LibraryRoute extends GoRouteData {
           builder: (innerContext) {
             return VideoLibraryPage(
               navigateToSearch: (searchParams) {
-                innerContext.push(SearchRouteExtension.fromSearchParams(searchParams).location);
+                innerContext.push(
+                    SearchRouteExtension.fromSearchParams(searchParams)
+                        .location);
               },
               navigateToVideoDetail: (videoId) {
                 innerContext.push(VideoDetailRoute(videoId).location);
@@ -67,17 +92,20 @@ class LibraryRoute extends GoRouteData {
 
 class ProgramsRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) => const Text("ProgramsRoute");
+  Widget build(BuildContext context, GoRouterState state) =>
+      const Text("ProgramsRoute");
 }
 
 class AppointmentsRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) => const Text("AppointmentsRoute");
+  Widget build(BuildContext context, GoRouterState state) =>
+      const Text("AppointmentsRoute");
 }
 
 class HomeRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) => const Text("HomeRoute");
+  Widget build(BuildContext context, GoRouterState state) =>
+      const Text("HomeRoute");
 }
 
 extension Navigate on NavigationItem {

@@ -6,6 +6,8 @@ import 'package:search/search.dart';
 import 'package:ui/ui.dart';
 import 'package:utils/utils.dart';
 
+import '../video_detail/video_detail_route.dart';
+
 part 'search_route.g.dart';
 
 @TypedGoRoute<SearchRoute>(
@@ -44,6 +46,9 @@ class SearchRoute extends GoRouteData {
           return SearchPage(
             navigateBack: () => innerContext.pop(),
             onSidebarClick: (NavigationItem value) => value.goTo(innerContext),
+            navigateToVideoDetail: (String value) {
+              innerContext.push(VideoDetailRoute(value).location);
+            },
           );
         },
       ),

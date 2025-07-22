@@ -1,13 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:ui/ui.dart';
+
 import 'main_effect.dart';
 import 'main_event.dart';
 import 'main_state.dart';
-import 'package:injectable/injectable.dart';
 
 @injectable
-class MainBloc extends Bloc<MainEvent, MainState>
-    with SideEffectMixin<MainState, MainEffect> {
+class MainBloc extends Bloc<MainEvent, MainState> with SideEffectMixin<MainState, MainEffect> {
   MainBloc() : super(MainState()) {
     on<PageChanged>((event, emit) {
       emit(state.copyWith(currentNavItem: event.item));
