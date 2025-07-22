@@ -105,7 +105,7 @@ class AppointmentsRoute extends GoRouteData {
 class HomeRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
-      const Text("HomeRoute");
+      const Text("HomeRoute2");
 }
 
 extension Navigate on NavigationItem {
