@@ -18,6 +18,7 @@ import 'package:domain/src/usecase/user/resend_otp_use_case.dart' as _i796;
 import 'package:domain/src/usecase/user/reset_password_use_case.dart' as _i491;
 import 'package:domain/src/usecase/user/send_otp_codes_use_case.dart' as _i979;
 import 'package:domain/src/usecase/user/validate_email_use_case.dart' as _i706;
+import 'package:domain/src/usecase/video/flag_video_use_case.dart' as _i139;
 import 'package:domain/src/usecase/video/get_videos_use_case.dart' as _i691;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -29,6 +30,8 @@ class DomainPackageModule extends _i526.MicroPackageModule {
         () => _i927.GetConfigUseCase(gh<_i494.ConfigRepository>()));
     gh.factory<_i691.GetVideosUseCase>(
         () => _i691.GetVideosUseCase(gh<_i494.VideoRepository>()));
+    gh.factory<_i139.FlagVideoUseCase>(
+        () => _i139.FlagVideoUseCase(gh<_i494.VideoRepository>()));
     gh.factory<_i203.LoginUseCase>(
         () => _i203.LoginUseCase(gh<_i498.UserRepository>()));
     gh.factory<_i531.RegisterUseCase>(
