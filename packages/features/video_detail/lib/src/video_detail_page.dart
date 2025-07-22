@@ -54,14 +54,17 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
-        child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
+        child: isMobile
+            ? _buildMobileLayout(context)
+            : _buildDesktopLayout(context),
       ),
     );
   }
 
   Widget _buildMobileLayout(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 8),
+      padding:
+          const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 8),
       child: SingleChildScrollView(
         child: Column(
           spacing: 16,
@@ -115,12 +118,8 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         final height = width / 1.7;
-        return CustomVideoPlayer(
-          videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-          width: width,
-          height: height,
-          radius: Theme.of(context).radius.small,
-        );
+        return SizedBox(
+            width: width, height: height, child: BasicVideoPlayer(videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',));
       },
     );
   }
@@ -158,7 +157,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
               width: 20,
               height: 20,
               source: "assets/images/ic_flag.svg",
-              onTap: (){
+              onTap: () {
                 context.read<VideoDetailBloc>().add(OnFlagClick());
               },
               tintColor: theme.customColors.disabled,
@@ -210,7 +209,8 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
   Widget _buildRelatedVideosSection(BuildContext context) {
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
-      buildWhen: (previous, current) => previous.relatedVideos != current.relatedVideos,
+      buildWhen: (previous, current) =>
+          previous.relatedVideos != current.relatedVideos,
       builder: (context, state) {
         final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 

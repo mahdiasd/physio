@@ -35,4 +35,5 @@ export 'src/widgets/text/title_text.dart';
 export 'src/widgets/toast/toast.dart';
 export 'src/widgets/video/video_item.dart';
 export 'src/widgets/video_player/custom_video_player.dart';
+export 'src/widgets/video_player/basic_video_player.dart';
 export 'src/widgets/web_left_section/web_left_section.dart';

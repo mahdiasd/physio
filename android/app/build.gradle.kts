@@ -19,7 +19,8 @@ if (localPropertiesFile.exists()) {
 android {
     namespace = "com.example.physio"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "28.1.13356709"
+    ndkVersion = "28.0.12674087"
+//    ndkVersion = "28.1.13356709"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
