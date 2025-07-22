@@ -9,13 +9,18 @@ import 'dart:async' as _i687;
 import 'package:dio/dio.dart' as _i361;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:network/network.dart' as _i372;
+import 'package:network/src/api/auth/auth_api_service.dart' as _i414;
+import 'package:network/src/api/auth/auth_api_service_impl.dart' as _i805;
 import 'package:network/src/api/config/config_api_service.dart' as _i329;
 import 'package:network/src/api/config/config_api_service_impl.dart' as _i77;
+import 'package:network/src/api/library/video_library_api_service.dart'
+    as _i414;
 import 'package:network/src/api/library/video_library_api_service_impl.dart'
     as _i475;
 import 'package:network/src/api/user/user_api_service_impl.dart' as _i208;
 import 'package:network/src/api/video/video_api_service_impl.dart' as _i786;
 import 'package:network/src/di/network_module.dart' as _i1026;
+import 'package:network/src/utils/token_interceptor.dart' as _i1068;
 import 'package:storage/storage.dart' as _i431;
 
 class NetworkPackageModule extends _i526.MicroPackageModule {
@@ -37,14 +42,21 @@ class NetworkPackageModule extends _i526.MicroPackageModule {
           gh<_i361.Dio>(instanceName: 'dioWithoutInterceptors'),
           gh<_i431.StorageService>(),
         ));
-    gh.lazySingleton<_i475.VideoLibraryApiServiceImpl>(
+    gh.lazySingleton<_i414.VideoLibraryApiService>(
         () => _i475.VideoLibraryApiServiceImpl(gh<_i361.Dio>()));
-    gh.lazySingleton<_i786.VideoApiServiceImpl>(
-        () => _i786.VideoApiServiceImpl(gh<_i361.Dio>()));
+    gh.lazySingleton<_i414.AuthApiService>(
+        () => _i805.AuthApiServiceImpl(gh<_i361.Dio>()));
     gh.lazySingleton<_i372.UserApiService>(
         () => _i208.UserApiServiceImpl(gh<_i361.Dio>()));
     gh.lazySingleton<_i329.ConfigApiService>(
         () => _i77.ConfigApiServiceImpl(gh<_i361.Dio>()));
+    gh.lazySingleton<_i372.VideoApiService>(
+        () => _i786.VideoApiServiceImpl(gh<_i361.Dio>()));
+    gh.lazySingleton<_i1068.TokenInterceptor>(() => _i1068.TokenInterceptor(
+          gh<_i431.StorageService>(),
+          gh<_i361.Dio>(),
+          gh<_i414.AuthApiService>(),
+        ));
   }
 }
 

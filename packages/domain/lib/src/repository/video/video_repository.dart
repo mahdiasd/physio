@@ -15,4 +15,7 @@ abstract class VideoRepository {
     required String id,
   });
 
+  Future<Result<bool>> flag({
+    required String id,
+  });
 }

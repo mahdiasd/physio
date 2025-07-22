@@ -5,3 +5,5 @@ class InitData extends VideoDetailEvent {
 
   InitData(this.videoId);
 }
+
+class OnFlagClick extends VideoDetailEvent {}

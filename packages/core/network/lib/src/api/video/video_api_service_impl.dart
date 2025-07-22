@@ -38,4 +38,13 @@ class VideoApiServiceImpl extends VideoApiService {
       },
     );
   }
+
+  @override
+  Future<Response<NetworkResponse<EmptyResponse>>> flag({required String id}) {
+    return ApiWrapper.postRequest<EmptyResponse>(
+      dio,
+      '/v1/videos/${id}/flag',
+      fromJsonT: (json) => EmptyResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
 }

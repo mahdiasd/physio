@@ -32,14 +32,14 @@ class _WebSidebarState extends State<WebSidebar> {
 
   @override
   Widget build(BuildContext context) {
-    final sidebarWidth = isSidebarCollapsed ? 57.0 : 256.0;
+    final sidebarWidth = isSidebarCollapsed ? 70.0 : 256.0;
 
     return Scaffold(
       body: Row(
         children: [
           // Sidebar
           AnimatedContainer(
-            duration: const Duration(milliseconds: 600),
+            duration: const Duration(milliseconds: 400),
             width: sidebarWidth,
             color: Theme.of(context).colorScheme.surfaceContainerLow,
             child: Padding(
@@ -86,7 +86,8 @@ class _WebSidebarState extends State<WebSidebar> {
 
                   // Navigation items
                   ...() {
-                    final sortedItems = [...widget.navigationItems]..sort((a, b) => a.index.compareTo(b.index));
+                    final sortedItems = [...widget.navigationItems]
+                      ..sort((a, b) => a.index.compareTo(b.index));
 
                     return sortedItems.map((item) {
                       return Padding(
@@ -134,7 +135,8 @@ class _WebSidebarState extends State<WebSidebar> {
 
     return InkWell(
       borderRadius: BorderRadius.circular(8),
-      onTap: widget.onItemTapped != null ? () => widget.onItemTapped!(item) : null,
+      onTap:
+          widget.onItemTapped != null ? () => widget.onItemTapped!(item) : null,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(

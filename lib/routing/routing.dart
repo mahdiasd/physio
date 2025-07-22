@@ -11,7 +11,7 @@ import 'login/login_route.dart';
 import 'register/register_route.dart';
 
 final router = GoRouter(
-  initialLocation: VideoDetailRoute("").location,
+  initialLocation: LibraryRoute().location,
   routes: [
     $splashRoute,
     $loginRoute,

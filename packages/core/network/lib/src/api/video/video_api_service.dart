@@ -11,4 +11,6 @@ abstract class VideoApiService {
   });
 
   Future<Response<NetworkResponse<VideoResponse>>> getSingle({required String id});
+
+  Future<Response<NetworkResponse<EmptyResponse>>> flag({required String id});
 }

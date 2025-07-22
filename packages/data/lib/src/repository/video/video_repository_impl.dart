@@ -45,4 +45,16 @@ class VideoRepositoryImpl extends VideoRepository {
         return Result.error(result.error);
     }
   }
+
+  @override
+  Future<Result<bool>> flag({required String id}) async {
+    final result = await ApiCaller.safeApiCall<EmptyResponse>(() => _apiService.flag(id: id));
+
+    switch (result) {
+      case Ok<EmptyResponse>():
+        return Result.ok(true);
+      case Error<EmptyResponse>():
+        return Result.error(result.error);
+    }
+  }
 }

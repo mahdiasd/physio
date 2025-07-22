@@ -5,6 +5,7 @@ import 'package:ui/ui.dart';
 
 import '../video_detail.dart';
 import 'bloc/video_detail_effect.dart';
+import 'bloc/video_detail_event.dart';
 import 'bloc/video_detail_state.dart';
 
 class VideoDetailPage extends StatelessWidget {
@@ -129,25 +130,39 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
       builder: (context, state) {
-        return Column(
-          spacing: 8,
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (isMobile)
-              ListItemTitleText(
-                state.video?.title ?? "Video Name",
-                color: theme.colorScheme.onSurface,
-              )
-            else
-              PageSubTitleText(
-                state.video?.title ?? "Video Name",
-                color: theme.colorScheme.onSurface,
-              ),
-
-            BodyLargeText(
-              state.video?.category ?? "Category",
-              color: theme.customColors.helper,
+            Column(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (isMobile)
+                  ListItemTitleText(
+                    state.video?.title ?? "Video Name",
+                    color: theme.colorScheme.onSurface,
+                  )
+                else
+                  PageSubTitleText(
+                    state.video?.title ?? "Video Name",
+                    color: theme.colorScheme.onSurface,
+                  ),
+                BodyLargeText(
+                  state.video?.category ?? "Category",
+                  color: theme.customColors.helper,
+                ),
+              ],
             ),
+            AppImage(
+              width: 20,
+              height: 20,
+              source: "assets/images/ic_flag.svg",
+              onTap: (){
+                context.read<VideoDetailBloc>().add(OnFlagClick());
+              },
+              tintColor: theme.customColors.disabled,
+            )
           ],
         );
       },
