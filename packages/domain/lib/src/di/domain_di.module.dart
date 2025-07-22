@@ -28,10 +28,10 @@ class DomainPackageModule extends _i526.MicroPackageModule {
   _i687.FutureOr<void> init(_i526.GetItHelper gh) {
     gh.factory<_i927.GetConfigUseCase>(
         () => _i927.GetConfigUseCase(gh<_i494.ConfigRepository>()));
-    gh.factory<_i691.GetVideosUseCase>(
-        () => _i691.GetVideosUseCase(gh<_i494.VideoRepository>()));
     gh.factory<_i139.FlagVideoUseCase>(
         () => _i139.FlagVideoUseCase(gh<_i494.VideoRepository>()));
+    gh.factory<_i691.GetVideosUseCase>(
+        () => _i691.GetVideosUseCase(gh<_i494.VideoRepository>()));
     gh.factory<_i203.LoginUseCase>(
         () => _i203.LoginUseCase(gh<_i498.UserRepository>()));
     gh.factory<_i531.RegisterUseCase>(
