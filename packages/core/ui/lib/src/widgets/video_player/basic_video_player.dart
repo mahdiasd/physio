@@ -27,7 +27,7 @@ class _BasicVideoPlayerState extends State<BasicVideoPlayer> {
   void initState() {
     super.initState();
     player.open(Media(widget.videoUrl));
-    PrintHelper.info("initState", location: "VideoPlayer");
+    PrintHelper.info("initState → ${widget.videoUrl}", location: "VideoPlayer");
   }
 
   @override
