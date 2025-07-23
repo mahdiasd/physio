@@ -27,10 +27,19 @@ scripts:
 
   generate:watch:
     run: |
-      melos exec -c 1 --depends-on="build_runner" -- "dart run build_runner watch --delete-conflicting-outputs"
+      melos exec -c 1 --scope="domain,data,network" --depends-on="build_runner" -- "dart run build_runner watch --delete-conflicting-outputs"
     description: >
-      Continuously watch and rebuild code generation outputs for packages 
+      Continuously watch and rebuild code generation outputs for domain, data, and network packages 
       using build_runner, ideal for development mode.
+
+  generate:watch:feature:
+    run: |
+      echo "Enter the feature package name (e.g., search):"
+      read feature
+      melos exec -c 1 --scope="$feature" --depends-on="build_runner" -- "dart run build_runner watch --delete-conflicting-outputs"
+    description: >
+      Continuously watch and rebuild code generation outputs for a single feature package. 
+      It will prompt for the feature name (e.g., search) and run on that package only.
 
   build:web:
     run: melos exec --scope="web_app" -- flutter build web --release

@@ -38,7 +38,7 @@ class UserRepositoryImpl extends UserRepository {
         case Error<LoginResponse>():
           return Result.error(result.error);
       }
-    } catch (e, stackTrace) {
+    } catch (e) {
       PrintHelper.error("Login failed: $e", location: "UserRepositoryImpl");
       return Result.error(NetworkException(message: "An unexpected error occurred during login."));
     }

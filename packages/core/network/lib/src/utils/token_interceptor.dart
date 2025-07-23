@@ -64,7 +64,7 @@ class TokenInterceptor extends QueuedInterceptor {
           final options = err.requestOptions;
           options.headers['Authorization'] = 'Bearer $newAccessToken';
 
-          final response = await _dio.fetch(options);
+          final response = await _dio.fetch<dynamic>(options);
           handler.resolve(response);
           return;
         } // If the refresh token has also expired, log out the user

@@ -26,7 +26,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState>
           categories: FakeDataProvider.instance.getFakeVideoCategories()));
       emit(state.copyWith(
           paging: Paging(
-              content: FakeDataProvider.instance.getFakeVideos(count: 25))));
+              content: FakeDataProvider.instance.getFakeVideoSummeries(count: 25))));
     });
 
     on<ShowCategoryDialog>((event, emit) {

@@ -18,10 +18,10 @@ class FakeDataProvider {
         contentType: isVideo ? 'video/mp4' : 'image/jpeg',
         fileCategory: isVideo ? 'video' : 'image',
         fileSize: '',
-        s3Url: '',
+        s3Url: 'https://persian16.asset.aparat.com/aparat-video/4cd923e5be2d79eb8d21e49ccfc5c3cc64748260-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNlM2Y0Zjk4NTljZTU0MTEwYzQyMzBjM2RjNGU2NjJkIiwiZXhwIjoxNzUzMjc1OTk2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.QyXcJk46c8bkxRJjZcxusMRlQQJuF5QO9mNGp9CckAo',
         storageType: '',
         uploadedBy: '',
-        url: '',
+        url: 'https://placehold.co/600x400',
       );
     });
   }
@@ -42,7 +42,7 @@ class FakeDataProvider {
       id: 'blog-image-$index',
       originalFilename: 'featured_$index.jpg',
       storedFilename: 'featured_$index.jpg',
-      storagePath: 'https://picsum.photos/seed/blog$index/600/400',
+      storagePath: 'https://placehold.co/600x400',
       contentType: 'image/jpeg',
       fileCategory: 'image',
       fileSize: '',
@@ -88,7 +88,7 @@ class FakeDataProvider {
     return baseCategories;
   }
 
-  List<VideoSummary> getFakeVideos({int count = 5}) {
+  List<VideoSummary> getFakeVideoSummeries({int count = 5}) {
     final random = Random();
 
     final categories = getFakeVideoCategories();
@@ -107,13 +107,35 @@ class FakeDataProvider {
     });
   }
 
+  List<Video> getFakeVideos(int count) {
+    return List.generate(count, (index) {
+      return Video(
+        category: "faker.lorem.word()",
+        coverPhoto: "faker.image.imageUrl()",
+        createdAt: DateTime.now(),
+        description: "faker.lorem.sentence()",
+        id: "faker.guid.guid()",
+        isPublic: false,
+        relatedVideos: getFakeVideoSummeries(count: 4),
+        status: "",
+        tags: ["tag 1" , "tag 2"],
+        title: "Video title",
+        updatedAt: DateTime.now(),
+        uploader: UploaderUser(
+         firstName: 'firstName', lastName: 'lastName',
+        ),
+        videoFile: getFakeFiles(count: 1, isImage: false).first,
+      );
+    });
+  }
+
   VideoLibrary getFakeLibrary() {
     return VideoLibrary(
         categories: getFakeVideoCategories(),
-        mainVideo: getFakeVideos().first,
-        recentVideos: getFakeVideos(count: 5),
-        mostVideos: getFakeVideos(count: 6),
-        shouldersVideos: getFakeVideos(count: 10),
+        mainVideo: getFakeVideoSummeries().first,
+        recentVideos: getFakeVideoSummeries(count: 5),
+        mostVideos: getFakeVideoSummeries(count: 6),
+        shouldersVideos: getFakeVideoSummeries(count: 10),
         blogPosts: getFakeBlogPosts(count: 8));
   }
 }

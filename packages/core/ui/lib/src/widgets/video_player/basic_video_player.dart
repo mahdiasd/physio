@@ -1,15 +1,18 @@
-import 'dart:io'; // For platform checking (e.g., for spinner if needed)
 import 'package:flutter/material.dart';
-import 'package:chewie/chewie.dart';
-import 'package:ui/src/theme/custom_colors.dart';
-import 'package:video_player/video_player.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
+import 'package:utils/utils.dart';
 
 class BasicVideoPlayer extends StatefulWidget {
   final String videoUrl;
+  final double? height;
+  final double? width;
 
   const BasicVideoPlayer({
     super.key,
     required this.videoUrl,
+    this.height,
+    this.width,
   });
 
   @override
@@ -17,61 +20,31 @@ class BasicVideoPlayer extends StatefulWidget {
 }
 
 class _BasicVideoPlayerState extends State<BasicVideoPlayer> {
-  late VideoPlayerController _videoPlayerController;
-  ChewieController? _chewieController;
+  late final player = Player();
+  late final controller = VideoController(player);
 
   @override
   void initState() {
     super.initState();
-    _initializePlayer();
-  }
-
-  Future<void> _initializePlayer() async {
-    try {
-      _videoPlayerController =
-          VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
-
-      await _videoPlayerController.initialize();
-
-      _chewieController = ChewieController(
-        videoPlayerController: _videoPlayerController,
-        autoPlay: true,
-        looping: true,
-      );
-
-      if (mounted) {
-        setState(() {});
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error initializing video: $e')));
-      }
-    }
+    player.open(Media(widget.videoUrl));
+    PrintHelper.info("initState", location: "VideoPlayer");
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Basic Video Player')),
-      body: Center(
-        child: _chewieController != null &&
-                _chewieController!.videoPlayerController.value.isInitialized
-            ? Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: Theme.of(context).radius.smallAll),
-                child: Chewie(controller: _chewieController!),
-              )
-            : const CircularProgressIndicator(color: Colors.black),
+    return Center(
+      child: SizedBox(
+        width: widget.width,
+        height: widget.height,
+        child: Video(controller: controller),
       ),
     );
   }
 
   @override
   void dispose() {
-    _videoPlayerController.dispose();
-    _chewieController?.dispose();
+    PrintHelper.info("dispose", location: "VideoPlayer");
+    player.dispose();
     super.dispose();
   }
 }

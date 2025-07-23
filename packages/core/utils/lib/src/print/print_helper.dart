@@ -46,7 +46,7 @@ class PrintHelper {
         required String label,
         String? location,
       }) {
-    final header = '\x1B[${colorCode}m══╣ $label ${location != null ? '[$location]' : ''} ╠══\x1B[0m';
+    final header = '\x1B[${colorCode}m $label ${location != null ? '[$location]' : ''} \x1B[0m';
     final coloredMessage = '\x1B[${colorCode}m$message\x1B[0m';
     final separator = '\x1B[${colorCode}m' + ('═' * 80) + '\x1B[0m';
 

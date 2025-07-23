@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 import '../video_detail.dart';
 import 'bloc/video_detail_effect.dart';
@@ -11,11 +12,13 @@ import 'bloc/video_detail_state.dart';
 class VideoDetailPage extends StatelessWidget {
   final VoidCallback navigateBack;
   final ValueChanged<NavigationItem> onSidebarClick;
+  final ValueChanged<String> navigateToVideoDetail;
 
   const VideoDetailPage({
     super.key,
     required this.navigateBack,
     required this.onSidebarClick,
+    required this.navigateToVideoDetail,
   });
 
   @override
@@ -27,6 +30,7 @@ class VideoDetailPage extends StatelessWidget {
       messageStream: bloc.messageStream,
       effectHandlers: {
         NavigateBack: (_) => navigateBack(),
+        NavigateToVideoDetail: (effect) => navigateToVideoDetail((effect as NavigateToVideoDetail).videoId),
       },
       child: isMobile
           ? VideoDetailContent()
@@ -54,17 +58,14 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
-        child: isMobile
-            ? _buildMobileLayout(context)
-            : _buildDesktopLayout(context),
+        child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
       ),
     );
   }
 
   Widget _buildMobileLayout(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 8),
+      padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 8),
       child: SingleChildScrollView(
         child: Column(
           spacing: 16,
@@ -114,12 +115,34 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   }
 
   Widget _buildVideoDetail(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final height = width / 1.7;
-        return SizedBox(
-            width: width, height: height, child: BasicVideoPlayer(videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',));
+
+    return BlocBuilder<VideoDetailBloc, VideoDetailState>(
+      buildWhen: (previous, current) => previous.video?.videoFile.s3Url != current.video?.videoFile.s3Url,
+      builder: (context, state) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            final height = width / 1.8;
+            if (state.video == null) {
+              return Container(
+                width: width,
+                height: height,
+              );
+            } else {
+              PrintHelper.info("${state.video?.videoFile.s3Url}", location: "Call BasicVideoPlayer");
+              return SizedBox(
+                width: width,
+                height: height,
+                child: BasicVideoPlayer(
+                  videoUrl: state.video?.videoFile.s3Url ?? "",
+                  width: width,
+                  height: height,
+                  // radius: Theme.of(context).radius.small,
+                ),
+              );
+            }
+          },
+        );
       },
     );
   }
@@ -209,11 +232,12 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
   Widget _buildRelatedVideosSection(BuildContext context) {
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
-      buildWhen: (previous, current) =>
-          previous.relatedVideos != current.relatedVideos,
+      buildWhen: (previous, current) => previous.video?.relatedVideos != current.video?.relatedVideos,
       builder: (context, state) {
         final isMobile = ResponsiveBreakpoints.of(context).isMobile;
-
+        if (state.video?.relatedVideos == null || state.video!.relatedVideos.isEmpty) {
+          return SizedBox.shrink();
+        }
         return SingleChildScrollView(
           child: Column(
             spacing: isMobile ? 16 : 28,
@@ -221,7 +245,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
             children: [
               const ListTitleText("Related Videos:"),
               if (isMobile)
-                ...state.relatedVideos
+                ...?state.video?.relatedVideos
                     .map((video) => Column(
                           spacing: 16,
                           children: [
@@ -238,12 +262,12 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: state.relatedVideos.length,
+                  itemCount: state.video!.relatedVideos.length,
                   itemBuilder: (context, index) {
-                    final video = state.relatedVideos[index];
+                    final video = state.video!.relatedVideos[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16.0, right: 48),
-                      child: VideoItem(video: video),
+                      child: VideoItem(video: video, onTap: () => context.read<VideoDetailBloc>().add(OnRelatedVideoClick(video))),
                     );
                   },
                 )

@@ -144,7 +144,7 @@ abstract class ApiCaller {
   /// Logs errors with formatting for better console visibility.
   static void _printError(String message, String location) {
     final separator = '\x1B[31m' + ('═' * 80) + '\x1B[0m';
-    final header = '\x1B[31m══╣ ERROR [$location] ╠══\x1B[0m';
+    final header = '\x1B[31mERROR [$location] \x1B[0m';
     final body = '\x1B[91m$message\x1B[0m';
 
     print(separator);

@@ -10,16 +10,19 @@ import 'video_detail_event.dart';
 import 'video_detail_state.dart';
 
 @injectable
-class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState>
-    with SideEffectMixin<VideoDetailState, VideoDetailEffect> {
-
+class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState> with SideEffectMixin<VideoDetailState, VideoDetailEffect> {
   VideoDetailBloc() : super(VideoDetailState()) {
     on<InitData>((event, emit) {
       emit(state.copyWith(videoId: event.videoId));
-      emit(state.copyWith(video: FakeDataProvider.instance.getFakeVideos(count: 10).first));
-      emit(state.copyWith(relatedVideos: FakeDataProvider.instance.getFakeVideos(count: 10)));
+      emit(state.copyWith(video: FakeDataProvider.instance.getFakeVideos(1).first));
     });
+
+    on<OnRelatedVideoClick>((event, emit) {
+      emitEffect(NavigateToVideoDetail(event.video.id));
+    });
+
   }
+
 
   void passData(String videoId) {
     add(InitData(videoId));
