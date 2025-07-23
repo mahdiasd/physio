@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:ui/ui.dart';
-import 'package:utils/utils.dart';
 
 import '../video_detail.dart';
 import 'bloc/video_detail_effect.dart';
@@ -35,9 +36,9 @@ class VideoDetailPage extends StatelessWidget {
       child: isMobile
           ? VideoDetailContent()
           : WebSidebar(
-              child: VideoDetailContent(),
-              onItemTapped: onSidebarClick,
-            ),
+        child: VideoDetailContent(),
+        onItemTapped: onSidebarClick,
+      ),
     );
   }
 }
@@ -50,6 +51,31 @@ class VideoDetailContent extends StatefulWidget {
 }
 
 class _VideoDetailContentState extends State<VideoDetailContent> {
+  // --- ✅ پلیر و کنترلر به اینجا منتقل شدند ---
+  late final Player player;
+  late final VideoController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // پلیر و کنترلر یک بار در اینجا ساخته می‌شوند
+    player = Player();
+    controller = VideoController(player);
+
+    // ویدیو را برای اولین بار با state موجود در BLoC باز می‌کند
+    final initialVideoUrl = context.read<VideoDetailBloc>().state.video?.videoFile.s3Url;
+    if (initialVideoUrl != null && initialVideoUrl.isNotEmpty) {
+      player.open(Media(initialVideoUrl));
+    }
+  }
+
+  @override
+  void dispose() {
+    // پلیر در انتهای عمر این State از بین می‌رود
+    player.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -57,8 +83,17 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      body: SafeArea(
-        child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
+      body: BlocListener<VideoDetailBloc, VideoDetailState>(
+        // گوش دادن به تغییرات URL ویدیو برای باز کردن ویدیوی جدید
+        listenWhen: (previous, current) =>
+        previous.video?.videoFile.s3Url != current.video?.videoFile.s3Url &&
+            current.video?.videoFile.s3Url != null,
+        listener: (context, state) {
+          player.open(Media(state.video!.videoFile.s3Url));
+        },
+        child: SafeArea(
+          child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
+        ),
       ),
     );
   }
@@ -104,7 +139,6 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
             ),
           ),
         ),
-
         // Related videos sidebar
         Container(
           width: 170,
@@ -115,35 +149,11 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   }
 
   Widget _buildVideoDetail(BuildContext context) {
-
-    return BlocBuilder<VideoDetailBloc, VideoDetailState>(
-      buildWhen: (previous, current) => previous.video?.videoFile.s3Url != current.video?.videoFile.s3Url,
-      builder: (context, state) {
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final width = constraints.maxWidth;
-            final height = width / 1.8;
-            if (state.video == null) {
-              return Container(
-                width: width,
-                height: height,
-              );
-            } else {
-              PrintHelper.info("${state.video?.videoFile.s3Url}", location: "Call BasicVideoPlayer");
-              return SizedBox(
-                width: width,
-                height: height,
-                child: BasicVideoPlayer(
-                  videoUrl: state.video?.videoFile.s3Url ?? "",
-                  width: width,
-                  height: height,
-                  // radius: Theme.of(context).radius.small,
-                ),
-              );
-            }
-          },
-        );
-      },
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: BasicVideoPlayer(
+        controller: controller,
+      ),
     );
   }
 
@@ -247,16 +257,16 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
               if (isMobile)
                 ...?state.video?.relatedVideos
                     .map((video) => Column(
-                          spacing: 16,
-                          children: [
-                            VideoItemHorizontal(video: video),
-                            Divider(
-                              height: 1,
-                              thickness: 0.5,
-                              color: Theme.of(context).colorScheme.outline,
-                            )
-                          ],
-                        ))
+                  spacing: 16,
+                  children: [
+                    VideoItemHorizontal(video: video),
+                    Divider(
+                      height: 1,
+                      thickness: 0.5,
+                      color: Theme.of(context).colorScheme.outline,
+                    )
+                  ],
+                ))
                     .toList()
               else
                 ListView.builder(
