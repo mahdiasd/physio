@@ -32,11 +32,13 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with RouteAware {
-  late final RouteObserver<PageRoute<void>> _routeObserver;
+  RouteObserver<PageRoute<void>>? _routeObserver;
 
   @override
   void initState() {
     super.initState();
+    // Initialize the route observer only once here
+    _routeObserver = RouteObserver<PageRoute<void>>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateNavigationItem();
     });
@@ -45,10 +47,11 @@ class _MainPageState extends State<MainPage> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _routeObserver = RouteObserver<PageRoute<dynamic>>();
+    // Unsubscribe first to avoid multiple subscriptions if didChangeDependencies is called multiple times
+    _routeObserver?.unsubscribe(this);
     final route = ModalRoute.of(context);
     if (route is PageRoute) {
-      _routeObserver.subscribe(this, route);
+      _routeObserver?.subscribe(this, route as PageRoute<void>);
     }
   }
 
@@ -95,7 +98,9 @@ class _MainPageState extends State<MainPage> with RouteAware {
 
   @override
   void dispose() {
-    _routeObserver.unsubscribe(this);
+    // Clean up the observer to prevent memory leaks
+    _routeObserver?.unsubscribe(this);
+    _routeObserver = null;
     super.dispose();
   }
 
@@ -123,7 +128,6 @@ class _MainPageState extends State<MainPage> with RouteAware {
     );
   }
 }
-
 
 class MainContent extends StatelessWidget {
   final Widget child;
@@ -179,14 +183,14 @@ class MainContent extends StatelessWidget {
         unselectedItemColor: const Color(0xFF6A6A6A),
         items: ([...defaultNavigationItems]..sort((a, b) => a.index.compareTo(b.index)))
             .map((item) => BottomNavigationBarItem(
-                  icon: Padding(
-                    padding: const EdgeInsets.only(bottom: 4.0),
-                    child: AppImage(
-                      source: item.icon,
-                    ),
-                  ),
-                  label: item.label,
-                ))
+          icon: Padding(
+            padding: const EdgeInsets.only(bottom: 4.0),
+            child: AppImage(
+              source: item.icon,
+            ),
+          ),
+          label: item.label,
+        ))
             .toList(),
       ),
     );

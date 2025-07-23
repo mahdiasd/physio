@@ -77,9 +77,7 @@ class LibraryRoute extends GoRouteData {
           builder: (innerContext) {
             return VideoLibraryPage(
               navigateToSearch: (searchParams) {
-                innerContext.push(
-                    SearchRouteExtension.fromSearchParams(searchParams)
-                        .location);
+                innerContext.push(SearchRouteExtension.fromSearchParams(searchParams).location);
               },
               navigateToVideoDetail: (videoId) {
                 innerContext.push(VideoDetailRoute(videoId).location);

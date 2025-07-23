@@ -18,7 +18,7 @@ class FakeDataProvider {
         contentType: isVideo ? 'video/mp4' : 'image/jpeg',
         fileCategory: isVideo ? 'video' : 'image',
         fileSize: '',
-        s3Url: 'https://persian16.asset.aparat.com/aparat-video/4cd923e5be2d79eb8d21e49ccfc5c3cc64748260-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNlM2Y0Zjk4NTljZTU0MTEwYzQyMzBjM2RjNGU2NjJkIiwiZXhwIjoxNzUzMjc1OTk2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.QyXcJk46c8bkxRJjZcxusMRlQQJuF5QO9mNGp9CckAo',
+        s3Url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         storageType: '',
         uploadedBy: '',
         url: 'https://placehold.co/600x400',
@@ -46,10 +46,10 @@ class FakeDataProvider {
       contentType: 'image/jpeg',
       fileCategory: 'image',
       fileSize: '',
-      s3Url: '',
+      s3Url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
       storageType: '',
       uploadedBy: '',
-      url: '',
+      url: 'https://placehold.co/600x400',
     );
   }
 
@@ -99,7 +99,7 @@ class FakeDataProvider {
         title: 'Sample Video $index',
         description: 'This is a description for video $index.',
         coverPhoto:
-            "https://persian18.asset.aparat.com/aparat-video/8dd62307c56c0666dfb0039f4087e6e864484193-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJkYWJiZjJmNWY4ZjI4MTc3NjE4ZGY1MjdkYzk3NmY3IiwiZXhwIjoxNzUyNDExMTI1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.JQIaSi4qRszgZ5V-fNpX2NaRVxBP1fb-tBsG2v_3Zys",
+            "https://www.sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
         viewCount: random.nextInt(1000),
         uploader: UploaderUser(firstName: "firstName", lastName: "lastName"),
         category: categories[random.nextInt(categories.length)],
