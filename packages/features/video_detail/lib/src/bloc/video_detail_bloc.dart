@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:ui/ui.dart';
+import 'package:utils/utils.dart';
 
 // TODO: Import your use cases
 
@@ -13,10 +14,13 @@ import 'video_detail_state.dart';
 
 @injectable
 class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState> with SideEffectMixin<VideoDetailState, VideoDetailEffect> {
+  final FlagVideoUseCase _flagVideoUseCase;
+  final GetVideoUseCase _getVideoUseCase;
+
   final Player player = Player();
   late final VideoController controller;
 
-  VideoDetailBloc() : super(VideoDetailState()) {
+  VideoDetailBloc(this._flagVideoUseCase, this._getVideoUseCase, this.controller) : super(VideoDetailState()) {
     controller = VideoController(player);
     on<InitData>((event, emit) {
       emit(state.copyWith(videoId: event.videoId));
@@ -24,27 +28,43 @@ class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState> with Side
     });
 
     on<OnRelatedVideoClick>((event, emit) {
+      player.dispose();
       emitEffect(NavigateToVideoDetail(event.video.id));
     });
 
+    on<FlagPressed>((event, emit) async {
+      await _flagVideo(event, emit);
+    });
   }
-
 
   void passData(String videoId) {
     add(InitData(videoId));
   }
 
-// TODO: Implement your event handlers
-/*
-  Future<void> _onSomeEvent(
-    SomeEvent event,
-    Emitter<video_playerState> emit,
-  ) async {
-    emit(state.copyWith(isLoading: true));
-    
-    // TODO: Implement your logic
-    
-    emit(state.copyWith(isLoading: false));
+  Future<void> _flagVideo(VideoDetailEvent event, Emitter<VideoDetailState> emit) async {
+    final result = await _flagVideoUseCase.invoke(id: state.videoId);
+
+    switch (result) {
+      case Ok<bool>():
+        emit(state.copyWith(video: state.video));
+       break;
+      case Error<bool>():
+        emitMessage(result.error.toUiMessage());
+        break;
+    }
   }
-  */
+
+  Future<void> _getVideo(VideoDetailEvent event, Emitter<VideoDetailState> emit) async {
+    final result = await _getVideoUseCase.invoke(id: state.videoId);
+    //
+    // switch (result) {
+    //   case Ok<bool>():
+    //     emit(state.copyWith(video: state.video));
+    //
+    //    break;
+    //   case Error<bool>():
+    //     emitMessage(result.error.toUiMessage());
+    //     break;
+    // }
+  }
 }

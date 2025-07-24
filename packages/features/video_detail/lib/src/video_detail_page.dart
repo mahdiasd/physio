@@ -191,7 +191,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
               height: 20,
               source: "assets/images/ic_flag.svg",
               onTap: () {
-                context.read<VideoDetailBloc>().add(OnFlagClick());
+                context.read<VideoDetailBloc>().add(FlagPressed());
               },
               tintColor: theme.customColors.disabled,
             )

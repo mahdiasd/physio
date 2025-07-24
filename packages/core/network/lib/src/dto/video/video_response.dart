@@ -19,6 +19,7 @@ class VideoResponse {
   DateTime updatedAt;
   UploaderUserResponse uploader;
   FileResponse videoFile;
+  int flags;
 
   VideoResponse({
     required this.category,
@@ -32,6 +33,7 @@ class VideoResponse {
     required this.tags,
     required this.title,
     required this.updatedAt,
+    required this.flags,
     required this.uploader,
     required this.videoFile,
   });

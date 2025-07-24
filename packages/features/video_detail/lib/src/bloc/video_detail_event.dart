@@ -14,4 +14,4 @@ class OnRelatedVideoClick extends VideoDetailEvent {
   OnRelatedVideoClick(this.video);
 }
 
-class OnFlagClick extends VideoDetailEvent {}
+class FlagPressed extends VideoDetailEvent {}

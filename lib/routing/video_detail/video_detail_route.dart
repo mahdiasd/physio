@@ -31,7 +31,7 @@ class VideoDetailRoute extends GoRouteData {
           return VideoDetailPage(
             navigateBack: () => innerContext.pop(),
             navigateToVideoDetail: (String value) {
-              innerContext.push(VideoDetailRoute(value).location);
+              innerContext.pushReplacement(VideoDetailRoute(value).location);
             },
             onSidebarClick: (NavigationItem value) => value.goTo(innerContext),
           );

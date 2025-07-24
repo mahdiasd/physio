@@ -32,5 +32,6 @@ export './src/usecase/user/resend_otp_use_case.dart';
 export './src/usecase/user/reset_password_use_case.dart';
 export './src/usecase/user/send_otp_codes_use_case.dart';
 export './src/usecase/user/validate_email_use_case.dart';
+export './src/usecase/video/flag_video_use_case.dart';
+export './src/usecase/video/get_video_use_case.dart';
 export './src/usecase/video/get_videos_use_case.dart';
-

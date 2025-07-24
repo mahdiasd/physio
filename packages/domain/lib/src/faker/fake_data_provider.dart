@@ -114,6 +114,7 @@ class FakeDataProvider {
         coverPhoto: "https://placehold.co/600x400.png",
         createdAt: DateTime.now(),
         description: "faker.lorem.sentence()",
+        isFlagged: true,
         id: "faker.guid.guid()",
         isPublic: false,
         relatedVideos: getFakeVideoSummeries(count: 4),
