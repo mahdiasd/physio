@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:ui/ui.dart';
+import 'package:ui/ui.dart' hide VideoState;
+import 'package:utils/utils.dart';
 
 import '../video_detail.dart';
 import 'bloc/video_detail_effect.dart';
@@ -51,8 +52,14 @@ class VideoDetailContent extends StatefulWidget {
 }
 
 class _VideoDetailContentState extends State<VideoDetailContent> {
-  late final player = Player();
+  final player = Player();
   late final controller = VideoController(player);
+  final GlobalKey<VideoState> videoKey = GlobalKey<VideoState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +82,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
           spacing: 16,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildVideoDetail(context, player, controller),
+            _buildVideoDetail(context, context.read<VideoDetailBloc>().player, context.read<VideoDetailBloc>().controller),
             _buildVideoInfo(context),
             _buildTags(context),
             _buildDescription(context),
@@ -97,7 +104,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildVideoDetail(context, player, controller),
+                _buildVideoDetail(context, context.read<VideoDetailBloc>().player, context.read<VideoDetailBloc>().controller),
                 const SizedBox(height: 24),
                 _buildVideoInfo(context),
                 const SizedBox(height: 16),
@@ -122,6 +129,15 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
       buildWhen: (previous, current) => previous.video?.videoFile.s3Url != current.video?.videoFile.s3Url,
       builder: (context, state) {
+        if (state.video != null &&
+            (player.state.playlist.medias.isEmpty ||
+                player.state.playlist.medias.first.uri != state.video!.videoFile.s3Url)) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            PrintHelper.info("open");
+            player.open(Media(state.video!.videoFile.s3Url));
+          });
+        }
+
         if (state.video == null) {
           return AspectRatio(
             aspectRatio: 1.7,
@@ -131,8 +147,9 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
           return AspectRatio(
             aspectRatio: 1.7,
             child: BasicVideoPlayer(
+              player: player,
+              controller: controller,
               key: ValueKey(state.video?.videoFile.s3Url),
-              videoUrl: state.video!.videoFile.s3Url,
             ),
             // child: SizedBox(),
           );
@@ -269,5 +286,12 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    PrintHelper.info("dispose", location: "VideoDetail");
+    player.dispose();
+    super.dispose();
   }
 }

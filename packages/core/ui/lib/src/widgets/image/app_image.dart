@@ -15,7 +15,6 @@ class AppImage extends StatelessWidget {
   final double? rotationAngle;
   final VoidCallback? onTap;
 
-  // Background & Shape properties
   final Color? backgroundColor;
   final BorderRadius? borderRadius;
   final ShapeBorder? shape;
@@ -34,7 +33,6 @@ class AppImage extends StatelessWidget {
     this.rotationAngle,
     this.onTap,
 
-    // Background & Shape
     this.backgroundColor,
     this.borderRadius,
     this.shape,
@@ -62,8 +60,6 @@ class AppImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget imageWidget = _buildImage(context);
-
-    // Apply rotation if needed
     if (rotationAngle != null) {
       imageWidget = Transform.rotate(
         angle: rotationAngle! * (math.pi / 180),
@@ -71,12 +67,10 @@ class AppImage extends StatelessWidget {
       );
     }
 
-    // Apply background container if backgroundColor is provided
     if (_hasBackground) {
       imageWidget = _buildBackgroundContainer(imageWidget);
     }
 
-    // Apply tap functionality
     if (onTap != null) {
       imageWidget = MouseRegion(
         cursor: SystemMouseCursors.click,
@@ -175,7 +169,6 @@ class AppImage extends StatelessWidget {
 
   Widget _buildBackgroundContainer(Widget child) {
     if (shape != null) {
-      // استفاده از ShapeBorder سفارشی
       return Container(
         padding: _effectivePadding,
         decoration: ShapeDecoration(
@@ -185,7 +178,6 @@ class AppImage extends StatelessWidget {
         child: child,
       );
     } else {
-      // استفاده از BorderRadius
       return Container(
         padding: _effectivePadding,
         decoration: BoxDecoration(

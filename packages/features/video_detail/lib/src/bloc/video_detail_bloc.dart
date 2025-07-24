@@ -1,6 +1,8 @@
 import 'package:domain/domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:ui/ui.dart';
 
 // TODO: Import your use cases
@@ -11,7 +13,11 @@ import 'video_detail_state.dart';
 
 @injectable
 class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState> with SideEffectMixin<VideoDetailState, VideoDetailEffect> {
+  final Player player = Player();
+  late final VideoController controller;
+
   VideoDetailBloc() : super(VideoDetailState()) {
+    controller = VideoController(player);
     on<InitData>((event, emit) {
       emit(state.copyWith(videoId: event.videoId));
       emit(state.copyWith(video: FakeDataProvider.instance.getFakeVideos(1).first));

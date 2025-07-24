@@ -18,10 +18,10 @@ class FakeDataProvider {
         contentType: isVideo ? 'video/mp4' : 'image/jpeg',
         fileCategory: isVideo ? 'video' : 'image',
         fileSize: '',
-        s3Url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        s3Url: "https://persian11.cdn.asset.aparat.com/aparat-video/a2a6d25602af467af2061a78843dbc0160237955-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjAwNDIzNGViNGQzMGM2Zjg3ZDQyN2VhYzUzOTI3YWNlIiwiZXhwIjoxNzUzMzUxMDQ2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.dMljqOQTCWuUgmo-pONY9OwzIl7W1Y2YHPUdFhXaU0k",
         storageType: '',
         uploadedBy: '',
-        url: 'https://placehold.co/600x400',
+        url: 'https://placehold.co/600x400.png',
       );
     });
   }
@@ -42,14 +42,14 @@ class FakeDataProvider {
       id: 'blog-image-$index',
       originalFilename: 'featured_$index.jpg',
       storedFilename: 'featured_$index.jpg',
-      storagePath: 'https://placehold.co/600x400',
+      storagePath: 'https://placehold.co/600x400.png',
       contentType: 'image/jpeg',
       fileCategory: 'image',
       fileSize: '',
-      s3Url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      s3Url: "https://persian11.cdn.asset.aparat.com/aparat-video/a2a6d25602af467af2061a78843dbc0160237955-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjAwNDIzNGViNGQzMGM2Zjg3ZDQyN2VhYzUzOTI3YWNlIiwiZXhwIjoxNzUzMzUxMDQ2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.dMljqOQTCWuUgmo-pONY9OwzIl7W1Y2YHPUdFhXaU0k",
       storageType: '',
       uploadedBy: '',
-      url: 'https://placehold.co/600x400',
+      url: 'https://placehold.co/600x400.png',
     );
   }
 
@@ -99,7 +99,7 @@ class FakeDataProvider {
         title: 'Sample Video $index',
         description: 'This is a description for video $index.',
         coverPhoto:
-            "https://www.sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+            "https://placehold.co/600x400.png",
         viewCount: random.nextInt(1000),
         uploader: UploaderUser(firstName: "firstName", lastName: "lastName"),
         category: categories[random.nextInt(categories.length)],
@@ -111,7 +111,7 @@ class FakeDataProvider {
     return List.generate(count, (index) {
       return Video(
         category: "faker.lorem.word()",
-        coverPhoto: "faker.image.imageUrl()",
+        coverPhoto: "https://placehold.co/600x400.png",
         createdAt: DateTime.now(),
         description: "faker.lorem.sentence()",
         id: "faker.guid.guid()",
