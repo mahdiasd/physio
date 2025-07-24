@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:ui/src/theme/custom_colors.dart';
 import 'package:utils/utils.dart';
 class BasicVideoPlayer extends StatefulWidget {
   final double? height;
@@ -49,11 +50,13 @@ class _BasicVideoPlayerState extends State<BasicVideoPlayer> with AutomaticKeepA
   @override
   Widget build(BuildContext context) {
     super.build(context); // Required for AutomaticKeepAliveClientMixin
-
-    return Video(
-      controller: widget.controller,
-      fit: BoxFit.contain,
-      fill: Colors.black,
+    return ClipRRect(
+      borderRadius: Theme.of(context).radius.smallAll,
+      child: Video(
+        controller: widget.controller,
+        fit: BoxFit.contain,
+        fill: Colors.black,
+      ),
     );
   }
 
