@@ -91,7 +91,7 @@ void main(List<String> args) async {
       });
 
       // Small delay between starting processes
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future<void>.delayed(const Duration(milliseconds: 500));
     }
 
     print('\n✅ All build_runner processes started!');

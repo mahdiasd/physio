@@ -1,35 +1,25 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../../../domain.dart';
 
-class Video {
-  String category;
-  String coverPhoto;
-  DateTime createdAt;
-  String description;
-  String id;
-  bool isPublic;
-  List<VideoSummary> relatedVideos;
-  String status;
-  List<String> tags;
-  String title;
-  DateTime updatedAt;
-  UploaderUser uploader;
-  PhysioFile videoFile;
-  bool isFlagged;
+part 'video.freezed.dart';
 
-  Video({
-    required this.category,
-    required this.coverPhoto,
-    required this.createdAt,
-    required this.description,
-    required this.id,
-    required this.isPublic,
-    required this.relatedVideos,
-    required this.isFlagged,
-    required this.status,
-    required this.tags,
-    required this.title,
-    required this.updatedAt,
-    required this.uploader,
-    required this.videoFile,
-  });
+@freezed
+abstract class Video with _$Video {
+  const factory Video({
+    required String category,
+    required String coverPhoto,
+    required DateTime createdAt,
+    required String description,
+    required String id,
+    required bool isPublic,
+    required List<VideoSummary> relatedVideos,
+    required String status,
+    required List<String> tags,
+    required String title,
+    required DateTime updatedAt,
+    required UploaderUser uploader,
+    required PhysioFile videoFile,
+    required bool isFlagged,
+  }) = _Video;
 }

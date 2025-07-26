@@ -2,11 +2,9 @@ import 'package:domain/domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
+import 'package:media_kit_video/media_kit_video.dart' hide Video;
 import 'package:ui/ui.dart';
 import 'package:utils/utils.dart';
-
-// TODO: Import your use cases
 
 import 'video_detail_effect.dart';
 import 'video_detail_event.dart';
@@ -46,7 +44,7 @@ class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState> with Side
 
     switch (result) {
       case Ok<bool>():
-        emit(state.copyWith(video: state.video));
+        emit(state.copyWith(video: state.video?.copyWith(isFlagged: true)));
        break;
       case Error<bool>():
         emitMessage(result.error.toUiMessage());
@@ -56,15 +54,14 @@ class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState> with Side
 
   Future<void> _getVideo(VideoDetailEvent event, Emitter<VideoDetailState> emit) async {
     final result = await _getVideoUseCase.invoke(id: state.videoId);
-    //
-    // switch (result) {
-    //   case Ok<bool>():
-    //     emit(state.copyWith(video: state.video));
-    //
-    //    break;
-    //   case Error<bool>():
-    //     emitMessage(result.error.toUiMessage());
-    //     break;
-    // }
+
+    switch (result) {
+      case Ok<Video>():
+        emit(state.copyWith(video: result.value));
+        break;
+      case Error<Video>():
+        emitMessage(result.error.toUiMessage());
+        break;
+    }
   }
 }

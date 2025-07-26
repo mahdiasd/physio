@@ -1,10 +1,11 @@
-class UploaderUser {
-  final String firstName;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String lastName;
+part 'uploader_user.freezed.dart';
 
-  UploaderUser({
-    required this.firstName,
-    required this.lastName,
-  });
+@freezed
+abstract class UploaderUser with _$UploaderUser {
+  const factory UploaderUser({
+    required String firstName,
+    required String lastName,
+  }) = _UploaderUser;
 }
