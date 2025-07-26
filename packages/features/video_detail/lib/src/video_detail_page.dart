@@ -255,7 +255,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
                     .map((video) => Column(
                           spacing: 16,
                           children: [
-                            VideoItemHorizontal(video: video),
+                            VideoItemHorizontal(video: video, onTap: () => context.read<VideoDetailBloc>().add(OnRelatedVideoClick(video))),
                             Divider(
                               height: 1,
                               thickness: 0.5,

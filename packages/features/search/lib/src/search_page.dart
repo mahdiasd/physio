@@ -50,7 +50,7 @@ class SearchPage extends StatelessWidget {
               navigateToVideoDetail((effect as NavigateToVideoDetail).videoId),
         },
         child: isMobile
-            ? SafeArea(child: SearchContent())
+            ? SearchContent()
             : WebSidebar(
                 child: SearchContent(),
                 onItemTapped: onSidebarClick,
@@ -66,15 +66,17 @@ class SearchContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: theme.colorScheme.surface,
-      body: Column(
-        children: [
-          _buildHeader(context),
-          Expanded(
-            child: _buildGridLists(context),
-          ),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: theme.colorScheme.surface,
+        body: Column(
+          children: [
+            _buildHeader(context),
+            Expanded(
+              child: _buildGridLists(context),
+            ),
+          ],
+        ),
       ),
     );
   }
