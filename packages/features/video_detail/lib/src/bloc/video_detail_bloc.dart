@@ -18,11 +18,14 @@ class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState> with Side
   final Player player = Player();
   late final VideoController controller;
 
-  VideoDetailBloc(this._flagVideoUseCase, this._getVideoUseCase, this.controller) : super(VideoDetailState()) {
+  VideoDetailBloc(this._flagVideoUseCase, this._getVideoUseCase) : super(VideoDetailState()) {
+    PrintHelper.info("Video bloc init");
     controller = VideoController(player);
     on<InitData>((event, emit) {
       emit(state.copyWith(videoId: event.videoId));
-      emit(state.copyWith(video: FakeDataProvider.instance.getFakeVideos(1).first));
+      emit(state.copyWith(video: FakeDataProvider.instance
+          .getFakeVideos(1)
+          .first));
     });
 
     on<OnRelatedVideoClick>((event, emit) {
@@ -45,7 +48,7 @@ class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState> with Side
     switch (result) {
       case Ok<bool>():
         emit(state.copyWith(video: state.video?.copyWith(isFlagged: true)));
-       break;
+        break;
       case Error<bool>():
         emitMessage(result.error.toUiMessage());
         break;
@@ -63,5 +66,11 @@ class VideoDetailBloc extends Bloc<VideoDetailEvent, VideoDetailState> with Side
         emitMessage(result.error.toUiMessage());
         break;
     }
+  }
+
+  @override
+  Future<void> close() {
+    PrintHelper.info("Video bloc close");
+    return super.close();
   }
 }

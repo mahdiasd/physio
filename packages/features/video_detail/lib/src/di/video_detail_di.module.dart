@@ -8,7 +8,6 @@ import 'dart:async' as _i687;
 
 import 'package:domain/domain.dart' as _i494;
 import 'package:injectable/injectable.dart' as _i526;
-import 'package:media_kit_video/media_kit_video.dart' as _i150;
 import 'package:video_detail/src/bloc/video_detail_bloc.dart' as _i429;
 
 class VideoDetailPackageModule extends _i526.MicroPackageModule {
@@ -18,7 +17,6 @@ class VideoDetailPackageModule extends _i526.MicroPackageModule {
     gh.factory<_i429.VideoDetailBloc>(() => _i429.VideoDetailBloc(
           gh<_i494.FlagVideoUseCase>(),
           gh<_i494.GetVideoUseCase>(),
-          gh<_i150.VideoController>(),
         ));
   }
 }
