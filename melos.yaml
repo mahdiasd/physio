@@ -4,9 +4,9 @@ packages:
   - packages/**
 
 scripts:
-  generate:build:
-    run: dart scripts/build_single_package.dart
-    description: Build runner for a single selected package interactively.
+  build:watch:
+    description: Interactive build_runner watch with package selection
+    run: dart scripts/build_runner_interactive.dart
 
   sync_dev_dependencies:
     run: dart scripts/sync_dev_dependencies.dart

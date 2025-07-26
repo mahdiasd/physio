@@ -10,24 +10,24 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_mappr_annotation/auto_mappr_annotation.dart' as _i1;
 import 'package:domain/src/model/blog_post/blog_post.dart' as _i6;
-import 'package:domain/src/model/config/config.dart' as _i18;
-import 'package:domain/src/model/config/update/update.dart' as _i20;
-import 'package:domain/src/model/file/physio_file.dart' as _i16;
-import 'package:domain/src/model/library/VideoLibrary.dart' as _i12;
+import 'package:domain/src/model/config/config.dart' as _i12;
+import 'package:domain/src/model/config/update/update.dart' as _i14;
+import 'package:domain/src/model/file/physio_file.dart' as _i10;
+import 'package:domain/src/model/library/VideoLibrary.dart' as _i18;
 import 'package:domain/src/model/user/user.dart' as _i3;
 import 'package:domain/src/model/video/uploader_user.dart' as _i8;
-import 'package:domain/src/model/video/video.dart' as _i14;
-import 'package:domain/src/model/video/video_summary.dart' as _i10;
+import 'package:domain/src/model/video/video.dart' as _i20;
+import 'package:domain/src/model/video/video_summary.dart' as _i16;
 import 'package:network/src/dto/blog_post/blog_post_response.dart' as _i5;
-import 'package:network/src/dto/config/config_response.dart' as _i17;
-import 'package:network/src/dto/config/update_response.dart' as _i19;
-import 'package:network/src/dto/file/file_response.dart' as _i15;
-import 'package:network/src/dto/library/video_library_response.dart' as _i11;
+import 'package:network/src/dto/config/config_response.dart' as _i11;
+import 'package:network/src/dto/config/update_response.dart' as _i13;
+import 'package:network/src/dto/file/file_response.dart' as _i9;
+import 'package:network/src/dto/library/video_library_response.dart' as _i17;
 import 'package:network/src/dto/user/register_response.dart' as _i4;
 import 'package:network/src/dto/user/user_response.dart' as _i2;
 import 'package:network/src/dto/video/uploader_user_response.dart' as _i7;
-import 'package:network/src/dto/video/video_response.dart' as _i13;
-import 'package:network/src/dto/video/video_summary_response.dart' as _i9;
+import 'package:network/src/dto/video/video_response.dart' as _i19;
+import 'package:network/src/dto/video/video_summary_response.dart' as _i15;
 
 import 'mapper.dart' as _i21;
 
@@ -37,12 +37,12 @@ import 'mapper.dart' as _i21;
 /// - `RegisterResponse` → `User`.
 /// - `BlogPostResponse` → `BlogPost`.
 /// - `UploaderUserResponse` → `UploaderUser`.
-/// - `VideoSummaryResponse` → `VideoSummary`.
-/// - `VideoLibraryResponse` → `VideoLibrary`.
-/// - `VideoResponse` → `Video`.
 /// - `FileResponse` → `PhysioFile`.
 /// - `ConfigResponse` → `Config`.
 /// - `UpdateResponse` → `Update`.
+/// - `VideoSummaryResponse` → `VideoSummary`.
+/// - `VideoLibraryResponse` → `VideoLibrary`.
+/// - `VideoResponse` → `Video`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -81,40 +81,40 @@ class $Mappr implements _i1.AutoMapprInterface {
             targetTypeOf == _typeOf<_i8.UploaderUser?>())) {
       return true;
     }
-    if ((sourceTypeOf == _typeOf<_i9.VideoSummaryResponse>() ||
-            sourceTypeOf == _typeOf<_i9.VideoSummaryResponse?>()) &&
-        (targetTypeOf == _typeOf<_i10.VideoSummary>() ||
-            targetTypeOf == _typeOf<_i10.VideoSummary?>())) {
+    if ((sourceTypeOf == _typeOf<_i9.FileResponse>() ||
+            sourceTypeOf == _typeOf<_i9.FileResponse?>()) &&
+        (targetTypeOf == _typeOf<_i10.PhysioFile>() ||
+            targetTypeOf == _typeOf<_i10.PhysioFile?>())) {
       return true;
     }
-    if ((sourceTypeOf == _typeOf<_i11.VideoLibraryResponse>() ||
-            sourceTypeOf == _typeOf<_i11.VideoLibraryResponse?>()) &&
-        (targetTypeOf == _typeOf<_i12.VideoLibrary>() ||
-            targetTypeOf == _typeOf<_i12.VideoLibrary?>())) {
+    if ((sourceTypeOf == _typeOf<_i11.ConfigResponse>() ||
+            sourceTypeOf == _typeOf<_i11.ConfigResponse?>()) &&
+        (targetTypeOf == _typeOf<_i12.Config>() ||
+            targetTypeOf == _typeOf<_i12.Config?>())) {
       return true;
     }
-    if ((sourceTypeOf == _typeOf<_i13.VideoResponse>() ||
-            sourceTypeOf == _typeOf<_i13.VideoResponse?>()) &&
-        (targetTypeOf == _typeOf<_i14.Video>() ||
-            targetTypeOf == _typeOf<_i14.Video?>())) {
+    if ((sourceTypeOf == _typeOf<_i13.UpdateResponse>() ||
+            sourceTypeOf == _typeOf<_i13.UpdateResponse?>()) &&
+        (targetTypeOf == _typeOf<_i14.Update>() ||
+            targetTypeOf == _typeOf<_i14.Update?>())) {
       return true;
     }
-    if ((sourceTypeOf == _typeOf<_i15.FileResponse>() ||
-            sourceTypeOf == _typeOf<_i15.FileResponse?>()) &&
-        (targetTypeOf == _typeOf<_i16.PhysioFile>() ||
-            targetTypeOf == _typeOf<_i16.PhysioFile?>())) {
+    if ((sourceTypeOf == _typeOf<_i15.VideoSummaryResponse>() ||
+            sourceTypeOf == _typeOf<_i15.VideoSummaryResponse?>()) &&
+        (targetTypeOf == _typeOf<_i16.VideoSummary>() ||
+            targetTypeOf == _typeOf<_i16.VideoSummary?>())) {
       return true;
     }
-    if ((sourceTypeOf == _typeOf<_i17.ConfigResponse>() ||
-            sourceTypeOf == _typeOf<_i17.ConfigResponse?>()) &&
-        (targetTypeOf == _typeOf<_i18.Config>() ||
-            targetTypeOf == _typeOf<_i18.Config?>())) {
+    if ((sourceTypeOf == _typeOf<_i17.VideoLibraryResponse>() ||
+            sourceTypeOf == _typeOf<_i17.VideoLibraryResponse?>()) &&
+        (targetTypeOf == _typeOf<_i18.VideoLibrary>() ||
+            targetTypeOf == _typeOf<_i18.VideoLibrary?>())) {
       return true;
     }
-    if ((sourceTypeOf == _typeOf<_i19.UpdateResponse>() ||
-            sourceTypeOf == _typeOf<_i19.UpdateResponse?>()) &&
-        (targetTypeOf == _typeOf<_i20.Update>() ||
-            targetTypeOf == _typeOf<_i20.Update?>())) {
+    if ((sourceTypeOf == _typeOf<_i19.VideoResponse>() ||
+            sourceTypeOf == _typeOf<_i19.VideoResponse?>()) &&
+        (targetTypeOf == _typeOf<_i20.Video>() ||
+            targetTypeOf == _typeOf<_i20.Video?>())) {
       return true;
     }
     if (recursive) {
@@ -348,65 +348,65 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i7$UploaderUserResponse_To__i8$UploaderUser(
           (model as _i7.UploaderUserResponse?)) as TARGET);
     }
-    if ((sourceTypeOf == _typeOf<_i9.VideoSummaryResponse>() ||
-            sourceTypeOf == _typeOf<_i9.VideoSummaryResponse?>()) &&
-        (targetTypeOf == _typeOf<_i10.VideoSummary>() ||
-            targetTypeOf == _typeOf<_i10.VideoSummary?>())) {
+    if ((sourceTypeOf == _typeOf<_i9.FileResponse>() ||
+            sourceTypeOf == _typeOf<_i9.FileResponse?>()) &&
+        (targetTypeOf == _typeOf<_i10.PhysioFile>() ||
+            targetTypeOf == _typeOf<_i10.PhysioFile?>())) {
       if (canReturnNull && model == null) {
         return null;
       }
-      return (_map__i9$VideoSummaryResponse_To__i10$VideoSummary(
-          (model as _i9.VideoSummaryResponse?)) as TARGET);
+      return (_map__i9$FileResponse_To__i10$PhysioFile(
+          (model as _i9.FileResponse?)) as TARGET);
     }
-    if ((sourceTypeOf == _typeOf<_i11.VideoLibraryResponse>() ||
-            sourceTypeOf == _typeOf<_i11.VideoLibraryResponse?>()) &&
-        (targetTypeOf == _typeOf<_i12.VideoLibrary>() ||
-            targetTypeOf == _typeOf<_i12.VideoLibrary?>())) {
+    if ((sourceTypeOf == _typeOf<_i11.ConfigResponse>() ||
+            sourceTypeOf == _typeOf<_i11.ConfigResponse?>()) &&
+        (targetTypeOf == _typeOf<_i12.Config>() ||
+            targetTypeOf == _typeOf<_i12.Config?>())) {
       if (canReturnNull && model == null) {
         return null;
       }
-      return (_map__i11$VideoLibraryResponse_To__i12$VideoLibrary(
-          (model as _i11.VideoLibraryResponse?)) as TARGET);
+      return (_map__i11$ConfigResponse_To__i12$Config(
+          (model as _i11.ConfigResponse?)) as TARGET);
     }
-    if ((sourceTypeOf == _typeOf<_i13.VideoResponse>() ||
-            sourceTypeOf == _typeOf<_i13.VideoResponse?>()) &&
-        (targetTypeOf == _typeOf<_i14.Video>() ||
-            targetTypeOf == _typeOf<_i14.Video?>())) {
+    if ((sourceTypeOf == _typeOf<_i13.UpdateResponse>() ||
+            sourceTypeOf == _typeOf<_i13.UpdateResponse?>()) &&
+        (targetTypeOf == _typeOf<_i14.Update>() ||
+            targetTypeOf == _typeOf<_i14.Update?>())) {
       if (canReturnNull && model == null) {
         return null;
       }
-      return (_map__i13$VideoResponse_To__i14$Video(
-          (model as _i13.VideoResponse?)) as TARGET);
+      return (_map__i13$UpdateResponse_To__i14$Update(
+          (model as _i13.UpdateResponse?)) as TARGET);
     }
-    if ((sourceTypeOf == _typeOf<_i15.FileResponse>() ||
-            sourceTypeOf == _typeOf<_i15.FileResponse?>()) &&
-        (targetTypeOf == _typeOf<_i16.PhysioFile>() ||
-            targetTypeOf == _typeOf<_i16.PhysioFile?>())) {
+    if ((sourceTypeOf == _typeOf<_i15.VideoSummaryResponse>() ||
+            sourceTypeOf == _typeOf<_i15.VideoSummaryResponse?>()) &&
+        (targetTypeOf == _typeOf<_i16.VideoSummary>() ||
+            targetTypeOf == _typeOf<_i16.VideoSummary?>())) {
       if (canReturnNull && model == null) {
         return null;
       }
-      return (_map__i15$FileResponse_To__i16$PhysioFile(
-          (model as _i15.FileResponse?)) as TARGET);
+      return (_map__i15$VideoSummaryResponse_To__i16$VideoSummary(
+          (model as _i15.VideoSummaryResponse?)) as TARGET);
     }
-    if ((sourceTypeOf == _typeOf<_i17.ConfigResponse>() ||
-            sourceTypeOf == _typeOf<_i17.ConfigResponse?>()) &&
-        (targetTypeOf == _typeOf<_i18.Config>() ||
-            targetTypeOf == _typeOf<_i18.Config?>())) {
+    if ((sourceTypeOf == _typeOf<_i17.VideoLibraryResponse>() ||
+            sourceTypeOf == _typeOf<_i17.VideoLibraryResponse?>()) &&
+        (targetTypeOf == _typeOf<_i18.VideoLibrary>() ||
+            targetTypeOf == _typeOf<_i18.VideoLibrary?>())) {
       if (canReturnNull && model == null) {
         return null;
       }
-      return (_map__i17$ConfigResponse_To__i18$Config(
-          (model as _i17.ConfigResponse?)) as TARGET);
+      return (_map__i17$VideoLibraryResponse_To__i18$VideoLibrary(
+          (model as _i17.VideoLibraryResponse?)) as TARGET);
     }
-    if ((sourceTypeOf == _typeOf<_i19.UpdateResponse>() ||
-            sourceTypeOf == _typeOf<_i19.UpdateResponse?>()) &&
-        (targetTypeOf == _typeOf<_i20.Update>() ||
-            targetTypeOf == _typeOf<_i20.Update?>())) {
+    if ((sourceTypeOf == _typeOf<_i19.VideoResponse>() ||
+            sourceTypeOf == _typeOf<_i19.VideoResponse?>()) &&
+        (targetTypeOf == _typeOf<_i20.Video>() ||
+            targetTypeOf == _typeOf<_i20.Video?>())) {
       if (canReturnNull && model == null) {
         return null;
       }
-      return (_map__i19$UpdateResponse_To__i20$Update(
-          (model as _i19.UpdateResponse?)) as TARGET);
+      return (_map__i19$VideoResponse_To__i20$Video(
+          (model as _i19.VideoResponse?)) as TARGET);
     }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
@@ -511,94 +511,15 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
-  _i10.VideoSummary _map__i9$VideoSummaryResponse_To__i10$VideoSummary(
-      _i9.VideoSummaryResponse? input) {
-    final model = input;
-    if (model == null) {
-      throw Exception(
-          r'Mapping VideoSummaryResponse → VideoSummary failed because VideoSummaryResponse was null, and no default value was provided. '
-          r'Consider setting the whenSourceIsNull parameter on the MapType<VideoSummaryResponse, VideoSummary> to handle null values during mapping.');
-    }
-    return _i10.VideoSummary(
-      id: model.id,
-      title: model.title,
-      description: model.description,
-      coverPhoto: model.coverPhoto,
-      viewCount: model.viewCount,
-      category: model.category,
-      uploader:
-          _map__i7$UploaderUserResponse_To__i8$UploaderUser(model.uploader),
-    );
-  }
-
-  _i12.VideoLibrary _map__i11$VideoLibraryResponse_To__i12$VideoLibrary(
-      _i11.VideoLibraryResponse? input) {
-    final model = input;
-    if (model == null) {
-      throw Exception(
-          r'Mapping VideoLibraryResponse → VideoLibrary failed because VideoLibraryResponse was null, and no default value was provided. '
-          r'Consider setting the whenSourceIsNull parameter on the MapType<VideoLibraryResponse, VideoLibrary> to handle null values during mapping.');
-    }
-    return _i12.VideoLibrary(
-      categories: model.categories,
-      mainVideo: _map__i9$VideoSummaryResponse_To__i10$VideoSummary_Nullable(
-          model.mainVideo),
-      recentVideos: model.recentVideos
-          ?.map<_i10.VideoSummary>((value) =>
-              _map__i9$VideoSummaryResponse_To__i10$VideoSummary(value))
-          .toList(),
-      mostVideos: model.mostVideos
-          ?.map<_i10.VideoSummary>((value) =>
-              _map__i9$VideoSummaryResponse_To__i10$VideoSummary(value))
-          .toList(),
-      shouldersVideos: model.shouldersVideos
-          ?.map<_i10.VideoSummary>((value) =>
-              _map__i9$VideoSummaryResponse_To__i10$VideoSummary(value))
-          .toList(),
-      blogPosts: model.blogPosts
-          ?.map<_i6.BlogPost>(
-              (value) => _map__i5$BlogPostResponse_To__i6$BlogPost(value))
-          .toList(),
-    );
-  }
-
-  _i14.Video _map__i13$VideoResponse_To__i14$Video(_i13.VideoResponse? input) {
-    final model = input;
-    if (model == null) {
-      throw Exception(
-          r'Mapping VideoResponse → Video failed because VideoResponse was null, and no default value was provided. '
-          r'Consider setting the whenSourceIsNull parameter on the MapType<VideoResponse, Video> to handle null values during mapping.');
-    }
-    return _i14.Video(
-      category: model.category,
-      coverPhoto: model.coverPhoto,
-      createdAt: model.createdAt,
-      description: model.description,
-      id: model.id,
-      isPublic: model.isPublic,
-      relatedVideos: model.relatedVideos
-          .map<_i10.VideoSummary>((value) =>
-              _map__i9$VideoSummaryResponse_To__i10$VideoSummary(value))
-          .toList(),
-      status: model.status,
-      tags: model.tags,
-      title: model.title,
-      updatedAt: model.updatedAt,
-      uploader:
-          _map__i7$UploaderUserResponse_To__i8$UploaderUser(model.uploader),
-      videoFile: _map__i15$FileResponse_To__i16$PhysioFile(model.videoFile),
-    );
-  }
-
-  _i16.PhysioFile _map__i15$FileResponse_To__i16$PhysioFile(
-      _i15.FileResponse? input) {
+  _i10.PhysioFile _map__i9$FileResponse_To__i10$PhysioFile(
+      _i9.FileResponse? input) {
     final model = input;
     if (model == null) {
       throw Exception(
           r'Mapping FileResponse → PhysioFile failed because FileResponse was null, and no default value was provided. '
           r'Consider setting the whenSourceIsNull parameter on the MapType<FileResponse, PhysioFile> to handle null values during mapping.');
     }
-    return _i16.PhysioFile(
+    return _i10.PhysioFile(
       contentType: model.contentType,
       fileCategory: model.fileCategory,
       fileSize: model.fileSize,
@@ -613,27 +534,27 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
-  _i18.Config _map__i17$ConfigResponse_To__i18$Config(
-      _i17.ConfigResponse? input) {
+  _i12.Config _map__i11$ConfigResponse_To__i12$Config(
+      _i11.ConfigResponse? input) {
     final model = input;
     if (model == null) {
       throw Exception(
           r'Mapping ConfigResponse → Config failed because ConfigResponse was null, and no default value was provided. '
           r'Consider setting the whenSourceIsNull parameter on the MapType<ConfigResponse, Config> to handle null values during mapping.');
     }
-    return _i18.Config(
-        update: _map__i19$UpdateResponse_To__i20$Update(model.update));
+    return _i12.Config(
+        update: _map__i13$UpdateResponse_To__i14$Update(model.update));
   }
 
-  _i20.Update _map__i19$UpdateResponse_To__i20$Update(
-      _i19.UpdateResponse? input) {
+  _i14.Update _map__i13$UpdateResponse_To__i14$Update(
+      _i13.UpdateResponse? input) {
     final model = input;
     if (model == null) {
       throw Exception(
           r'Mapping UpdateResponse → Update failed because UpdateResponse was null, and no default value was provided. '
           r'Consider setting the whenSourceIsNull parameter on the MapType<UpdateResponse, Update> to handle null values during mapping.');
     }
-    return _i20.Update(
+    return _i14.Update(
       forceVersion: model.forceVersion,
       lastVersion: model.lastVersion,
       suggestVersion: model.suggestVersion,
@@ -643,14 +564,94 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
-  _i10.VideoSummary?
-      _map__i9$VideoSummaryResponse_To__i10$VideoSummary_Nullable(
-          _i9.VideoSummaryResponse? input) {
+  _i16.VideoSummary _map__i15$VideoSummaryResponse_To__i16$VideoSummary(
+      _i15.VideoSummaryResponse? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping VideoSummaryResponse → VideoSummary failed because VideoSummaryResponse was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<VideoSummaryResponse, VideoSummary> to handle null values during mapping.');
+    }
+    return _i16.VideoSummary(
+      id: model.id,
+      title: model.title,
+      description: model.description,
+      coverPhoto: model.coverPhoto,
+      viewCount: model.viewCount,
+      category: model.category,
+      uploader:
+          _map__i7$UploaderUserResponse_To__i8$UploaderUser(model.uploader),
+    );
+  }
+
+  _i18.VideoLibrary _map__i17$VideoLibraryResponse_To__i18$VideoLibrary(
+      _i17.VideoLibraryResponse? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping VideoLibraryResponse → VideoLibrary failed because VideoLibraryResponse was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<VideoLibraryResponse, VideoLibrary> to handle null values during mapping.');
+    }
+    return _i18.VideoLibrary(
+      categories: model.categories,
+      mainVideo: _map__i15$VideoSummaryResponse_To__i16$VideoSummary_Nullable(
+          model.mainVideo),
+      recentVideos: model.recentVideos
+          ?.map<_i16.VideoSummary>((value) =>
+              _map__i15$VideoSummaryResponse_To__i16$VideoSummary(value))
+          .toList(),
+      mostVideos: model.mostVideos
+          ?.map<_i16.VideoSummary>((value) =>
+              _map__i15$VideoSummaryResponse_To__i16$VideoSummary(value))
+          .toList(),
+      shouldersVideos: model.shouldersVideos
+          ?.map<_i16.VideoSummary>((value) =>
+              _map__i15$VideoSummaryResponse_To__i16$VideoSummary(value))
+          .toList(),
+      blogPosts: model.blogPosts
+          ?.map<_i6.BlogPost>(
+              (value) => _map__i5$BlogPostResponse_To__i6$BlogPost(value))
+          .toList(),
+    );
+  }
+
+  _i20.Video _map__i19$VideoResponse_To__i20$Video(_i19.VideoResponse? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping VideoResponse → Video failed because VideoResponse was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<VideoResponse, Video> to handle null values during mapping.');
+    }
+    return _i20.Video(
+      category: model.category,
+      coverPhoto: model.coverPhoto,
+      createdAt: model.createdAt,
+      description: model.description,
+      id: model.id,
+      isPublic: model.isPublic,
+      relatedVideos: model.relatedVideos
+          .map<_i16.VideoSummary>((value) =>
+              _map__i15$VideoSummaryResponse_To__i16$VideoSummary(value))
+          .toList(),
+      isFlagged: _i21.Mappr.convertFlagsToIsFlagged(model),
+      status: model.status,
+      tags: model.tags,
+      title: model.title,
+      updatedAt: model.updatedAt,
+      uploader:
+          _map__i7$UploaderUserResponse_To__i8$UploaderUser(model.uploader),
+      videoFile: _map__i9$FileResponse_To__i10$PhysioFile(model.videoFile),
+    );
+  }
+
+  _i16.VideoSummary?
+      _map__i15$VideoSummaryResponse_To__i16$VideoSummary_Nullable(
+          _i15.VideoSummaryResponse? input) {
     final model = input;
     if (model == null) {
       return null;
     }
-    return _i10.VideoSummary(
+    return _i16.VideoSummary(
       id: model.id,
       title: model.title,
       description: model.description,

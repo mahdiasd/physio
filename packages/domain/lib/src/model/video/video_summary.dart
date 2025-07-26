@@ -1,21 +1,19 @@
-import 'package:domain/src/model/video/uploader_user.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class VideoSummary {
-  VideoSummary({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.coverPhoto,
-    required this.viewCount,
-    required this.category,
-    required this.uploader,
-  });
+import '../../../domain.dart';
 
-  final String id;
-  final String title;
-  final String description;
-  final String coverPhoto;
-  final String category;
-  final int viewCount;
-  final UploaderUser uploader;
+part 'video_summary.freezed.dart';
+
+@freezed
+abstract class VideoSummary with _$VideoSummary {
+  const factory VideoSummary({
+    required String id,
+    required String title,
+    required String description,
+    required String coverPhoto,
+    required String category,
+    required int viewCount,
+    required UploaderUser uploader,
+  }) = _VideoSummary;
 }
+

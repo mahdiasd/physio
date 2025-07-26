@@ -21,6 +21,7 @@ VideoResponse _$VideoResponseFromJson(Map<String, dynamic> json) =>
       tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
       title: json['title'] as String,
       updatedAt: DateTime.parse(json['updatedAt'] as String),
+      flags: (json['flags'] as num).toInt(),
       uploader: UploaderUserResponse.fromJson(
           json['uploader'] as Map<String, dynamic>),
       videoFile:
@@ -42,4 +43,5 @@ Map<String, dynamic> _$VideoResponseToJson(VideoResponse instance) =>
       'updatedAt': instance.updatedAt.toIso8601String(),
       'uploader': instance.uploader,
       'videoFile': instance.videoFile,
+      'flags': instance.flags,
     };

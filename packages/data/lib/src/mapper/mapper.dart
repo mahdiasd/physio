@@ -19,20 +19,34 @@ import 'mapper.auto_mappr.dart';
       Field('role', custom: Mappr.convertUserRole),
     ],
   ),
+
   MapType<BlogPostResponse, BlogPost>(
     fields: [
       Field('status', custom: Mappr.convertPostStatus),
     ],
   ),
+
   MapType<UploaderUserResponse, UploaderUser>(),
+
+  MapType<FileResponse, PhysioFile>(),
+
+  MapType<ConfigResponse, Config>(),
+
+  MapType<UpdateResponse, Update>(),
+
   MapType<VideoSummaryResponse, VideoSummary>(),
   MapType<VideoLibraryResponse, VideoLibrary>(),
-  MapType<VideoResponse, Video>(),
-  MapType<FileResponse, PhysioFile>(),
-  MapType<ConfigResponse, Config>(),
-  MapType<UpdateResponse, Update>(),
+  MapType<VideoResponse, Video>(
+    fields: [
+      Field('isFlagged', custom: Mappr.convertFlagsToIsFlagged),
+    ],
+  ),
 ])
 class Mappr extends $Mappr {
+  static bool convertFlagsToIsFlagged(VideoResponse response) {
+    return response.flags == 1;
+  }
+
   static UserRole convertUserRole(dynamic source) {
     final String role;
     if (source is UserResponse) {

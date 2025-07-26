@@ -52,8 +52,6 @@ class VideoDetailContent extends StatefulWidget {
 }
 
 class _VideoDetailContentState extends State<VideoDetailContent> {
-  final player = Player();
-  late final controller = VideoController(player);
   final GlobalKey<VideoState> videoKey = GlobalKey<VideoState>();
 
   @override
@@ -129,11 +127,9 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
     return BlocBuilder<VideoDetailBloc, VideoDetailState>(
       buildWhen: (previous, current) => previous.video?.videoFile.s3Url != current.video?.videoFile.s3Url,
       builder: (context, state) {
-        if (state.video != null &&
-            (player.state.playlist.medias.isEmpty ||
-                player.state.playlist.medias.first.uri != state.video!.videoFile.s3Url)) {
+        if (state.video != null && (player.state.playlist.medias.isEmpty || player.state.playlist.medias.first.uri != state.video!.videoFile.s3Url)) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            PrintHelper.info("open");
+            PrintHelper.info(state.video!.videoFile.s3Url, location: "open");
             player.open(Media(state.video!.videoFile.s3Url));
           });
         }
@@ -191,7 +187,7 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
               height: 20,
               source: "assets/images/ic_flag.svg",
               onTap: () {
-                context.read<VideoDetailBloc>().add(OnFlagClick());
+                context.read<VideoDetailBloc>().add(FlagPressed());
               },
               tintColor: theme.customColors.disabled,
             )
@@ -291,7 +287,6 @@ class _VideoDetailContentState extends State<VideoDetailContent> {
   @override
   void dispose() {
     PrintHelper.info("dispose", location: "VideoDetail");
-    player.dispose();
     super.dispose();
   }
 }
